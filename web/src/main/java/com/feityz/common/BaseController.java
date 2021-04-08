@@ -13,11 +13,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * 基础控制器
+ * @author zhangjie
+ * @date 2021-04-08
+ */
 @Controller
 public class BaseController {
-    protected Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    //protected User LoginUser = SpringUtils.getLoginUser();
 
     /**
      * 从thread local获取网络上下文
@@ -51,6 +55,10 @@ public class BaseController {
         return getServletRequest().getSession();
     }
 
+    /**
+     * 获取当前登录的用户
+     * @return 返回当前登录的用户实体
+     */
     protected User getLoginUser() {
 
         return SpringUtils.getLoginUser();

@@ -15,20 +15,16 @@
  ******************************************************************************/
 package com.bstek.uflo.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.Table;
-
 import org.springframework.util.SerializationUtils;
+
+import javax.persistence.*;
 
 /**
  * @author Jacky.gao
  * @since 2013年9月27日
  */
 @Entity
-@Table(name="UFLO_BLOB")
+@Table(name="uflo_blob")
 public class Blob {
 	@Id
 	@Column(name="ID_")

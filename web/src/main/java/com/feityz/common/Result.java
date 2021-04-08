@@ -4,6 +4,11 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * 全局返回数据实体
+ * @author zhangjie
+ * @date 2021-04-08
+ */
 @Data
 public class Result {
 
@@ -11,5 +16,5 @@ public class Result {
 
     private String msg;
 
-    private List data;
+    private List<Object> data;
 }

@@ -19,14 +19,16 @@ import java.io.PrintWriter;
 import java.util.List;
 
 /**
- * @author kongqinglin
+ * 全局异常处理
+ * @author zhangjie
+ * @date 2021-04-08
  */
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UnauthorizedException.class)
-    private String UnauthorizedException(HttpServletRequest request, HttpServletResponse response, Exception e) {
+    private String unauthorizedException(HttpServletRequest request, HttpServletResponse response, Exception e) {
         System.out.println("UnauthorizedException成功拦截");
         log.error("{} UnauthorizedException", request.getRequestURI(), e);
         if (RequestUtil.isAjaxRequest(request)) {
@@ -38,14 +40,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BindException.class)
-    private String BindException(HttpServletRequest request, HttpServletResponse response, Exception e) {
+    private String bindException(HttpServletRequest request, HttpServletResponse response, Exception e) {
         System.out.println("UnauthorizedException成功拦截");
         writeJson(Rest.failure(e.getMessage()), response);
         return null;
     }
 
     @ExceptionHandler(BizException.class)
-    private String BizException(HttpServletRequest request, HttpServletResponse response, Exception e) {
+    private String bizException(HttpServletRequest request, HttpServletResponse response, Exception e) {
         writeJson(Rest.failure(e.getMessage()), response);
         return null;
     }

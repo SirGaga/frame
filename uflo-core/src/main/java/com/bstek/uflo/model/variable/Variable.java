@@ -1,32 +1,9 @@
-/*******************************************************************************
- * Copyright 2017 Bstek
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License.  You may obtain a copy
- * of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
 package com.bstek.uflo.model.variable;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.Table;
-
 import com.bstek.uflo.env.Context;
+
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * @author Jacky.gao
@@ -52,7 +29,7 @@ public abstract class Variable {
 	private long rootProcessInstanceId;
 	
 	public static Variable newVariable(Object value,Context context){
-		Variable variable=null;
+		Variable variable;
 		if(value instanceof Date){
 			variable=new DateVariable((Date)value);
 		}else if(value instanceof String){
@@ -86,9 +63,17 @@ public abstract class Variable {
 		}
 		return variable;
 	}
-	
+
+	/**
+	 * 获取值
+	 * @return 返回对象
+	 */
 	public abstract Object getValue();
-	
+
+	/**
+	 * 获取变量实体类
+	 * @return 返回变量类型
+	 */
 	public abstract VariableType getType();
 	
 	public long getId() {

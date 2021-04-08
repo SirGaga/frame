@@ -30,7 +30,8 @@ import com.bstek.uflo.service.IdentityService;
 public class DeptAssigneeProvider extends AbstractAssigneeProvider {
 	private IdentityService identityService;
 	private boolean disabledDeptAssigneeProvider;
-	public boolean isTree() {
+	@Override
+    public boolean isTree() {
 		return true;
 	}
 	
@@ -38,14 +39,17 @@ public class DeptAssigneeProvider extends AbstractAssigneeProvider {
 		return "指定部门";
 	}
 	
+	@Override
 	public void queryEntities(PageQuery<Entity> pageQuery, String parentId) {
 		identityService.deptPageQuery(pageQuery,parentId);
 	}
 	
-	public Collection<String> getUsers(String entityId,Context context,ProcessInstance processInstance) {
+	@Override
+	public Collection<String> getUsers(String entityId, Context context, ProcessInstance processInstance) {
 		return identityService.getUsersByDept(entityId);
 	}
 
+	@Override
 	public boolean disable() {
 		return disabledDeptAssigneeProvider;
 	}

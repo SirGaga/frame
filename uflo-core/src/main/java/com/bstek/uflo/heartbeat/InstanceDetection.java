@@ -1,24 +1,7 @@
-/*******************************************************************************
- * Copyright 2017 Bstek
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License.  You may obtain a copy
- * of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
 package com.bstek.uflo.heartbeat;
 
-import java.text.ParseException;
-import java.util.Properties;
-import java.util.logging.Logger;
-
+import com.bstek.uflo.service.SchedulerService;
+import com.bstek.uflo.utils.EnvironmentUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.SessionFactory;
 import org.quartz.JobKey;
@@ -31,8 +14,9 @@ import org.quartz.impl.triggers.CronTriggerImpl;
 import org.quartz.simpl.SimpleThreadPool;
 import org.springframework.beans.factory.InitializingBean;
 
-import com.bstek.uflo.service.SchedulerService;
-import com.bstek.uflo.utils.EnvironmentUtils;
+import java.text.ParseException;
+import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * @author Jacky.gao
@@ -45,7 +29,7 @@ public class InstanceDetection implements InitializingBean{
 	private boolean disableScheduler;
 	private SchedulerService schedulerService;
 	private String detectionCron="0/30 * * * * ?";
-	private Logger log=Logger.getGlobal();
+	private final Logger log=Logger.getGlobal();
 	private void startDaemonJob() throws Exception{
 		if(disableScheduler){
 			log.info("Current uflo application is disabled scheduler...");
@@ -92,7 +76,7 @@ public class InstanceDetection implements InitializingBean{
 	}
 	
 	private JobDetailImpl initJobDetail(String currentInstanceName){
-		String clusterJobInstanceNames[]=instanceNames.split(",");
+		String[] clusterJobInstanceNames =instanceNames.split(",");
 		SessionFactory sessionFactory=EnvironmentUtils.getEnvironment().getSessionFactory();
 		JobDetailImpl jobDetail=new DetectionJobDetail(sessionFactory,currentInstanceName,clusterJobInstanceNames,schedulerService);
 		jobDetail.setKey(new JobKey("UfloDaemonJobDetail"));
@@ -112,6 +96,7 @@ public class InstanceDetection implements InitializingBean{
 		}
 	}
 	
+	@Override
 	public void afterPropertiesSet() throws Exception {
 		startDaemonJob();
 	}

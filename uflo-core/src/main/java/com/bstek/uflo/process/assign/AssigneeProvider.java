@@ -15,10 +15,10 @@
  ******************************************************************************/
 package com.bstek.uflo.process.assign;
 
-import java.util.Collection;
-
 import com.bstek.uflo.env.Context;
 import com.bstek.uflo.model.ProcessInstance;
+
+import java.util.Collection;
 
 
 /**
@@ -32,6 +32,7 @@ public interface AssigneeProvider {
 	 */
 	boolean isTree();
 	/**
+	 * 获取当前任务处理人提供者名称，比如员工列表，部门列表等
 	 * @return 返回当前任务处理人提供者名称，比如员工列表，部门列表等
 	 */
 	String getName();
@@ -50,6 +51,7 @@ public interface AssigneeProvider {
 	 */
 	Collection<String> getUsers(String entityId, Context context, ProcessInstance processInstance);
 	/**
+	 * 是否禁用当前任务处理人提供器
 	 * @return 是否禁用当前任务处理人提供器
 	 */
 	boolean disable();

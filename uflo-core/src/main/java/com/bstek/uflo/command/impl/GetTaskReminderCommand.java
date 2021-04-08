@@ -15,14 +15,13 @@
  ******************************************************************************/
 package com.bstek.uflo.command.impl;
 
-import java.util.List;
-
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-
 import com.bstek.uflo.command.Command;
 import com.bstek.uflo.env.Context;
 import com.bstek.uflo.model.task.reminder.TaskReminder;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+
+import java.util.List;
 
 /**
  * @author Jacky.gao
@@ -33,6 +32,7 @@ public class GetTaskReminderCommand implements Command<List<TaskReminder>> {
 	public GetTaskReminderCommand(long taskId){
 		this.taskId=taskId;
 	}
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<TaskReminder> execute(Context context) {
 		Criteria criteria=context.getSession().createCriteria(TaskReminder.class);

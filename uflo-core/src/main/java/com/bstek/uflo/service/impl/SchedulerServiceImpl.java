@@ -1,41 +1,4 @@
-/*******************************************************************************
- * Copyright 2017 Bstek
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License.  You may obtain a copy
- * of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
 package com.bstek.uflo.service.impl;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-import java.util.logging.Logger;
-
-import org.quartz.Calendar;
-import org.quartz.JobKey;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
-import org.quartz.TriggerKey;
-import org.quartz.impl.StdSchedulerFactory;
-import org.quartz.impl.calendar.BaseCalendar;
-import org.quartz.impl.triggers.AbstractTrigger;
-import org.quartz.impl.triggers.CronTriggerImpl;
-import org.quartz.impl.triggers.SimpleTriggerImpl;
-import org.quartz.simpl.SimpleThreadPool;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 import com.bstek.uflo.env.TaskDueDefinitionProvider;
 import com.bstek.uflo.model.ProcessInstance;
@@ -45,11 +8,7 @@ import com.bstek.uflo.model.task.reminder.TaskReminder;
 import com.bstek.uflo.process.handler.ReminderHandler;
 import com.bstek.uflo.process.node.TaskNode;
 import com.bstek.uflo.process.node.calendar.MultipleCalendar;
-import com.bstek.uflo.process.node.reminder.CalendarInfo;
-import com.bstek.uflo.process.node.reminder.CalendarProvider;
-import com.bstek.uflo.process.node.reminder.DueDefinition;
-import com.bstek.uflo.process.node.reminder.PeriodReminder;
-import com.bstek.uflo.process.node.reminder.Reminder;
+import com.bstek.uflo.process.node.reminder.*;
 import com.bstek.uflo.service.ProcessService;
 import com.bstek.uflo.service.SchedulerService;
 import com.bstek.uflo.service.TaskService;
@@ -57,6 +16,19 @@ import com.bstek.uflo.service.impl.job.ReminderJob;
 import com.bstek.uflo.service.impl.job.ReminderJobDetail;
 import com.bstek.uflo.service.impl.job.ScanReminderJob;
 import com.bstek.uflo.service.impl.job.ScanReminderJobDetail;
+import org.quartz.Calendar;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
+import org.quartz.impl.calendar.BaseCalendar;
+import org.quartz.impl.triggers.AbstractTrigger;
+import org.quartz.impl.triggers.CronTriggerImpl;
+import org.quartz.impl.triggers.SimpleTriggerImpl;
+import org.quartz.simpl.SimpleThreadPool;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+
+import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * @author Jacky.gao
@@ -76,18 +48,20 @@ public class SchedulerServiceImpl implements SchedulerService,ApplicationContext
 	private TaskDueDefinitionProvider provider;
 	private String makeSchedulerThreadDaemon;
 	private boolean enableScanReminderJob;
-	private List<Long> reminderTaskList=new ArrayList<Long>();
+	private List<Long> reminderTaskList=new ArrayList<>();
+	@Override
 	public Scheduler getScheduler() {
 		return scheduler;
 	}
 	
-	public void addReminderJob(TaskReminder reminder,ProcessInstance processInstance,Task task) {
+	@Override
+	public void addReminderJob(TaskReminder reminder, ProcessInstance processInstance, Task task) {
 		JobKey jobKey=new JobKey(JOB_NAME_PREFIX+reminder.getId(),JOB_GROUP_PREFIX);
 		try {
 			if(scheduler.checkExists(jobKey)){
 				return;
 			}
-			AbstractTrigger<? extends Trigger> trigger=null;
+			AbstractTrigger<? extends Trigger> trigger;
 			if(reminder.getType().equals(ReminderType.Once)){
 				SimpleTriggerImpl simpleTrigger=new SimpleTriggerImpl();
 				simpleTrigger.setRepeatCount(0);
@@ -126,6 +100,7 @@ public class SchedulerServiceImpl implements SchedulerService,ApplicationContext
 		}	
 	}
 
+	@Override
 	public void removeReminderJob(Task task) {
 		List<TaskReminder> reminders=taskService.getTaskReminders(task.getId());
 		for(TaskReminder reminder:reminders){
@@ -185,8 +160,7 @@ public class SchedulerServiceImpl implements SchedulerService,ApplicationContext
 		mergedProps.setProperty("org.quartz.scheduler.makeSchedulerThreadDaemon", makeSchedulerThreadDaemon);
 		mergedProps.setProperty("org.quartz.threadPool.threadCount", Integer.toString(threadCount));
 		factory.initialize(mergedProps);
-		Scheduler newScheduler=factory.getScheduler();
-		return newScheduler;
+		return factory.getScheduler();
 	}
 
 	private void initTaskReminders(){
@@ -244,7 +218,7 @@ public class SchedulerServiceImpl implements SchedulerService,ApplicationContext
 				reminder=dueDefinition.getReminder();				
 			}
 		}
-		if(reminder==null || !(reminder instanceof PeriodReminder)){
+		if(!(reminder instanceof PeriodReminder)){
 			return null;
 		}
 		List<CalendarInfo> infos=((PeriodReminder)reminder).getCalendarInfos();
@@ -253,6 +227,7 @@ public class SchedulerServiceImpl implements SchedulerService,ApplicationContext
 		}
 		return buildCalendar(infos);
 	}
+	@Override
 	public Calendar buildCalendar(List<CalendarInfo> infos) {
 		MultipleCalendar mulCalendar=null;
 		Collection<CalendarProvider> providers=applicationContext.getBeansOfType(CalendarProvider.class).values();
@@ -261,7 +236,7 @@ public class SchedulerServiceImpl implements SchedulerService,ApplicationContext
 				Calendar calendar=provider.getCalendar(info.getId());
 				if(calendar!=null){
 					if(mulCalendar==null){
-						mulCalendar=new MultipleCalendar();;
+						mulCalendar=new MultipleCalendar();
 					}
 					mulCalendar.addCalendar((BaseCalendar)calendar);
 				}
@@ -278,6 +253,7 @@ public class SchedulerServiceImpl implements SchedulerService,ApplicationContext
 		this.enableScanReminderJob = enableScanReminderJob;
 	}
 	
+	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 		Collection<TaskDueDefinitionProvider> colls=applicationContext.getBeansOfType(TaskDueDefinitionProvider.class).values();
@@ -291,7 +267,9 @@ public class SchedulerServiceImpl implements SchedulerService,ApplicationContext
 			if(scheduler!=null && !scheduler.isShutdown()){
 				scheduler.shutdown(false);
 			}			
-		}catch(Exception ex){}
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 	}
 	
 	public void setTaskService(TaskService taskService) {

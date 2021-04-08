@@ -1,20 +1,57 @@
-/*******************************************************************************
- * Copyright 2017 Bstek
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License.  You may obtain a copy
- * of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
 package com.bstek.uflo.model.variable;
 
+/**
+ * @author zhangjie
+ * @date 2021-04-08
+ */
+
 public enum VariableType {
-	Blob,Boolean,Byte,Character,Date,Double,Float,Integer,Long,Short,String,Text
+	/**
+	 * Blob类型
+	 */
+	Blob,
+	/**
+	 * Boolean类型
+	 */
+	Boolean,
+	/**
+	 * 字节类型
+	 */
+	Byte,
+	/**
+	 * 字符类型
+	 */
+	Character,
+	/**
+	 * 日期类型
+	 */
+	Date,
+	/**
+	 * Double类型
+	 */
+	Double,
+	/**
+	 * Float类型
+	 */
+	Float,
+	/**
+	 * Integer类型
+	 */
+	Integer,
+	/**
+	 * Long类型
+	 */
+	Long,
+	/**
+	 * Short类型
+	 */
+	Short,
+	/**
+	 * 字符串类型
+	 */
+	String,
+	/**
+	 * 文本类型
+	 */
+	Text
 }

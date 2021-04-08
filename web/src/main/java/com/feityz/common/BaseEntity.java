@@ -3,11 +3,14 @@ package com.feityz.common;
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Date;
+/**
+ * 基础实体类
+ * @author family
+ * @date 2021-04-07
+ */
 @Data
 public class BaseEntity implements Serializable {
     /**
@@ -24,8 +27,10 @@ public class BaseEntity implements Serializable {
     @JsonIgnore
     private String updateUser;
 
+    /**
+     * @ JsonIgnore
+     */
     @TableField(value = "insert_time", fill = FieldFill.INSERT)
-    //@JsonIgnore
     private Date insertTime;
 
     @TableField(value = "update_time", fill = FieldFill.UPDATE)

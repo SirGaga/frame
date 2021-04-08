@@ -22,14 +22,33 @@ package com.bstek.uflo.process.flow;
  * @since 2013年8月19日
  */
 public interface SequenceFlow {
-
+	/**
+	 * 获取下一步节点名称
+	 * @return 返回节点名称
+	 */
 	String getToNode();
 
+	/**
+	 * 获取表达式
+	 * @return 返回表达式
+	 */
 	String getExpression();
-	
+
+	/**
+	 * 返回处理器bean
+	 * @return bean名称
+	 */
 	String getHandlerBean();
 
+	/**
+	 * 获取条件类型
+	 * @return 条件类型
+	 */
 	ConditionType getConditionType();
 
+	/**
+	 * 返回当前任务流
+	 * @return 返回任务流名称
+	 */
 	String getName();
 }

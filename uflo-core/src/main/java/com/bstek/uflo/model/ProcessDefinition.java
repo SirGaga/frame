@@ -1,40 +1,20 @@
-/*******************************************************************************
- * Copyright 2017 Bstek
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License.  You may obtain a copy
- * of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
 package com.bstek.uflo.model;
-
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.bstek.uflo.diagram.ProcessDiagram;
 import com.bstek.uflo.process.node.Node;
 import com.bstek.uflo.process.node.StartNode;
 import com.bstek.uflo.process.security.ComponentAuthority;
 import com.bstek.uflo.process.swimlane.Swimlane;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 /**
  * @author Jacky.gao
  * @since 2013年8月18日
  */
 @Entity
-@Table(name="UFLO_PROCESS")
+@Table(name="uflo_process")
 public class ProcessDefinition implements java.io.Serializable{
 	private static final long serialVersionUID = -1328642749306459546L;
 

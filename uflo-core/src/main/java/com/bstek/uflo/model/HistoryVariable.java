@@ -1,39 +1,20 @@
-/*******************************************************************************
- * Copyright 2017 Bstek
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License.  You may obtain a copy
- * of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
 package com.bstek.uflo.model;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import org.hibernate.Session;
-import org.springframework.util.SerializationUtils;
 
 import com.bstek.uflo.env.Context;
 import com.bstek.uflo.model.variable.VariableType;
+import org.hibernate.Session;
+import org.springframework.util.SerializationUtils;
 
+import javax.persistence.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+/**
+ * @author zhangjie
+ * @date 2021-04-08
+ */
 @Entity
-@Table(name="UFLO_HIS_VARIABLE")
+@Table(name="uflo_his_variable")
 public class HistoryVariable {
 	@Id
 	@Column(name="ID_")
@@ -63,7 +44,7 @@ public class HistoryVariable {
 		SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
 		Session session=context.getSession();
 		if(type.equals(VariableType.Blob) || type.equals(VariableType.Text)){
-			HistoryBlob blob=(HistoryBlob)session.get(HistoryBlob.class,Long.valueOf(stringValue));
+			HistoryBlob blob= session.get(HistoryBlob.class,Long.valueOf(stringValue));
 			variableObject=SerializationUtils.deserialize(blob.getBlobValue());
 		}else if(type.equals(VariableType.String)){
 			variableObject=stringValue;
@@ -76,7 +57,7 @@ public class HistoryVariable {
 		}else if(type.equals(VariableType.Integer)){
 			variableObject=Integer.valueOf(stringValue);
 		}else if(type.equals(VariableType.Character)){
-			variableObject=Character.valueOf((char)(stringValue.getBytes()[0]));
+			variableObject= (char) (stringValue.getBytes()[0]);
 		}else if(type.equals(VariableType.Double)){
 			variableObject=Double.valueOf(stringValue);
 		}else if(type.equals(VariableType.Float)){

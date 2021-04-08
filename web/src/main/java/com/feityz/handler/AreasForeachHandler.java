@@ -12,12 +12,15 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * @author zhangjie
+ * @date 2021-04-08
+ */
 @Component
 public class AreasForeachHandler implements ForeachHandler {
     @Override
     public Collection<Object> handle(ProcessInstance processInstance, Context context) {
-        //String deptVar = String.valueOf(context.getProcessService().getProcessVariable("dept", processInstance.getRootId()));
-
+        // String deptVar = String.valueOf(context.getProcessService().getProcessVariable("dept", processInstance.getRootId()));
         List<Variable> variables = context.getProcessService().createProcessVariableQuery().processInstanceId(processInstance.getRootId()).key("area").list();
 
         Assert.isTrue(CollectionUtil.isNotEmpty(variables),"辖区变量为空");

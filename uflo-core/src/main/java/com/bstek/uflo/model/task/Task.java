@@ -1,39 +1,19 @@
-/*******************************************************************************
- * Copyright 2017 Bstek
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License.  You may obtain a copy
- * of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
 package com.bstek.uflo.model.task;
 
+import com.bstek.uflo.model.Activity;
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
-
-import com.bstek.uflo.model.Activity;
-
+/**
+ * 流程任务实体类
+ * @author zhangjie
+ * @date 2021-04-08
+ */
 @Entity
-@Table(name="UFLO_TASK")
+@Table(name="uflo_task")
 public class Task extends Activity{
 	@Column(name="TASK_NAME_",length=60)
 	private String taskName;
@@ -112,7 +92,7 @@ public class Task extends Activity{
 	private String operation;
 	
 	@JsonIgnore
-	@OneToMany(cascade=CascadeType.DETACH/*,fetch=FetchType.LAZY*/)
+	@OneToMany(cascade=CascadeType.DETACH)
 	@JoinColumn(name="TASK_ID_")
 	private Collection<TaskParticipator> taskParticipators;
 	

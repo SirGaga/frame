@@ -15,21 +15,15 @@
  ******************************************************************************/
 package com.bstek.uflo.model.task.reminder;
 
+import javax.persistence.*;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  * @author Jacky.gao
  * @since 2013年8月20日
  */
 @Entity
-@Table(name="UFLO_TASK_REMINDER")
+@Table(name="uflo_task_reminder")
 public class TaskReminder {
 	@Id
 	@Column(name="ID_")

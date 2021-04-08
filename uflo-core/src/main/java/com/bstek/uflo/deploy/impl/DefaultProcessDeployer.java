@@ -1,34 +1,4 @@
-/*******************************************************************************
- * Copyright 2017 Bstek
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License.  You may obtain a copy
- * of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
 package com.bstek.uflo.deploy.impl;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import com.bstek.uflo.command.CommandService;
 import com.bstek.uflo.command.impl.DeployProcessCommand;
@@ -39,6 +9,19 @@ import com.bstek.uflo.deploy.validate.ProcessValidateException;
 import com.bstek.uflo.deploy.validate.impl.ProcessValidator;
 import com.bstek.uflo.model.ProcessDefinition;
 import com.bstek.uflo.utils.IDGenerator;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * @author Jacky.gao
@@ -48,8 +31,9 @@ public class DefaultProcessDeployer implements ProcessDeployer{
 	private DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 	private ProcessValidator processValidator;
 	private CommandService commandService;
-	public ProcessDefinition deploy(InputStream inputStream) {
-		ProcessDefinition process=null;
+	@Override
+    public ProcessDefinition deploy(InputStream inputStream) {
+		ProcessDefinition process;
 		long processId=IDGenerator.getInstance().nextId();
 		if(inputStream instanceof ZipInputStream){
 			//表示通过zip打包上传的流程模版文件，其中可能包含流程图片文件(png格式)
@@ -62,17 +46,18 @@ public class DefaultProcessDeployer implements ProcessDeployer{
 		return process;
 	}
 	
-	public ProcessDefinition deploy(InputStream inputStream,int version, long processId) {
-		ProcessDefinition process=deployFile(inputStream,version,processId,true);
-		return process;
+	@Override
+	public ProcessDefinition deploy(InputStream inputStream, int version, long processId) {
+		return deployFile(inputStream,version,processId,true);
 	}
 
 	private ProcessDefinition deployFile(InputStream inputStream,Integer version,long processId,boolean update) {
-		ProcessDefinition process=null;
+		ProcessDefinition process;
 		try{
 			byte[] bytes=IOUtils.toByteArray(inputStream);
 			validateProcess(new ByteArrayInputStream(bytes));
 			process=ProcessParser.parseProcess(bytes,processId,update);
+			assert process != null;
 			process.setCreateDate(new Date());
 			if(update){
 				process.setVersion(version);				
@@ -115,17 +100,17 @@ public class DefaultProcessDeployer implements ProcessDeployer{
 	}
 
 	private void validateProcess(InputStream inputStream) {
-		StringBuffer errorInfo=new StringBuffer();
+		StringBuilder errorInfo=new StringBuilder();
         try {
         	Document document = documentBuilderFactory.newDocumentBuilder().parse(inputStream);
-        	List<String> errors=new ArrayList<String>();
-        	List<String> nodeNames=new ArrayList<String>();
+        	List<String> errors= new ArrayList<>();
+        	List<String> nodeNames= new ArrayList<>();
         	Element element=document.getDocumentElement();
         	if(processValidator.support(element)){
         		processValidator.validate(element, errors, nodeNames);
         		if(errors.size()>0){
         			for(int i=0;i<errors.size();i++){
-        				errorInfo.append((i+1)+"."+errors.get(i)+"\r\r");
+        				errorInfo.append(i + 1).append(".").append(errors.get(i)).append("\r\r");
         			}
         		}
         	}else{

@@ -9,7 +9,13 @@ import lombok.Getter;
 
 @Getter
 public enum HandleResult {
+    /**
+     * 同意
+     */
     Agree("同意","1"),
+    /**
+     * 不同意
+     */
     Disagree("不同意","0")
     ;
     /**

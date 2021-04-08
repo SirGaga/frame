@@ -32,22 +32,26 @@ import com.bstek.uflo.service.IdentityService;
 public class UserAssigneeProvider extends AbstractAssigneeProvider{
 	private IdentityService identityService;
 	private boolean disabledUserAssigneeProvider;
-	public boolean isTree() {
+	@Override
+    public boolean isTree() {
 		return false;
 	}
 	public String getName() {
 		return "指定用户";
 	}
+	@Override
 	public void queryEntities(PageQuery<Entity> pageQuery, String parentId) {
 		identityService.userPageQuery(pageQuery);
 	}
 	
-	public Collection<String> getUsers(String entityId,Context context,ProcessInstance processInstance) {
+	@Override
+	public Collection<String> getUsers(String entityId, Context context, ProcessInstance processInstance) {
 		List<String> users=new ArrayList<String>();
 		users.add(entityId);
 		return users;
 	}
 
+	@Override
 	public boolean disable() {
 		return disabledUserAssigneeProvider;
 	}

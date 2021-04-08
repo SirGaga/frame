@@ -25,7 +25,7 @@ import javax.persistence.Table;
  * @since 2013年8月19日
  */
 @Entity
-@Table(name="UFLO_TASK_APPOINTOR")
+@Table(name="uflo_task_appointor")
 public class TaskAppointor {
 	@Id
 	@Column(name="ID_")

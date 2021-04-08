@@ -20,5 +20,16 @@ package com.bstek.uflo.model.task;
  * @since 2013年8月20日
  */
 public enum DateUnit {
-	Minute,Hour,Day
+	/**
+	 * 分钟
+	 */
+	Minute,
+	/**
+	 * 小时
+	 */
+	Hour,
+	/**
+	 * 天
+	 */
+	Day
 }

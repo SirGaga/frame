@@ -20,8 +20,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * @author zhangjie
+ * @date 2021-04-08
+ */
 @Entity
-@Table(name="UFLO_TASK_PARTICIPATOR")
+@Table(name="uflo_task_participator")
 public class TaskParticipator {
 	@Id
 	@Column(name="ID_")
