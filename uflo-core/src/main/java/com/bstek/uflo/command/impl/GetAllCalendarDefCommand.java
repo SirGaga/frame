@@ -31,7 +31,8 @@ import com.bstek.uflo.utils.EnvironmentUtils;
  * @since 2013年9月23日
  */
 public class GetAllCalendarDefCommand implements Command<Collection<CalendarDef>> {
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public Collection<CalendarDef> execute(Context context) {
 		Criteria criteria=context.getSession().createCriteria(CalendarDef.class);
 		String categoryId=EnvironmentUtils.getEnvironment().getCategoryId();

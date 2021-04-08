@@ -26,7 +26,8 @@ import com.bstek.uflo.process.handler.ReminderHandler;
  * @since 2013年8月21日
  */
 public class ReminderJob implements Job {
-	public void execute(JobExecutionContext context) throws JobExecutionException {
+	@Override
+    public void execute(JobExecutionContext context) throws JobExecutionException {
 		ReminderJobDetail jobDetail=(ReminderJobDetail)context.getJobDetail();
 		ReminderHandler handler=jobDetail.getReminderHandlerBean();
 		handler.execute(jobDetail.getProcessInstance(), jobDetail.getTask());

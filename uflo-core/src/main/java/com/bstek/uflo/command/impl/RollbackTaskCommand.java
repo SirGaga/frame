@@ -40,7 +40,8 @@ public class RollbackTaskCommand implements Command<Object> {
 		this.task=task;
 		this.targetNodeName=targetNodeName;
 	}
-	public Object execute(Context context) {
+	@Override
+    public Object execute(Context context) {
 		TaskService taskService=context.getTaskService();
 		taskService.forward(task, targetNodeName, variables,opinion,TaskState.Rollback);
 		return null;

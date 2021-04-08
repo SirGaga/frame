@@ -34,7 +34,8 @@ public class ExecuteEndNodeCommand implements Command<Object> {
 		this.endNode=endNode;
 		this.processInstance=processInstance;
 	}
-	public Object execute(Context context) {
+	@Override
+    public Object execute(Context context) {
 		Session session=context.getSession();
 		processInstance.setState(ProcessInstanceState.End);
 		session.delete(processInstance);

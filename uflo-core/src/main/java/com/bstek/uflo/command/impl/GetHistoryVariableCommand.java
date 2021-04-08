@@ -33,7 +33,8 @@ public class GetHistoryVariableCommand implements Command<HistoryVariable> {
 		this.historyProcessInstanceId=historyProcessInstanceId;
 		this.key=key;
 	}
-	public HistoryVariable execute(Context context) {
+	@Override
+    public HistoryVariable execute(Context context) {
 		Criteria criteria=context.getSession().createCriteria(HistoryVariable.class);
 		criteria.add(Restrictions.eq("historyProcessInstanceId", historyProcessInstanceId));
 		criteria.add(Restrictions.eq("key", key));

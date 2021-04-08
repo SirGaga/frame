@@ -15,16 +15,6 @@
  ******************************************************************************/
 package com.bstek.uflo.query.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
-
 import com.bstek.uflo.command.CommandService;
 import com.bstek.uflo.command.impl.QueryCountCommand;
 import com.bstek.uflo.command.impl.QueryListCommand;
@@ -33,6 +23,15 @@ import com.bstek.uflo.model.task.TaskState;
 import com.bstek.uflo.model.task.TaskType;
 import com.bstek.uflo.query.HistoryTaskQuery;
 import com.bstek.uflo.query.QueryJob;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Jacky.gao
@@ -70,15 +69,18 @@ public class HistoryTaskQueryImpl implements HistoryTaskQuery,QueryJob{
 	public HistoryTaskQueryImpl(CommandService commandService){
 		this.commandService=commandService;
 	}
+	@Override
 	public List<HistoryTask> list() {
 		return commandService.executeCommand(new QueryListCommand<List<HistoryTask>>(this));
 	}
 
+	@Override
 	public int count() {
 		return commandService.executeCommand(new QueryCountCommand(this));
 	}
 
-	public Criteria getCriteria(Session session,boolean queryCount) {
+	@Override
+	public Criteria getCriteria(Session session, boolean queryCount) {
 		Criteria criteria=session.createCriteria(HistoryTask.class);
 		buildCriteria(criteria,queryCount);
 		return criteria;
@@ -170,129 +172,155 @@ public class HistoryTaskQueryImpl implements HistoryTaskQuery,QueryJob{
 		}
 	}
 	
+	@Override
 	public HistoryTaskQuery addOrderAsc(String property){
 		ascOrders.add(property);
 		return this;
 	}
 
+	@Override
 	public HistoryTaskQuery addOrderDesc(String property){
 		descOrders.add(property);
 		return this;
 	}
 	
+	@Override
 	public HistoryTaskQuery assignee(String assignee) {
 		this.assignee=assignee;
 		return this;
 	}
 
+	@Override
 	public HistoryTaskQuery owner(String owner) {
 		this.owner=owner;
 		return this;
 	}
 
+	@Override
 	public HistoryTaskQuery addTaskState(TaskState state) {
 		states.add(state);
 		return this;
 	}
 
+	@Override
 	public HistoryTaskQuery addPrevTaskState(TaskState state) {
 		prevstates.add(state);
 		return this;
 	}
 
+	@Override
 	public HistoryTaskQuery processInstanceId(long processInstanceId) {
 		this.processInstanceId=processInstanceId;
 		return this;
 	}
 	
 	
+	@Override
 	public HistoryTaskQuery rootProcessInstanceId(long rootProcessInstanceId) {
 		this.rootProcessInstanceId=rootProcessInstanceId;
 		return this;
 	}
 	
+	@Override
 	public HistoryTaskQuery taskId(long taskId) {
 		this.taskId=taskId;
 		return this;
 	}
 
+	@Override
 	public HistoryTaskQuery createDateLessThen(Date createDateLessThen) {
 		this.createDateLessThen=createDateLessThen;
 		return this;
 	}
 
+	@Override
 	public HistoryTaskQuery createDateLessThenOrEquals(Date createDateLessThenOrEquals) {
 		this.createDateLessThenOrEquals=createDateLessThenOrEquals;
 		return this;
 	}
 
+	@Override
 	public HistoryTaskQuery createDateGreaterThen(Date createDateGreaterThen) {
 		this.createDateGreaterThen=createDateGreaterThen;
 		return this;
 	}
 
+	@Override
 	public HistoryTaskQuery createDateGreaterThenOrEquals(Date createDateGreaterThenOrEquals) {
 		this.createDateGreaterThenOrEquals=createDateGreaterThenOrEquals;
 		return this;
 	}
+	@Override
 	public HistoryTaskQuery endDateLessThen(Date endDateLessThen) {
 		this.endDateLessThen=endDateLessThen;
 		return this;
 	}
 	
+	@Override
 	public HistoryTaskQuery endDateLessThenOrEquals(Date endDateLessThenOrEquals) {
 		this.endDateLessThenOrEquals=endDateLessThenOrEquals;
 		return this;
 	}
 	
+	@Override
 	public HistoryTaskQuery endDateGreaterThen(Date endDateGreaterThen) {
 		this.endDateGreaterThen=endDateGreaterThen;
 		return this;
 	}
 	
+	@Override
 	public HistoryTaskQuery endDateGreaterThenOrEquals(Date endDateGreaterThenOrEquals) {
 		this.endDateGreaterThenOrEquals=endDateGreaterThenOrEquals;
 		return this;
 	}
 
+	@Override
 	public HistoryTaskQuery urlLike(String url) {
 		this.url=url;
 		return this;
 	}
+	@Override
 	public HistoryTaskQuery businessId(String businessId) {
 		this.businessId=businessId;
 		return this;
 	}
 
+	@Override
 	public HistoryTaskQuery countersign(boolean countersign) {
 		this.countersign=countersign;
 		return this;
 	}
 	
 
+	@Override
 	public HistoryTaskQuery taskType(TaskType type) {
 		this.type=type;
 		return this;
 	}
 	
+	@Override
 	public HistoryTaskQuery processId(long processId) {
 		this.processId=processId;
 		return this;
 	}
+	@Override
 	public HistoryTaskQuery historyProcessInstanceId(long historyProcessInstanceId) {
 		this.historyProcessInstanceId=historyProcessInstanceId;
 		return this;
 	}
 
+	@Override
 	public HistoryTaskQuery nameLike(String name) {
 		this.name=name;
 		return this;
 	}
 	
+	@Override
 	public HistoryTaskQuery nodeName(String nodeName) {
 		this.nodeName=nodeName;
 		return this;
 	}
+	@Override
 	public HistoryTaskQuery page(int firstResult, int maxResults) {
 		this.firstResult=firstResult;
 		this.maxResults=maxResults;

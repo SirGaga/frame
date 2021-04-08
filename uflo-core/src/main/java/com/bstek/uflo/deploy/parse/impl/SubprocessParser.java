@@ -34,7 +34,8 @@ import com.bstek.uflo.process.node.SubprocessVariable;
  */
 public class SubprocessParser extends AbstractParser {
 
-	public Object parse(Element element, long processId, boolean parseChildren) {
+	@Override
+    public Object parse(Element element, long processId, boolean parseChildren) {
 		SubprocessNode node=new SubprocessNode();
 		node.setProcessId(processId);
 		parseNodeCommonInfo(element, node);
@@ -57,11 +58,11 @@ public class SubprocessParser extends AbstractParser {
 				continue;
 			}
 			Element ele=(Element)obj;
-			if(ele.getName().equals("in-subprocess-variable")){
+			if("in-subprocess-variable".equals(ele.getName())){
 				SubprocessVariable var=new SubprocessVariable(unescape(ele.attributeValue("in-parameter-key")),unescape(ele.attributeValue("out-parameter-key")));
 				inVars.add(var);
 			}
-			if(ele.getName().equals("out-subprocess-variable")){
+			if("out-subprocess-variable".equals(ele.getName())){
 				SubprocessVariable var=new SubprocessVariable(unescape(ele.attributeValue("in-parameter-key")),unescape(ele.attributeValue("out-parameter-key")));
 				outVars.add(var);
 			}
@@ -78,8 +79,9 @@ public class SubprocessParser extends AbstractParser {
 		return node;
 	}
 
-	public boolean support(Element element) {
-		return element.getName().equals("subprocess");
+	@Override
+    public boolean support(Element element) {
+		return "subprocess".equals(element.getName());
 	}
 
 }

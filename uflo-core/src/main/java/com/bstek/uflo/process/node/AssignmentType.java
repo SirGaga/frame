@@ -15,6 +15,10 @@
  ******************************************************************************/
 package com.bstek.uflo.process.node;
 
+/**
+ * @author zhangjie
+ * @date 2021-04-08
+ */
 public enum AssignmentType {
 	Assignee,Swimlane,Handler,Expression,ProcessPromoter;
 }

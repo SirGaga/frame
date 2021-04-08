@@ -47,6 +47,7 @@ public class GetAvaliableAppointAssigneeTaskNodes implements Command<List<String
 		this.expressionContext = context;
 	}
 
+	@Override
 	public List<String> execute(Context context) {
 		this.expressionContext = context.getExpressionContext();
 		ProcessDefinition pd=context.getProcessService().getProcessById(task.getProcessId());
@@ -57,7 +58,9 @@ public class GetAvaliableAppointAssigneeTaskNodes implements Command<List<String
 	}
 	private void getAvliableNodes(Node node,List<String> nodes,ProcessDefinition pd){
 		List<SequenceFlowImpl> flows=node.getSequenceFlows();
-		if(flows==null || flows.size()==0)return;
+		if(flows==null || flows.size()==0) {
+			return;
+		}
 		//判断是否是路由决策节点
 		if(node instanceof DecisionNode){
 			DecisionNode decisionNode = (DecisionNode)node;

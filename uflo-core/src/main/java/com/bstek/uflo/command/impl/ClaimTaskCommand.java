@@ -34,7 +34,8 @@ public class ClaimTaskCommand implements Command<Task> {
 		this.task=task;
 		this.user=user;
 	}
-	public Task execute(Context context) {
+	@Override
+    public Task execute(Context context) {
 		if(!task.getType().equals(TaskType.Participative)){
 			throw new IllegalStateException("当前任务 ["+task.getTaskName()+"] 不是一个竞争任务!");
 		}

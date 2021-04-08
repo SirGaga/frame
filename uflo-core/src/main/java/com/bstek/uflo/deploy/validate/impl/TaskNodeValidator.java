@@ -60,7 +60,7 @@ public class TaskNodeValidator extends NodeValidator {
 					continue;
 				}
 				Element e=(Element)node;
-				if(e.getNodeName().equals("assignee")){
+				if("assignee".equals(e.getNodeName())){
 					hasAssignee=true;
 				}
 			}
@@ -76,7 +76,7 @@ public class TaskNodeValidator extends NodeValidator {
 				continue;
 			}
 			Element e=(Element)node;
-			if(e.getNodeName().equals("due")){
+			if("due".equals(e.getNodeName())){
 				hasDue=true;
 			}
 			if(hasDue){
@@ -96,10 +96,10 @@ public class TaskNodeValidator extends NodeValidator {
 			Element e=(Element)node;
 			String reminder=null;
 			String nodeName=e.getNodeName();
-			if(nodeName.equals("once-reminder")){
+			if("once-reminder".equals(nodeName)){
 				reminder="只提醒一次";
 			}
-			if(nodeName.equals("period-reminder")){
+			if("period-reminder".equals(nodeName)){
 				reminder="周期性提醒";
 			}
 			if(reminder!=null){
@@ -112,11 +112,13 @@ public class TaskNodeValidator extends NodeValidator {
 		}
 	}
 	
-	public boolean support(Element element) {
-		return element.getNodeName().equals("task");
+	@Override
+    public boolean support(Element element) {
+		return "task".equals(element.getNodeName());
 	}
 
-	public String getNodeName() {
+	@Override
+    public String getNodeName() {
 		return "人工任务";
 	}
 }

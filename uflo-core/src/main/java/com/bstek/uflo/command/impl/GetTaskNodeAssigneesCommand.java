@@ -36,7 +36,8 @@ public class GetTaskNodeAssigneesCommand implements Command<List<String>> {
 		this.taskId=taskId;
 		this.taskNodeName=taskNodeName;
 	}
-	public List<String> execute(Context context) {
+	@Override
+    public List<String> execute(Context context) {
 		ProcessService processService=context.getProcessService();
 		Task task=context.getTaskService().getTask(taskId);
 		ProcessInstance processInstance=processService.getProcessInstanceById(task.getProcessInstanceId());

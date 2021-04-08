@@ -29,7 +29,8 @@ public class SuspendTaskCommand implements Command<Task> {
 	public SuspendTaskCommand(Task task){
 		this.task=task;
 	}
-	public Task execute(Context context) {
+	@Override
+    public Task execute(Context context) {
 		TaskState state=task.getState();
 		if(!state.equals(TaskState.Ready) && !state.equals(TaskState.InProgress) && !state.equals(TaskState.Reserved)){
 			throw new IllegalStateException("只有状态为 ready,reserved or inProgress 的任务才能被暂停!");

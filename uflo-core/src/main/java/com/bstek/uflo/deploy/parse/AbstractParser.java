@@ -15,18 +15,6 @@
  ******************************************************************************/
 package com.bstek.uflo.deploy.parse;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.StringTokenizer;
-
-import org.apache.commons.lang.StringUtils;
-import org.dom4j.Element;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-
 import com.bstek.uflo.deploy.StringTools;
 import com.bstek.uflo.diagram.NodeDiagram;
 import com.bstek.uflo.process.assign.Assignee;
@@ -37,6 +25,17 @@ import com.bstek.uflo.process.node.Node;
 import com.bstek.uflo.process.node.UserData;
 import com.bstek.uflo.process.security.Authority;
 import com.bstek.uflo.utils.Utils;
+import org.apache.commons.lang.StringUtils;
+import org.dom4j.Element;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.StringTokenizer;
 
 
 /**
@@ -47,7 +46,9 @@ public abstract class AbstractParser implements Parser,ApplicationContextAware {
 	protected Collection<Parser> parsers;
 	
 	protected String unescape(String str){
-		if(StringUtils.isEmpty(str))return str;
+		if(StringUtils.isEmpty(str)) {
+			return str;
+		}
 		return StringTools.unescape(str);
 	}
 	
@@ -152,7 +153,7 @@ public abstract class AbstractParser implements Parser,ApplicationContextAware {
 				continue;
 			}
 			Element ele=(Element)obj;
-			if(!ele.getName().equals("assignee")){
+			if(!"assignee".equals(ele.getName())){
 				continue;
 			}
 			String id=unescape(ele.attributeValue("id"));
@@ -170,9 +171,13 @@ public abstract class AbstractParser implements Parser,ApplicationContextAware {
 	protected List<UserData> parseUserData(Element element){
 		List<UserData> data=new ArrayList<UserData>();
 		for(Object object:element.elements()){
-			if(!(object instanceof Element))continue;
+			if(!(object instanceof Element)) {
+				continue;
+			}
 			Element ele=(Element)object;
-			if(!ele.getName().equals("user-data"))continue;
+			if(!"user-data".equals(ele.getName())) {
+				continue;
+			}
 			data.add(new UserData(ele.attributeValue("key"),ele.attributeValue("value")));
 		}
 		return data;
@@ -181,9 +186,13 @@ public abstract class AbstractParser implements Parser,ApplicationContextAware {
 	protected List<FormElement> parseFormElements(Element element){
 		List<FormElement> formElements=new ArrayList<FormElement>();
 		for(Object object:element.elements()){
-			if(!(object instanceof Element))continue;
+			if(!(object instanceof Element)) {
+				continue;
+			}
 			Element ele=(Element)object;
-			if(!ele.getName().equals("form-element"))continue;
+			if(!"form-element".equals(ele.getName())) {
+				continue;
+			}
 			FormElement formElement=new FormElement();
 			formElement.setName(ele.attributeValue("name"));
 			formElement.setCaption(ele.attributeValue("caption"));
@@ -198,7 +207,7 @@ public abstract class AbstractParser implements Parser,ApplicationContextAware {
 					continue;
 				}
 				Element mappingElement=(Element)obj;
-				if(!mappingElement.getName().equals("mapping")){
+				if(!"mapping".equals(mappingElement.getName())){
 					continue;
 				}
 				if(mappings==null){
@@ -237,6 +246,7 @@ public abstract class AbstractParser implements Parser,ApplicationContextAware {
 		return flows;
 	}
 	
+	@Override
 	public void setApplicationContext(ApplicationContext applicationContext)
 			throws BeansException {
 		parsers=applicationContext.getBeansOfType(Parser.class).values();

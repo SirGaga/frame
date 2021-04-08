@@ -47,7 +47,8 @@ public class HistoryProcessVariableQueryImpl implements QueryJob,HistoryProcessV
 	public HistoryProcessVariableQueryImpl(CommandService commandService){
 		this.commandService=commandService;
 	}
-	public Criteria getCriteria(Session session,boolean queryCount) {
+	@Override
+	public Criteria getCriteria(Session session, boolean queryCount) {
 		Criteria criteria=session.createCriteria(HistoryVariable.class);
 		buildCriteria(criteria,queryCount);
 		return criteria;
@@ -77,35 +78,42 @@ public class HistoryProcessVariableQueryImpl implements QueryJob,HistoryProcessV
 		}
 	}
 	
+	@Override
 	public List<HistoryVariable> list() {
 		return commandService.executeCommand(new QueryListCommand<List<HistoryVariable>>(this));
 	}
 
+	@Override
 	public int count() {
 		return commandService.executeCommand(new QueryCountCommand(this));
 	}
 
+	@Override
 	public HistoryProcessVariableQuery historyProcessInstanceId(long historyProcessInstanceId) {
 		this.historyProcessInstanceId=historyProcessInstanceId;
 		return this;
 	}
 
+	@Override
 	public HistoryProcessVariableQuery key(String key) {
 		this.key=key;
 		return this;
 	}
 
+	@Override
 	public HistoryProcessVariableQuery page(int firstResult, int maxResults) {
 		this.firstResult=firstResult;
 		this.maxResults=maxResults;
 		return this;
 	}
 
+	@Override
 	public HistoryProcessVariableQuery addOrderAsc(String property) {
 		ascOrders.add(property);
 		return this;
 	}
 
+	@Override
 	public HistoryProcessVariableQuery addOrderDesc(String property) {
 		descOrders.add(property);
 		return this;

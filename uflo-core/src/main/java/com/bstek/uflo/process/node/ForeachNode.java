@@ -15,20 +15,15 @@
  ******************************************************************************/
 package com.bstek.uflo.process.node;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.bstek.uflo.command.impl.SaveProcessInstanceVariablesCommand;
 import com.bstek.uflo.env.Context;
 import com.bstek.uflo.model.ProcessInstance;
 import com.bstek.uflo.model.ProcessInstanceState;
 import com.bstek.uflo.process.handler.ForeachHandler;
 import com.bstek.uflo.utils.IDGenerator;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.*;
 
 /**
  * @author Jacky.gao
@@ -60,7 +55,7 @@ public class ForeachNode extends Node {
 			Object variableObj=context.getExpressionContext().eval(processInstance, processVariable);
 			if(variableObj instanceof Object[]){
 				coll=new ArrayList<Object>();
-				Object objs[]=(Object[])variableObj;
+				Object[] objs =(Object[])variableObj;
 				for(Object obj:objs){
 					coll.add(obj);
 				}
@@ -92,7 +87,7 @@ public class ForeachNode extends Node {
 			subProcessInstance.setTag(processInstance.getTag());
 			subProcessInstance.setSubject(processInstance.getSubject());
 			context.getSession().save(subProcessInstance);
-			Map<String,Object> variables=new HashMap<String,Object>();
+			Map<String,Object> variables= new HashMap<>(16);
 			variables.put(variable, obj);
 			context.getCommandService().executeCommand(new SaveProcessInstanceVariablesCommand(subProcessInstance, variables));
 			context.getExpressionContext().createContext(subProcessInstance, variables);

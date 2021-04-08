@@ -30,7 +30,8 @@ public class GetHistoryProcessInstanceCommand implements Command<HistoryProcessI
 	public GetHistoryProcessInstanceCommand(long processInstanceId){
 		this.processInstanceId=processInstanceId;
 	}
-	public HistoryProcessInstance execute(Context context) {
+	@Override
+    public HistoryProcessInstance execute(Context context) {
 		return (HistoryProcessInstance)context.getSession().createCriteria(HistoryProcessInstance.class).add(Restrictions.eq("processInstanceId", processInstanceId)).uniqueResult();
 	}
 }

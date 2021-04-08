@@ -1,23 +1,23 @@
 package com.feityz.system.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.feityz.common.BaseController;
+import com.feityz.common.Rest;
+import com.feityz.system.entity.ProcessModel;
+import com.feityz.system.service.IProcessModelService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.feityz.system.service.IProcessModelService;
-import com.feityz.system.entity.ProcessModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.feityz.common.BaseController;
-import com.feityz.common.Rest;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import springfox.documentation.annotations.ApiIgnore;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
+import javax.annotation.Resource;
 import java.io.File;
 
 @Api(tags = "请写全接口用途注释")
@@ -26,11 +26,13 @@ import java.io.File;
 @ApiIgnore
 public class ProcessModelController extends BaseController {
 
-    //文件存储路径
+    /**
+     * 文件存储路径
+     */
     @Value("${fileStoreDir}")
     private String fileStoreDir;
 
-    @Autowired
+    @Resource
     public IProcessModelService processModelService;
 
 

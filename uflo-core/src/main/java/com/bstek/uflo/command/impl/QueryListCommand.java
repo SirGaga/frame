@@ -15,15 +15,14 @@
  ******************************************************************************/
 package com.bstek.uflo.command.impl;
 
-import java.util.List;
-
-import org.hibernate.Criteria;
-
 import com.bstek.uflo.command.Command;
 import com.bstek.uflo.env.Context;
 import com.bstek.uflo.model.variable.BlobVariable;
 import com.bstek.uflo.model.variable.TextVariable;
 import com.bstek.uflo.query.QueryJob;
+import org.hibernate.Criteria;
+
+import java.util.List;
 
 /**
  * @author Jacky.gao
@@ -34,7 +33,8 @@ public class QueryListCommand<T> implements Command<T> {
 	public QueryListCommand(QueryJob job){
 		this.job=job;
 	}
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public T execute(Context context) {
 		Criteria criteria=job.getCriteria(context.getSession(),false);
 		List<Object> list=criteria.list();

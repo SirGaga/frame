@@ -25,7 +25,8 @@ public class ProcessValidateException extends RuntimeException {
 	public ProcessValidateException(String message){
 		this.message=message;
 	}
-	public String getMessage() {
+	@Override
+    public String getMessage() {
 		return message;
 	}	
 }

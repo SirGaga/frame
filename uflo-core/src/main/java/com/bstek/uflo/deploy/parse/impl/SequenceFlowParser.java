@@ -34,7 +34,8 @@ import com.bstek.uflo.process.flow.SequenceFlowImpl;
  */
 public class SequenceFlowParser implements Parser {
 
-	public Object parse(Element element,long processId,boolean parseChildren) {
+	@Override
+	public Object parse(Element element, long processId, boolean parseChildren) {
 		SequenceFlowImpl flow=new SequenceFlowImpl();
 		flow.setProcessId(processId);
 		flow.setName(unescape(element.attributeValue("name")));
@@ -69,7 +70,9 @@ public class SequenceFlowParser implements Parser {
 		diagram.setTo(element.attributeValue("to"));
 		diagram.setName(name);
 		String g=element.attributeValue("g");
-		if(StringUtils.isEmpty(g))return diagram;
+		if(StringUtils.isEmpty(g)) {
+            return diagram;
+        }
 		String[] pointInfos=null;
 		if(StringUtils.isNotEmpty(name)){
 			String[] info=g.split(":");
@@ -114,12 +117,15 @@ public class SequenceFlowParser implements Parser {
 		return points;
 	}
 	
+	@Override
 	public boolean support(Element element) {
-		return element.getName().equals("sequence-flow");
+		return "sequence-flow".equals(element.getName());
 	}
 	
 	protected String unescape(String str){
-		if(StringUtils.isEmpty(str))return str;
+		if(StringUtils.isEmpty(str)) {
+            return str;
+        }
 		str=StringEscapeUtils.escapeXml(str);
 		return StringEscapeUtils.unescapeXml(str);
 	}

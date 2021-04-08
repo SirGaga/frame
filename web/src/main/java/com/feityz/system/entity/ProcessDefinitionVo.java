@@ -7,8 +7,13 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * 流程实体
+ * @author zhangjie
+ * @date 2021-04-08
+ */
 @Data
-@TableName(value="UFLO_PROCESS")
+@TableName(value="uflo_process")
 public class ProcessDefinitionVo implements java.io.Serializable {
     private static final long serialVersionUID = -1328642749306459546L;
 

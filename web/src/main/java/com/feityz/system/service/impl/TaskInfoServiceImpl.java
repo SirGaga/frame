@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bstek.uflo.command.CommandService;
 import com.bstek.uflo.command.impl.SaveProcessInstanceVariablesCommand;
-import com.bstek.uflo.env.impl.ContextImpl;
 import com.bstek.uflo.expr.ExpressionContext;
 import com.bstek.uflo.model.ProcessInstance;
 import com.bstek.uflo.model.task.Task;
@@ -31,27 +30,27 @@ import com.feityz.system.vo.*;
 import com.feityz.util.SpringUtils;
 import exception.BizException;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class TaskInfoServiceImpl extends ServiceImpl<TaskInfoMapper, TaskInfo> implements ITaskInfoService {
-    @Autowired
+    @Resource
     private TaskService taskService;
-    @Autowired
+    @Resource
     private IUserService userService;
-    @Autowired
+    @Resource
     private ProcessService processService;
-    @Autowired
+    @Resource
     private CommandService commandService;
-    @Autowired
+    @Resource
     private ExpressionContext expressionContext;
-    @Autowired
+    @Resource
     private IDeptService deptService;
 
     @Override
@@ -63,7 +62,7 @@ public class TaskInfoServiceImpl extends ServiceImpl<TaskInfoMapper, TaskInfo> i
 
     @Override
     @Transactional
-    public Map complateTask(TaskInput input){
+    public Map completeTask(TaskInput input){
         //先设置流程变量
         if(input.getVariables()!=null) {
             taskService.setTaskVariable(input.getVariables(), input.getTaskId());
@@ -78,7 +77,7 @@ public class TaskInfoServiceImpl extends ServiceImpl<TaskInfoMapper, TaskInfo> i
 
         if(nodeNames.size()>0 && (StringUtils.isEmpty(input.getNextNodeName())
             ||StringUtils.isEmpty(input.getAssignee()))){
-            Map resultMap = new HashMap();
+            Map<String, List<User>> resultMap = new HashMap<>(16);
             for (String nodeName:nodeNames) {
                 //判断该节点之前有没有被处理过,如果有人处理过,直接将处理人指定为这个人
                 /*List<Task> tasks = taskService.createTaskQuery().processInstanceId(task.getProcessInstanceId())
@@ -114,12 +113,12 @@ public class TaskInfoServiceImpl extends ServiceImpl<TaskInfoMapper, TaskInfo> i
             }
             return resultMap;
         }else {
-            complateSingle(input);
+            completeSingle(input);
             return null;
         }
     }
 
-    private void complateSingle(TaskInput input){
+    private void completeSingle(TaskInput input){
         Task task = taskService.getTask(input.getTaskId());
         if(task.getType().equals(TaskType.Participative)){
             //竞争类型的任务
@@ -274,7 +273,8 @@ public class TaskInfoServiceImpl extends ServiceImpl<TaskInfoMapper, TaskInfo> i
         if(nodeNames.size()>0){
             throw new BizException("根据条件出现了多个节点");
         }
-        String nodeName = nodeNames.get(0);//否决的节点只能有一个
+        //否决的节点只能有一个
+        String nodeName = nodeNames.get(0);
         taskService.rollback(task,nodeName,input.getVariables(),new TaskOpinion(input.getOpinion()));
     }
 

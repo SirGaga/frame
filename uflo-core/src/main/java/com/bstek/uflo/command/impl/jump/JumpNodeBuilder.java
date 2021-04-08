@@ -55,7 +55,9 @@ public class JumpNodeBuilder {
 	
 	private void simulation(Node parentNode,JumpNode jumpNode){
 		List<SequenceFlowImpl> flows=parentNode.getSequenceFlows();
-		if(flows==null || flows.size()==0)return;
+		if(flows==null || flows.size()==0) {
+            return;
+        }
 		for(SequenceFlow flow:flows){
 			if(flowStore.contains(flow)){
 				continue;

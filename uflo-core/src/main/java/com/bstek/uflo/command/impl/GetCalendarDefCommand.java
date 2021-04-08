@@ -31,7 +31,8 @@ public class GetCalendarDefCommand implements Command<CalendarDef> {
 	public GetCalendarDefCommand(long calendarId){
 		this.calendarId=calendarId;
 	}
-	public CalendarDef execute(Context context) {
+	@Override
+    public CalendarDef execute(Context context) {
 		Criteria criteria=context.getSession().createCriteria(CalendarDef.class);
 		criteria.add(Restrictions.eq("id", calendarId));
 		CalendarDef def=(CalendarDef)criteria.uniqueResult();

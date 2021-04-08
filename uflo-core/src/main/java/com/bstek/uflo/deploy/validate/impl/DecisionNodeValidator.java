@@ -48,7 +48,7 @@ public class DecisionNodeValidator extends NodeValidator {
 							continue;
 						}
 						Element childElement=(Element)node;
-						if(childElement.getNodeName().equals("expression")){
+						if("expression".equals(childElement.getNodeName())){
 							hasExpr=true;
 							break;
 						}
@@ -64,11 +64,13 @@ public class DecisionNodeValidator extends NodeValidator {
 		}
 	}
 	
-	public boolean support(Element element) {
-		return element.getNodeName().equals("decision");
+	@Override
+    public boolean support(Element element) {
+		return "decision".equals(element.getNodeName());
 	}
 
-	public String getNodeName() {
+	@Override
+    public String getNodeName() {
 		return "路由决策";
 	}
 }

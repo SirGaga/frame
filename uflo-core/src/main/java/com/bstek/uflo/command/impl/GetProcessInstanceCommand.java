@@ -28,7 +28,8 @@ public class GetProcessInstanceCommand implements Command<ProcessInstance> {
 	public GetProcessInstanceCommand(long processInstanceId){
 		this.processInstanceId=processInstanceId;
 	}
-	public ProcessInstance execute(Context context) {
+	@Override
+    public ProcessInstance execute(Context context) {
 		return (ProcessInstance)context.getSession().get(ProcessInstance.class, processInstanceId);
 	}
 }

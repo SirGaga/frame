@@ -35,7 +35,8 @@ public class DeptAssigneeProvider extends AbstractAssigneeProvider {
 		return true;
 	}
 	
-	public String getName() {
+	@Override
+    public String getName() {
 		return "指定部门";
 	}
 	

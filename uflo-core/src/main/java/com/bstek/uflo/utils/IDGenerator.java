@@ -76,7 +76,8 @@ public class IDGenerator implements ApplicationContextAware{
 		this.commandService = commandService;
 	}
 
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+	@Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		IDGenerator.generator=this;
 	}
 

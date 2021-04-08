@@ -1,16 +1,12 @@
 package com.feityz;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.extra.mail.MailAccount;
 import cn.hutool.extra.mail.MailUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.bstek.uflo.command.CommandService;
-import com.bstek.uflo.command.impl.CompleteTaskCommand;
 import com.bstek.uflo.model.ProcessInstance;
-import com.bstek.uflo.model.task.Task;
 import com.bstek.uflo.service.ProcessService;
 import com.bstek.uflo.service.StartProcessInfo;
 import com.bstek.uflo.service.TaskService;
@@ -22,27 +18,17 @@ import com.feityz.system.service.IParameterService;
 import com.feityz.system.service.IProcessRunService;
 import com.feityz.system.service.IUserAndRoleService;
 import com.feityz.system.service.IUserService;
-import com.feityz.util.MD5Util;
-import org.apache.commons.jexl2.Expression;
-import org.apache.commons.jexl2.JexlContext;
-import org.apache.commons.jexl2.JexlEngine;
-import org.apache.commons.jexl2.MapContext;
-import org.apache.commons.lang3.time.DateUtils;
+import com.feityz.util.Md5Util;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-import org.thymeleaf.spring5.context.SpringContextUtils;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.concurrent.Future;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @SpringBootTest
@@ -201,7 +187,7 @@ public class ProcessTest {
                 user.setUserName(userName);
                 user.setUserNum(userNum);
                 user.setRoles("");
-                user.setPassword(MD5Util.getPassword(user.getUserNum(), "123456"));
+                user.setPassword(Md5Util.getPassword(user.getUserNum(), "123456"));
                 userService.save(user);
             }
             users.add(user.getId().toString());

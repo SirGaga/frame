@@ -40,38 +40,45 @@ public class ContextImpl implements ApplicationContextAware,Context{
 	private ExpressionContext expressionContext;
 	private IdentityService identityService;
 	private TaskService taskService;
-	public Session getSession(){
+	@Override
+    public Session getSession(){
 		return sessionFactory.getCurrentSession();
 	}
-	public ApplicationContext getApplicationContext() {
+	@Override
+    public ApplicationContext getApplicationContext() {
 		return applicationContext;
 	}
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-	public CommandService getCommandService() {
+	@Override
+    public CommandService getCommandService() {
 		return commandService;
 	}
 	public void setCommandService(CommandService commandService) {
 		this.commandService = commandService;
 	}
-	public void setApplicationContext(ApplicationContext applicationContext)
+	@Override
+    public void setApplicationContext(ApplicationContext applicationContext)
 			throws BeansException {
 		this.applicationContext=applicationContext;
 	}
-	public ProcessService getProcessService() {
+	@Override
+    public ProcessService getProcessService() {
 		return processService;
 	}
 	public void setProcessService(ProcessService processService) {
 		this.processService = processService;
 	}
-	public ExpressionContext getExpressionContext() {
+	@Override
+    public ExpressionContext getExpressionContext() {
 		return expressionContext;
 	}
 	public void setExpressionContext(ExpressionContext expressionContext) {
 		this.expressionContext = expressionContext;
 	}
-	public IdentityService getIdentityService() {
+	@Override
+    public IdentityService getIdentityService() {
 		return identityService;
 	}
 	public void setIdentityService(IdentityService identityService) {
@@ -80,7 +87,8 @@ public class ContextImpl implements ApplicationContextAware,Context{
 	public void setTaskService(TaskService taskService) {
 		this.taskService = taskService;
 	}
-	public TaskService getTaskService() {
+	@Override
+    public TaskService getTaskService() {
 		return taskService;
 	}
 }

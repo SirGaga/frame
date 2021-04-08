@@ -28,7 +28,8 @@ import com.bstek.uflo.deploy.validate.Validator;
  */
 public abstract class NodeValidator implements Validator {
 
-	public void validate(Element element, List<String> errors,List<String> nodeNames) {
+	@Override
+    public void validate(Element element, List<String> errors, List<String> nodeNames) {
 		String name=element.getAttribute("name");
 		if(StringUtils.isEmpty(name)){
 			errors.add(getNodeName()+"节点未定义名称");

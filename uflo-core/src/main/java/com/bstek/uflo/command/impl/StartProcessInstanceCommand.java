@@ -46,7 +46,8 @@ public class StartProcessInstanceCommand implements Command<ProcessInstance> {
 		this.startProcessInfo=startProcessInfo;
 		this.parentProcessInstanceId=parentProcessInstanceId;
 	}
-	public ProcessInstance execute(Context context) {
+	@Override
+    public ProcessInstance execute(Context context) {
 		ProcessInstance processInstance=new ProcessInstance();
 		long piId=IDGenerator.getInstance().nextId();
 		processInstance.addMetadata(StartProcessInfo.KEY, startProcessInfo);

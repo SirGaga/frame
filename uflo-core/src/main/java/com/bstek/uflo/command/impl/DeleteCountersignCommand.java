@@ -32,7 +32,8 @@ public class DeleteCountersignCommand implements Command<Object> {
 	public DeleteCountersignCommand(Task task){
 		this.task=task;
 	}
-	public Object execute(Context context) {
+	@Override
+    public Object execute(Context context) {
 		if(!TaskType.Countersign.equals(task.getType())){
 			throw new IllegalArgumentException("任务 "+task.getId()+" 不是一个会签任务.");
 		}

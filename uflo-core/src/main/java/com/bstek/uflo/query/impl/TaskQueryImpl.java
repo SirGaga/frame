@@ -74,15 +74,18 @@ public class TaskQueryImpl implements TaskQuery,QueryJob{
 	public TaskQueryImpl(CommandService commandService){
 		this.commandService=commandService;
 	}
-	public List<Task> list() {
+	@Override
+    public List<Task> list() {
 		return commandService.executeCommand(new QueryListCommand<List<Task>>(this));
 	}
 
-	public int count() {
+	@Override
+    public int count() {
 		return commandService.executeCommand(new QueryCountCommand(this));
 	}
 
-	public Criteria getCriteria(Session session,boolean queryCount) {
+	@Override
+    public Criteria getCriteria(Session session, boolean queryCount) {
 		Criteria criteria=session.createCriteria(Task.class);
 		buildCriteria(criteria,queryCount);
 		return criteria;
@@ -229,130 +232,156 @@ public class TaskQueryImpl implements TaskQuery,QueryJob{
 		}
 	}
 		
-	public TaskQuery addAssignee(String assignee) {
+	@Override
+    public TaskQuery addAssignee(String assignee) {
 		assignees.add(assignee);
 		return this;
 	}
 	
-	public TaskQuery businessId(String businessId) {
+	@Override
+    public TaskQuery businessId(String businessId) {
 		this.businessId=businessId;
 		return this;
 	}
 	
-	public TaskQuery addOrderAsc(String property){
+	@Override
+    public TaskQuery addOrderAsc(String property){
 		ascOrders.add(property);
 		return this;
 	}
 
-	public TaskQuery addOrderDesc(String property){
+	@Override
+    public TaskQuery addOrderDesc(String property){
 		descOrders.add(property);
 		return this;
 	}
 	
-	public TaskQuery assignee(String assignee) {
+	@Override
+    public TaskQuery assignee(String assignee) {
 		assignees.add(assignee);
 		return this;
 	}
 
-	public TaskQuery owner(String owner) {
+	@Override
+    public TaskQuery owner(String owner) {
 		this.owner=owner;
 		return this;
 	}
 
-	public TaskQuery addTaskState(TaskState state) {
+	@Override
+    public TaskQuery addTaskState(TaskState state) {
 		states.add(state);
 		return this;
 	}
 
-	public TaskQuery addPrevTaskState(TaskState state) {
+	@Override
+    public TaskQuery addPrevTaskState(TaskState state) {
 		prevstates.add(state);
 		return this;
 	}
 
-	public TaskQuery processInstanceId(long processInstanceId) {
+	@Override
+    public TaskQuery processInstanceId(long processInstanceId) {
 		this.processInstanceId=processInstanceId;
 		return this;
 	}
 
-	public TaskQuery createDateLessThen(Date createDateLessThen) {
+	@Override
+    public TaskQuery createDateLessThen(Date createDateLessThen) {
 		this.createDateLessThen=createDateLessThen;
 		return this;
 	}
 
-	public TaskQuery createDateLessThenOrEquals(Date createDateLessThenOrEquals) {
+	@Override
+    public TaskQuery createDateLessThenOrEquals(Date createDateLessThenOrEquals) {
 		this.createDateLessThenOrEquals=createDateLessThenOrEquals;
 		return this;
 	}
 
-	public TaskQuery createDateGreaterThen(Date createDateGreaterThen) {
+	@Override
+    public TaskQuery createDateGreaterThen(Date createDateGreaterThen) {
 		this.createDateGreaterThen=createDateGreaterThen;
 		return this;
 	}
 
-	public TaskQuery createDateGreaterThenOrEquals(Date createDateGreaterThenOrEquals) {
+	@Override
+    public TaskQuery createDateGreaterThenOrEquals(Date createDateGreaterThenOrEquals) {
 		this.createDateGreaterThenOrEquals=createDateGreaterThenOrEquals;
 		return this;
 	}
-	public TaskQuery dueDateLessThen(Date dueDateLessThen) {
+	@Override
+    public TaskQuery dueDateLessThen(Date dueDateLessThen) {
 		this.dueDateLessThen=dueDateLessThen;
 		return this;
 	}
 	
-	public TaskQuery dueDateLessThenOrEquals(Date dueDateLessThenOrEquals) {
+	@Override
+    public TaskQuery dueDateLessThenOrEquals(Date dueDateLessThenOrEquals) {
 		this.dueDateLessThenOrEquals=dueDateLessThenOrEquals;
 		return this;
 	}
 	
-	public TaskQuery dueDateGreaterThen(Date dueDateGreaterThen) {
+	@Override
+    public TaskQuery dueDateGreaterThen(Date dueDateGreaterThen) {
 		this.dueDateGreaterThen=dueDateGreaterThen;
 		return this;
 	}
 	
-	public TaskQuery dueDateGreaterThenOrEquals(Date dueDateGreaterThenOrEquals) {
+	@Override
+    public TaskQuery dueDateGreaterThenOrEquals(Date dueDateGreaterThenOrEquals) {
 		this.dueDateGreaterThenOrEquals=dueDateGreaterThenOrEquals;
 		return this;
 	}
 
-	public TaskQuery urlLike(String url) {
+	@Override
+    public TaskQuery urlLike(String url) {
 		this.url=url;
 		return this;
 	}
 	
-	public TaskQuery subjectLike(String subject) {
+	@Override
+    public TaskQuery subjectLike(String subject) {
 		this.subject=subject;
 		return this;
 	}
 
-	public TaskQuery countersign(boolean countersign) {
+	@Override
+    public TaskQuery countersign(boolean countersign) {
 		this.countersign=countersign;
 		return this;
 	}
 	
 
-	public TaskQuery taskType(TaskType type) {
+	@Override
+    public TaskQuery taskType(TaskType type) {
 		this.type=type;
 		return this;
 	}
 
-	public TaskQuery addParticipator(String user) {
+	@Override
+    public TaskQuery addParticipator(String user) {
 		participators.add(user);
 		return this;
 	}
 	
-	public TaskQuery processId(long processId) {
+	@Override
+    public TaskQuery processId(long processId) {
 		this.processIds.add(processId);
 		return this;
 	}
-	public TaskQuery addProcessId(long processId) {
+	@Override
+    public TaskQuery addProcessId(long processId) {
 		this.processIds.add(processId);
 		return this;
 	}
-	public TaskQuery rootProcessInstanceId(long rootProcessInstanceId) {
+	@Override
+    public TaskQuery rootProcessInstanceId(long rootProcessInstanceId) {
 		this.rootProcessInstanceId=rootProcessInstanceId;
 		return this;
 	}
 
-	public TaskQuery nameLike(String name) {
+	@Override
+    public TaskQuery nameLike(String name) {
 		this.name=name;
 		return this;
 	}
@@ -369,12 +398,14 @@ public class TaskQueryImpl implements TaskQuery,QueryJob{
 		return this;
 	}
 	
-	public TaskQuery nodeName(String nodeName) {
+	@Override
+    public TaskQuery nodeName(String nodeName) {
 		this.nodeName=nodeName;
 		return this;
 	}
 	
-	public TaskQuery page(int firstResult, int maxResults) {
+	@Override
+    public TaskQuery page(int firstResult, int maxResults) {
 		this.firstResult=firstResult;
 		this.maxResults=maxResults;
 		return this;

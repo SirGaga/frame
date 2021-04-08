@@ -15,30 +15,8 @@
  ******************************************************************************/
 package com.bstek.uflo.service.impl;
 
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.zip.ZipInputStream;
-
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-
 import com.bstek.uflo.command.CommandService;
-import com.bstek.uflo.command.impl.DeleteProcessDefinitionCommand;
-import com.bstek.uflo.command.impl.DeleteProcessInstanceCommand;
-import com.bstek.uflo.command.impl.DeleteProcessVariableCommand;
-import com.bstek.uflo.command.impl.GetExpressionValueCommand;
-import com.bstek.uflo.command.impl.GetProcessByKeyCommand;
-import com.bstek.uflo.command.impl.GetProcessCommand;
-import com.bstek.uflo.command.impl.GetProcessInstanceCommand;
-import com.bstek.uflo.command.impl.GetProcessInstanceVariableCommand;
-import com.bstek.uflo.command.impl.SaveProcessInstanceVariablesCommand;
-import com.bstek.uflo.command.impl.StartProcessInstanceCommand;
+import com.bstek.uflo.command.impl.*;
 import com.bstek.uflo.deploy.ProcessDeployer;
 import com.bstek.uflo.model.ProcessDefinition;
 import com.bstek.uflo.model.ProcessInstance;
@@ -54,6 +32,14 @@ import com.bstek.uflo.service.ProcessInterceptor;
 import com.bstek.uflo.service.ProcessService;
 import com.bstek.uflo.service.StartProcessInfo;
 import com.bstek.uflo.utils.EnvironmentUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.zip.ZipInputStream;
 
 /**
  * @author Jacky.gao
@@ -64,6 +50,7 @@ public class DefaultProcessService implements ProcessService,ApplicationContextA
 	private ProcessDeployer processDeployer;
 	private CommandService commandService;
 	
+	@Override
 	public synchronized ProcessDefinition getProcessById(long processId) {
 		CacheService cache=EnvironmentUtils.getEnvironment().getCache();
 		if(cache.containsProcessDefinition(processId)){
@@ -75,10 +62,12 @@ public class DefaultProcessService implements ProcessService,ApplicationContextA
 		}
 	}
 	
+	@Override
 	public void deleteProcessVariable(String key, long processInstanceId) {
 		commandService.executeCommand(new DeleteProcessVariableCommand(key,processInstanceId));
 	}
 	
+	@Override
 	public ProcessDefinition getProcessByKey(String key) {
 		/*CacheService cache=EnvironmentUtils.getEnvironment().getCache();
 		for(ProcessDefinition pd:cache.loadAllProcessDefinitions()){
@@ -94,11 +83,13 @@ public class DefaultProcessService implements ProcessService,ApplicationContextA
 		return process;
 	}
 
+	@Override
 	public ProcessDefinition getProcessByName(String processName) {
 		return commandService.executeCommand(new GetProcessCommand(0,processName,0,null));
 	}
 	
-	public ProcessDefinition getProcessByName(String processName,String categoryId) {
+	@Override
+	public ProcessDefinition getProcessByName(String processName, String categoryId) {
 		return commandService.executeCommand(new GetProcessCommand(0,processName,0,categoryId));
 	}
 	
@@ -207,32 +198,39 @@ public class DefaultProcessService implements ProcessService,ApplicationContextA
 		this.commandService = commandService;
 	}
 
-	public void saveProcessVariable(long processInstanceId,String key, Object value) {
-		Map<String,Object> variables=new HashMap<String,Object>();
+	@Override
+	public void saveProcessVariable(long processInstanceId, String key, Object value) {
+		Map<String,Object> variables= new HashMap<>(16);
 		variables.put(key, value);
 		saveProcessVariables(processInstanceId, variables);
 	}
 	
-	public void saveProcessVariables(long processInstanceId,Map<String, Object> variables) {
+	@Override
+	public void saveProcessVariables(long processInstanceId, Map<String, Object> variables) {
 		ProcessInstance pi=getProcessInstanceById(processInstanceId);
 		commandService.executeCommand(new SaveProcessInstanceVariablesCommand(pi,variables));
 	}
 	
+	@Override
 	public List<Variable> getProcessVariables(long processInstanceId) {
 		ProcessVariableQuery query=new ProcessVariableQueryImpl(commandService);
 		query.processInstanceId(processInstanceId);
 		return query.list();
 	}
 
+	@Override
 	public List<Variable> getProcessVariables(ProcessInstance processInstance) {
 		ProcessVariableQuery query=new ProcessVariableQueryImpl(commandService);
 		query.rootprocessInstanceId(processInstance.getRootId());
 		return query.list();
 	}
 
-	public Object getProcessVariable(String key,ProcessInstance processInstance) {
+	@Override
+	public Object getProcessVariable(String key, ProcessInstance processInstance) {
 		Object obj=commandService.executeCommand(new GetExpressionValueCommand(processInstance.getId(),key));
-		if(obj!=null)return obj;
+		if(obj!=null) {
+			return obj;
+		}
 		Variable var=commandService.executeCommand(new GetProcessInstanceVariableCommand(key,processInstance));
 		if(var!=null){
 			return var.getValue();
@@ -240,9 +238,12 @@ public class DefaultProcessService implements ProcessService,ApplicationContextA
 		return null;
 	}
 
+	@Override
 	public Object getProcessVariable(String key, long processInstanceId) {
 		Object obj=commandService.executeCommand(new GetExpressionValueCommand(processInstanceId,key));
-		if(obj!=null)return obj;
+		if(obj!=null) {
+			return obj;
+		}
 		ProcessInstance pi=getProcessInstanceById(processInstanceId);
 		return getProcessVariable(key, pi);
 	}
@@ -257,27 +258,33 @@ public class DefaultProcessService implements ProcessService,ApplicationContextA
 		deleteProcessInstance(getProcessInstanceById(processInstanceId));
 	}
 
+	@Override
 	public ProcessInstanceQuery createProcessInstanceQuery() {
 		return new ProcessInstanceQueryImpl(commandService);
 	}
 
+	@Override
 	public ProcessVariableQuery createProcessVariableQuery() {
 		return new ProcessVariableQueryImpl(commandService);
 	}
 	
+	@Override
 	public ProcessQuery createProcessQuery() {
 		return new ProcessQueryImpl(commandService);
 	}
 	
+	@Override
 	public void deleteProcess(long processId) {
 		ProcessDefinition processDefinition=getProcessById(processId);
 		deleteProcess(processDefinition);
 	}
+	@Override
 	public void deleteProcess(String processKey) {
 		ProcessDefinition processDefinition=getProcessByKey(processKey);
 		deleteProcess(processDefinition);
 	}
 	
+	@Override
 	public void updateProcessForMemory(long processId) {
 		ProcessDefinition process=commandService.executeCommand(new GetProcessCommand(processId,null,0,null));
 		if(process!=null){
@@ -286,6 +293,7 @@ public class DefaultProcessService implements ProcessService,ApplicationContextA
 		}
 	}
 	
+	@Override
 	public void deleteProcess(ProcessDefinition processDefinition) {
 		commandService.executeCommand(new DeleteProcessDefinitionCommand(processDefinition));
 		CacheService cache=EnvironmentUtils.getEnvironment().getCache();
@@ -293,14 +301,17 @@ public class DefaultProcessService implements ProcessService,ApplicationContextA
 		doProcessInterceptors(processDefinition,false);
 	}
 	
+	@Override
 	public void deleteProcessFromMemory(long processId) {
 		CacheService cache=EnvironmentUtils.getEnvironment().getCache();
 		cache.removeProcessDefinition(processId);
 	}
+	@Override
 	public void deleteProcessFromMemory(ProcessDefinition processDefinition) {
 		CacheService cache=EnvironmentUtils.getEnvironment().getCache();
 		cache.removeProcessDefinition(processDefinition.getId());
 	}
+	@Override
 	public void deleteProcessFromMemory(String processKey) {
 		ProcessDefinition processDefinition=getProcessByKey(processKey);
 		CacheService cache=EnvironmentUtils.getEnvironment().getCache();
@@ -317,6 +328,7 @@ public class DefaultProcessService implements ProcessService,ApplicationContextA
 		}
 	}
 	
+	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		processInterceptors=applicationContext.getBeansOfType(ProcessInterceptor.class).values();
 	}

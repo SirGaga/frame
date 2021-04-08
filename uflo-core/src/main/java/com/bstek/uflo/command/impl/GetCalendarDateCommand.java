@@ -33,7 +33,8 @@ public class GetCalendarDateCommand implements Command<List<CalendarDate>> {
 	public GetCalendarDateCommand(long calendarId){
 		this.calendarId=calendarId;
 	}
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public List<CalendarDate> execute(Context context) {
 		Criteria dateCriteria=context.getSession().createCriteria(CalendarDate.class);
 		dateCriteria.add(Restrictions.eq("calendarId", calendarId));

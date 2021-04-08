@@ -15,12 +15,6 @@
  ******************************************************************************/
 package com.bstek.uflo.command.impl;
 
-import java.util.Date;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Session;
-
 import com.bstek.uflo.command.Command;
 import com.bstek.uflo.env.Context;
 import com.bstek.uflo.model.ProcessDefinition;
@@ -34,6 +28,11 @@ import com.bstek.uflo.process.node.reminder.DueDefinition;
 import com.bstek.uflo.service.ProcessService;
 import com.bstek.uflo.service.SchedulerService;
 import com.bstek.uflo.service.TaskOpinion;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Session;
+
+import java.util.Date;
+import java.util.Map;
 
 /**
  * @author Jacky.gao
@@ -50,7 +49,8 @@ public class CompleteTaskCommand implements Command<Task> {
 		this.flowName=flowName;
 		this.variables=variables;
 	}
-	public Task execute(Context context) {
+	@Override
+    public Task execute(Context context) {
 		TaskState state=task.getState();
 		if(!state.equals(TaskState.InProgress)
 				&& !state.equals(TaskState.Forwarded)

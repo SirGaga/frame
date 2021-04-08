@@ -30,7 +30,8 @@ public class DeleteCalendarDateCommand implements Command<CalendarDate> {
 		this.date = date;
 	}
 
-	public CalendarDate execute(Context context) {
+	@Override
+    public CalendarDate execute(Context context) {
 		context.getSession().delete(this.date);
 		return null;
 	}

@@ -57,7 +57,7 @@ public class ProcessController {
         //只查最新版本
         condition.setLastVersion(true);
         IPage<ProcessDefinitionVo> pageInfo =
-                definitionService.definitionPage(new Page<ProcessDefinitionVo>(page, limit),condition);
+                definitionService.definitionPage(new Page<>(page, limit),condition);
         return Rest.success().setData(pageInfo.getRecords()).setTotal(pageInfo.getTotal());
     }
 

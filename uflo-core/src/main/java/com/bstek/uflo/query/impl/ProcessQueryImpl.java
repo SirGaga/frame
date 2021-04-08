@@ -58,17 +58,20 @@ public class ProcessQueryImpl implements ProcessQuery,QueryJob{
 	public ProcessQueryImpl(CommandService commandService){
 		this.commandService=commandService;
 	}
-	public Criteria getCriteria(Session session,boolean queryCount) {
+	@Override
+    public Criteria getCriteria(Session session, boolean queryCount) {
 		Criteria criteria=session.createCriteria(ProcessDefinition.class);
 		buildCriteria(criteria,queryCount);
 		return criteria;
 	}
 	
-	public List<ProcessDefinition> list() {
+	@Override
+    public List<ProcessDefinition> list() {
 		return commandService.executeCommand(new QueryListCommand<List<ProcessDefinition>>(this));
 	}
 
-	public int count() {
+	@Override
+    public int count() {
 		return commandService.executeCommand(new QueryCountCommand(this));
 	}
 
@@ -127,29 +130,35 @@ public class ProcessQueryImpl implements ProcessQuery,QueryJob{
 		}
 	}
 	
-	public ProcessQuery createDateGreaterThen(Date date) {
+	@Override
+    public ProcessQuery createDateGreaterThen(Date date) {
 		this.createDateGreaterThen=date;
 		return this;
 	}
-	public ProcessQuery createDateGreaterThenOrEquals(Date date) {
+	@Override
+    public ProcessQuery createDateGreaterThenOrEquals(Date date) {
 		this.createDateGreaterThenOrEquals=date;
 		return this;
 	}
-	public ProcessQuery createDateLessThen(Date date) {
+	@Override
+    public ProcessQuery createDateLessThen(Date date) {
 		this.createDateLessThen=date;
 		return this;
 	}
-	public ProcessQuery createDateLessThenOrEquals(Date date) {
+	@Override
+    public ProcessQuery createDateLessThenOrEquals(Date date) {
 		this.createDateLessThenOrEquals=date;
 		return this;
 	}
 	
-	public ProcessQuery addOrderAsc(String property){
+	@Override
+    public ProcessQuery addOrderAsc(String property){
 		ascOrders.add(property);
 		return this;
 	}
 
-	public ProcessQuery addOrderDesc(String property){
+	@Override
+    public ProcessQuery addOrderDesc(String property){
 		descOrders.add(property);
 		return this;
 	}
@@ -160,12 +169,14 @@ public class ProcessQueryImpl implements ProcessQuery,QueryJob{
 		return this;
 	}
 
-	public ProcessQuery id(long id) {
+	@Override
+    public ProcessQuery id(long id) {
 		this.id=id;
 		return this;
 	}
 	
-	public ProcessQuery categoryId(String categoryId) {
+	@Override
+    public ProcessQuery categoryId(String categoryId) {
 		this.categoryId=categoryId;
 		return this;
 	}
@@ -176,27 +187,32 @@ public class ProcessQueryImpl implements ProcessQuery,QueryJob{
 		return this;
 	}
 	
-	public ProcessQuery nameLike(String name) {
+	@Override
+    public ProcessQuery nameLike(String name) {
 		this.name=name;
 		return this;
 	}
 	
-	public ProcessQuery subjectLike(String subject) {
+	@Override
+    public ProcessQuery subjectLike(String subject) {
 		this.subject=subject;
 		return this;
 	}
 	
-	public ProcessQuery keyLike(String key) {
+	@Override
+    public ProcessQuery keyLike(String key) {
 		this.key=key;
 		return this;
 	}
 
-	public ProcessQuery version(int version) {
+	@Override
+    public ProcessQuery version(int version) {
 		this.version=version;
 		return this;
 	}
 
-	public ProcessQuery page(int firstResult, int maxResults) {
+	@Override
+    public ProcessQuery page(int firstResult, int maxResults) {
 		this.firstResult=firstResult;
 		this.maxResults=maxResults;
 		return this;

@@ -38,7 +38,8 @@ public class DeleteTaskByNodeCommand implements Command<Integer> {
 		this.processInstanceId=processInstanceId;
 		this.nodeName=nodeName;
 	}
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public Integer execute(Context context) {
 		Session session=context.getSession();
 		String hql="from "+Task.class.getName()+" where nodeName=:nodeName and (processInstanceId=:processInstanceId or rootProcessInstanceId=:rootProcessInstanceId)";

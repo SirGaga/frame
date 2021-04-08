@@ -58,5 +58,6 @@ public interface TaskListener extends BaseHandler {
 	 * 描述
 	 * @return
 	 */
-	String desc();
+    @Override
+    String desc();
 }

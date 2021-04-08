@@ -31,7 +31,8 @@ public class SaveCalendarDefCommand implements Command<CalendarDef> {
 		this.def = def;
 	}
 
-	public CalendarDef execute(Context context) {
+	@Override
+    public CalendarDef execute(Context context) {
 		String categoryId=EnvironmentUtils.getEnvironment().getCategoryId();
 		this.def.setCategoryId(categoryId);
 		context.getSession().saveOrUpdate(this.def);

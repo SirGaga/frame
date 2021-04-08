@@ -32,7 +32,8 @@ import com.bstek.uflo.model.Heartbeat;
  * @since 2016年12月29日
  */
 public class HeartJob implements Job {
-	public void execute(JobExecutionContext context) throws JobExecutionException {
+	@Override
+    public void execute(JobExecutionContext context) throws JobExecutionException {
 		HeartJobDetail detail=(HeartJobDetail)context.getJobDetail();
 		String instanceName=detail.getCurrentInstanceName();
 		Session session=detail.getSessionFactory().openSession();

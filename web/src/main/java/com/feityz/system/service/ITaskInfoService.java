@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bstek.uflo.process.security.ComponentAuthority;
-import com.feityz.system.entity.Role;
 import com.feityz.system.entity.TaskInfo;
 import com.feityz.system.vo.*;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +20,7 @@ public interface ITaskInfoService extends IService<TaskInfo> {
      * @param input
      * @return
      */
-    Map complateTask(TaskInput input);
+    Map completeTask(TaskInput input);
 
     /**
      * 根据taskId获取下一步需要设置人员的node

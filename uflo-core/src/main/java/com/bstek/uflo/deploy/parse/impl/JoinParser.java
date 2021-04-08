@@ -29,7 +29,8 @@ import com.bstek.uflo.process.node.JoinNode;
  */
 public class JoinParser extends AbstractParser {
 
-	public Object parse(Element element, long processId, boolean parseChildren) {
+	@Override
+    public Object parse(Element element, long processId, boolean parseChildren) {
 		JoinNode node=new JoinNode();
 		node.setProcessId(processId);
 		parseNodeCommonInfo(element, node);
@@ -56,8 +57,9 @@ public class JoinParser extends AbstractParser {
 		return node;
 	}
 
-	public boolean support(Element element) {
-		return element.getName().equals("join");
+	@Override
+    public boolean support(Element element) {
+		return "join".equals(element.getName());
 	}
 
 }

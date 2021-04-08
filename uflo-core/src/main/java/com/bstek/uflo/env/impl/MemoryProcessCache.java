@@ -26,11 +26,13 @@ import com.bstek.uflo.env.ProcessCache;
  */
 public class MemoryProcessCache implements ProcessCache {
 	private Map<String,Object> map=new Hashtable<String,Object>();
-	public void store(String key, Object obj) {
+	@Override
+    public void store(String key, Object obj) {
 		map.put(key, obj);
 	}
 
-	public Object retrive(String key) {
+	@Override
+    public Object retrive(String key) {
 		return map.get(key);
 	}
 }

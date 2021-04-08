@@ -35,7 +35,8 @@ public class GetListHistoryTasksCommand implements Command<List<HistoryTask>> {
 		this.processInstanceId = processInstanceId;
 	}
 
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public List<HistoryTask> execute(Context context) {
 		return context.getSession().createCriteria(HistoryTask.class)
 				.add(Restrictions.eq("processInstanceId", processInstanceId))

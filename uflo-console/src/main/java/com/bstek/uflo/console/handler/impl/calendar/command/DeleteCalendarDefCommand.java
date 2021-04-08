@@ -33,7 +33,8 @@ public class DeleteCalendarDefCommand implements Command<CalendarDef> {
 		this.def = def;
 	}
 
-	public CalendarDef execute(Context context) {
+	@Override
+    public CalendarDef execute(Context context) {
 		Session session  =context.getSession();
 		session.createQuery("delete " + CalendarDate.class.getName() + " where calendarId=:calendarId").setLong("calendarId", this.def.getId()).executeUpdate();
 		session.delete(this.def);

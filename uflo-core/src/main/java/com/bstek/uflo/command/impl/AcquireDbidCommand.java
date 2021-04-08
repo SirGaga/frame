@@ -34,7 +34,8 @@ public class AcquireDbidCommand implements Command<Long>{
 	public AcquireDbidCommand(int blockSize){
 		this.blockSize=blockSize;
 	}
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public Long execute(Context context) {
 		long nextId=0;
 		Session session=context.getSession();

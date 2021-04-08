@@ -38,7 +38,8 @@ public class SaveHistoryTaskCommand implements Command<HistoryTask> {
 		this.task=task;
 		this.processInstance=processInstance;
 	}
-	public HistoryTask execute(Context context) {
+	@Override
+    public HistoryTask execute(Context context) {
 		Session session=context.getSession();
 		HistoryTask hisTask=new HistoryTask();
 		hisTask.setId(IDGenerator.getInstance().nextId());

@@ -41,19 +41,23 @@ import com.bstek.uflo.service.CalendarService;
  */
 public class CalendarServiceImpl implements CalendarService {
 	private CommandService commandService;
-	public Collection<CalendarDef> getAllCalendarDefs() {
+	@Override
+    public Collection<CalendarDef> getAllCalendarDefs() {
 		return commandService.executeCommand(new GetAllCalendarDefCommand());
 	}
 
-	public CalendarDef getCalendarDef(long calendarId) {
+	@Override
+    public CalendarDef getCalendarDef(long calendarId) {
 		return commandService.executeCommand(new GetCalendarDefCommand(calendarId));
 	}
 	
-	public Collection<CalendarDate> getCalendarDate(long calendarId) {
+	@Override
+    public Collection<CalendarDate> getCalendarDate(long calendarId) {
 		return commandService.executeCommand(new GetCalendarDateCommand(calendarId));
 	}
 	
-	public Calendar getCalendar(long calendarId) {
+	@Override
+    public Calendar getCalendar(long calendarId) {
 		CalendarDef def=getCalendarDef(calendarId);
 		Collection<CalendarDate> dates=getCalendarDate(calendarId);
 		Calendar baseCalendar=buildCalendar(def,dates);

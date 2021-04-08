@@ -30,7 +30,8 @@ import com.bstek.uflo.process.node.AssignmentType;
  */
 public class SwimlaneValidator extends NodeValidator {
 
-	public void validate(Element element, List<String> errors,List<String> nodeNames) {
+	@Override
+    public void validate(Element element, List<String> errors, List<String> nodeNames) {
 		super.validate(element, errors,nodeNames);
 		String assignmentType=element.getAttribute("assignment-type");
 		if(StringUtils.isEmpty(assignmentType)){
@@ -55,7 +56,7 @@ public class SwimlaneValidator extends NodeValidator {
 					continue;
 				}
 				Element e=(Element)node;
-				if(e.getNodeName().equals("assignee")){
+				if("assignee".equals(e.getNodeName())){
 					hasAssignee=true;
 				}
 			}
@@ -65,11 +66,13 @@ public class SwimlaneValidator extends NodeValidator {
 		}
 	}
 	
-	public boolean support(Element element) {
-		return element.getNodeName().equals("swimlane");
+	@Override
+    public boolean support(Element element) {
+		return "swimlane".equals(element.getNodeName());
 	}
 
-	public String getNodeName() {
+	@Override
+    public String getNodeName() {
 		return "泳道";
 	}
 }

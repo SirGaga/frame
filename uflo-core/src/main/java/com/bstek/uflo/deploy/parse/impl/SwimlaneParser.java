@@ -28,7 +28,8 @@ import com.bstek.uflo.process.swimlane.Swimlane;
  */
 public class SwimlaneParser extends AbstractParser {
 
-	public Object parse(Element element, long processId, boolean parseChildren) {
+	@Override
+    public Object parse(Element element, long processId, boolean parseChildren) {
 		Swimlane swimlane=new Swimlane();
 		String name=element.attributeValue("name");
 		swimlane.setName(unescape(name));
@@ -51,7 +52,8 @@ public class SwimlaneParser extends AbstractParser {
 		return swimlane;
 	}
 
-	public boolean support(Element element) {
-		return element.getName().equals("swimlane");
+	@Override
+    public boolean support(Element element) {
+		return "swimlane".equals(element.getName());
 	}
 }

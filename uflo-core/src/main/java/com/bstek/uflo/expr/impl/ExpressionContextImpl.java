@@ -15,12 +15,15 @@
  ******************************************************************************/
 package com.bstek.uflo.expr.impl;
 
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import cn.hutool.core.date.DateUtil;
+import com.bstek.uflo.expr.ExpressionContext;
+import com.bstek.uflo.expr.ExpressionProvider;
+import com.bstek.uflo.model.ProcessInstance;
+import com.bstek.uflo.model.variable.Variable;
+import com.bstek.uflo.query.ProcessInstanceQuery;
+import com.bstek.uflo.service.CacheService;
+import com.bstek.uflo.service.ProcessService;
+import com.bstek.uflo.utils.EnvironmentUtils;
 import org.apache.commons.jexl2.JexlEngine;
 import org.apache.commons.jexl2.JexlException;
 import org.apache.commons.jexl2.MapContext;
@@ -32,14 +35,9 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import com.bstek.uflo.expr.ExpressionContext;
-import com.bstek.uflo.expr.ExpressionProvider;
-import com.bstek.uflo.model.ProcessInstance;
-import com.bstek.uflo.model.variable.Variable;
-import com.bstek.uflo.query.ProcessInstanceQuery;
-import com.bstek.uflo.service.CacheService;
-import com.bstek.uflo.service.ProcessService;
-import com.bstek.uflo.utils.EnvironmentUtils;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -56,7 +54,8 @@ public class ExpressionContextImpl implements ExpressionContext,ApplicationConte
        jexl.setLenient(false);
        jexl.setSilent(false);
     }
-	public MapContext createContext(ProcessInstance processInstance,Map<String,Object> variables){
+	@Override
+	public MapContext createContext(ProcessInstance processInstance, Map<String,Object> variables){
 		ProcessMapContext context=new ProcessMapContext();
 		if(variables!=null && variables.size()>0){
 			for(String key:variables.keySet()){
@@ -81,6 +80,7 @@ public class ExpressionContextImpl implements ExpressionContext,ApplicationConte
 		return context;
 	}
 	
+	@Override
 	public boolean removeContext(ProcessInstance processInstance){
 		long id=processInstance.getId();
 		CacheService cacheService=EnvironmentUtils.getEnvironment().getCache();
@@ -91,6 +91,7 @@ public class ExpressionContextImpl implements ExpressionContext,ApplicationConte
 		return false;
 	}
 	
+	@Override
 	public void removeContextVariables(long processInstanceId, String key) {
 		CacheService cacheService=EnvironmentUtils.getEnvironment().getCache();
 		ProcessMapContext context=cacheService.getContext(processInstanceId);
@@ -101,10 +102,12 @@ public class ExpressionContextImpl implements ExpressionContext,ApplicationConte
 	}
 
 	
+	@Override
 	public synchronized String evalString(ProcessInstance processInstance, String str) {
 		return parseExpression(str,processInstance);
 	}
 
+	@Override
 	public synchronized Object eval(long processInstanceId, String expression) {
 		expression=expression.trim();
 		if(expression.startsWith("${") && expression.endsWith("}")){
@@ -133,7 +136,7 @@ public class ExpressionContextImpl implements ExpressionContext,ApplicationConte
 	
 	private void buildProcessInstanceContext(ProcessInstance processInstance){
 		List<Variable> variables=processService.getProcessVariables(processInstance.getId());
-		Map<String,Object> variableMap=new HashMap<String,Object>();
+		Map<String,Object> variableMap= new HashMap<>(16);
 		for(Variable var:variables){
 			variableMap.put(var.getKey(), var.getValue());
 		}
@@ -141,7 +144,9 @@ public class ExpressionContextImpl implements ExpressionContext,ApplicationConte
 	}
 	
 	private String parseExpression(String str,ProcessInstance processInstance){
-		if(StringUtils.isEmpty(str))return str;
+		if(StringUtils.isEmpty(str)) {
+            return str;
+        }
 		Pattern p=Pattern.compile("\\$\\{[^\\}][0-9a-zA-Z]([^\\}]*[0-9a-zA-Z])\\}");
 		Matcher m=p.matcher(str);
 		StringBuffer sb=new StringBuffer();
@@ -162,6 +167,7 @@ public class ExpressionContextImpl implements ExpressionContext,ApplicationConte
 		}
 	}
 
+	@Override
 	public synchronized Object eval(ProcessInstance processInstance, String expression) {
 		return getProcessExpressionValue(processInstance,expression);
 	}
@@ -196,7 +202,8 @@ public class ExpressionContextImpl implements ExpressionContext,ApplicationConte
 		children.addAll(list);
 	}
 	
-	public void addContextVariables(ProcessInstance processInstance,Map<String, Object> variables) {
+	@Override
+	public void addContextVariables(ProcessInstance processInstance, Map<String, Object> variables) {
 		if(variables==null || variables.size()<1){
 			return ;
 		}
@@ -214,6 +221,7 @@ public class ExpressionContextImpl implements ExpressionContext,ApplicationConte
 		}
 	}
 	
+	@Override
 	public void moveContextToParent(ProcessInstance processInstance) {
 		long parentId=processInstance.getParentId();
 		if(parentId<1){
@@ -246,6 +254,7 @@ public class ExpressionContextImpl implements ExpressionContext,ApplicationConte
 		this.processService = processService;
 	}
 
+	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		providers=applicationContext.getBeansOfType(ExpressionProvider.class).values();
 	}
@@ -263,6 +272,7 @@ public class ExpressionContextImpl implements ExpressionContext,ApplicationConte
 		}
 	}
 
+	@Override
 	public void afterPropertiesSet() throws Exception {
 		//initExpressionContext();
 	}

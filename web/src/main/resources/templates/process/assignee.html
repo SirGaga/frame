@@ -81,7 +81,7 @@
             id: "dataTable",// 设定表格的唯一ID进行标识
             elem: '#dataTable',
             height: bodyheight,
-            url: ctx + '/processIncetance/assignee/list', //数据接口
+            url: ctx + '/processInstance/assignee/list', //数据接口
             method: 'POST',
             page: true, //开启分页
             limit: 50,
@@ -182,7 +182,7 @@
             type: 2,
             title:false,
             shadeClose: false,
-            content: ctx+'/processIncetance/commonView?instanceId='+record.id,
+            content: ctx+'/processInstance/commonView?instanceId='+record.id,
             end:function(){
                 initTable();
                 record = null

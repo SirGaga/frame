@@ -35,7 +35,8 @@ public class SaveHistoryProcessInstanceCommand implements Command<HistoryProcess
 	public SaveHistoryProcessInstanceCommand(ProcessInstance processInstance){
 		this.processInstance=processInstance;
 	}
-	public HistoryProcessInstance execute(Context context) {
+	@Override
+    public HistoryProcessInstance execute(Context context) {
 		Session session=context.getSession();
 		HistoryProcessInstance hisProcessInstance=null;
 		if(processInstance.getState().equals(ProcessInstanceState.Start)){

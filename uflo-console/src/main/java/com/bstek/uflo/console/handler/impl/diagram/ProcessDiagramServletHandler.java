@@ -15,35 +15,9 @@
  ******************************************************************************/
 package com.bstek.uflo.console.handler.impl.diagram;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-
 import com.bstek.uflo.console.handler.impl.RenderPageServletHandler;
-import com.bstek.uflo.diagram.NodeDiagram;
-import com.bstek.uflo.diagram.ProcessDiagram;
-import com.bstek.uflo.diagram.SequenceFlowDiagram;
-import com.bstek.uflo.diagram.TaskDiagramInfoProvider;
-import com.bstek.uflo.diagram.TaskInfo;
-import com.bstek.uflo.model.HistoryActivity;
-import com.bstek.uflo.model.HistoryProcessInstance;
-import com.bstek.uflo.model.HistoryTask;
-import com.bstek.uflo.model.ProcessDefinition;
-import com.bstek.uflo.model.ProcessInstance;
+import com.bstek.uflo.diagram.*;
+import com.bstek.uflo.model.*;
 import com.bstek.uflo.model.task.Task;
 import com.bstek.uflo.model.task.TaskState;
 import com.bstek.uflo.process.node.Node;
@@ -54,6 +28,18 @@ import com.bstek.uflo.query.TaskQuery;
 import com.bstek.uflo.service.HistoryService;
 import com.bstek.uflo.service.ProcessService;
 import com.bstek.uflo.service.TaskService;
+import org.apache.commons.lang.StringUtils;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.*;
 
 /**
  * @author Jacky.gao
@@ -177,7 +163,7 @@ public class ProcessDiagramServletHandler extends RenderPageServletHandler{
 		if (diagram == null) {
 			throw new IllegalArgumentException("There is not enough information to load process diagram!");
 		}
-		if (processInstanceId != null && processInstanceId != 0l) {
+		if (processInstanceId != null && processInstanceId != 0L) {
 			ProcessInstance pi = processService.getProcessInstanceById(Long.valueOf(processInstanceId));
 			HistoryProcessInstance hpi = null;
 			if(pi==null){

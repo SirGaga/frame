@@ -5,7 +5,6 @@ import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bstek.uflo.model.ProcessDefinition;
-import com.bstek.uflo.model.ProcessInstance;
 import com.bstek.uflo.model.task.Task;
 import com.bstek.uflo.process.node.Node;
 import com.bstek.uflo.process.node.StartNode;
@@ -13,7 +12,6 @@ import com.bstek.uflo.process.node.TaskNode;
 import com.bstek.uflo.process.node.UserData;
 import com.bstek.uflo.process.security.ComponentAuthority;
 import com.bstek.uflo.service.ProcessService;
-import com.bstek.uflo.service.TaskOpinion;
 import com.bstek.uflo.service.TaskService;
 import com.feityz.common.Rest;
 import com.feityz.system.entity.*;
@@ -24,7 +22,6 @@ import com.feityz.system.vo.*;
 import com.feityz.util.SpringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import jdk.nashorn.internal.objects.annotations.Getter;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -108,7 +105,7 @@ public class TaskController {
     @ResponseBody
     @PostMapping("/complate")
     public Rest complate(@RequestBody TaskInput input){
-        Map map = taskInfoService.complateTask(input);
+        Map map = taskInfoService.completeTask(input);
         if(map==null){
             return Rest.success();
         }else {

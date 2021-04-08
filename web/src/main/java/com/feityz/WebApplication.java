@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @date 2021-04-07
  */
 @SpringBootApplication(scanBasePackages = {"com.feityz"})
-@ImportResource({"classpath:uflo-console-context.xml"/*,"classpath:ureport-console-context.xml"*/})
+@ImportResource({"classpath:uflo-console-context.xml"})
 @EnableTransactionManagement
 @EnableAsync
 public class WebApplication {

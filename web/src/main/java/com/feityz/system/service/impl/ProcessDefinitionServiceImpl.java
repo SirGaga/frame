@@ -9,13 +9,18 @@ import com.feityz.system.service.IProcessDefinitionService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
+/**
+ * 流程定义
+ * @author family
+ * @date 2021-04-08
+ */
 @Service
 public class ProcessDefinitionServiceImpl extends ServiceImpl<ProcessDefinitionMapper, ProcessDefinitionVo>
         implements IProcessDefinitionService {
     @Override
     public IPage<ProcessDefinitionVo> definitionPage(Page<ProcessDefinitionVo> page, ProcessDefinitionVo condition) {
 
-        IPage<ProcessDefinitionVo> result = this.lambdaQuery()
+        return this.lambdaQuery()
                 .eq(StringUtils.isNotEmpty(condition.getName()),
                         ProcessDefinitionVo::getName,condition.getName())
                 .eq(StringUtils.isNotEmpty(condition.getDescription()),
@@ -27,6 +32,5 @@ public class ProcessDefinitionServiceImpl extends ServiceImpl<ProcessDefinitionM
                                 "where res.VERSION_ = (select max(VERSION_) from " +
                                 "uflo_process where KEY_ = res.KEY_)")
                 .page(page);
-        return result;
     }
 }

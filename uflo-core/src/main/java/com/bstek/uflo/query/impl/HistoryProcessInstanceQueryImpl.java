@@ -15,22 +15,21 @@
  ******************************************************************************/
 package com.bstek.uflo.query.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
-
 import com.bstek.uflo.command.CommandService;
 import com.bstek.uflo.command.impl.QueryCountCommand;
 import com.bstek.uflo.command.impl.QueryListCommand;
 import com.bstek.uflo.model.HistoryProcessInstance;
 import com.bstek.uflo.query.HistoryProcessInstanceQuery;
 import com.bstek.uflo.query.QueryJob;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Jacky.gao
@@ -54,17 +53,20 @@ public class HistoryProcessInstanceQueryImpl implements HistoryProcessInstanceQu
 		this.commandService=commandService;
 	}
 	
-	public Criteria getCriteria(Session session,boolean queryCount) {
+	@Override
+    public Criteria getCriteria(Session session, boolean queryCount) {
 		Criteria criteria=session.createCriteria(HistoryProcessInstance.class);
 		buildCriteria(criteria,queryCount);						
 		return criteria;
 	}
 	
-	public List<HistoryProcessInstance> list(){
-		return commandService.executeCommand(new QueryListCommand<List<HistoryProcessInstance>>(this));
+	@Override
+    public List<HistoryProcessInstance> list(){
+		return commandService.executeCommand(new QueryListCommand<>(this));
 	}
 	
-	public int count(){
+	@Override
+    public int count(){
 		return commandService.executeCommand(new QueryCountCommand(this));		
 	}
 	
@@ -111,54 +113,65 @@ public class HistoryProcessInstanceQueryImpl implements HistoryProcessInstanceQu
 	}
 	
 
-	public HistoryProcessInstanceQuery processId(long processId){
+	@Override
+    public HistoryProcessInstanceQuery processId(long processId){
 		this.processId=processId;
 		return this;
 	}
 
-	public HistoryProcessInstanceQuery page(int firstResult, int maxResults){
+	@Override
+    public HistoryProcessInstanceQuery page(int firstResult, int maxResults){
 		this.firstResult=firstResult;
 		this.maxResults=maxResults;
 		return this;
 	}
 
-	public HistoryProcessInstanceQuery addOrderAsc(String property){
+	@Override
+    public HistoryProcessInstanceQuery addOrderAsc(String property){
 		ascOrders.add(property);
 		return this;
 	}
-	public HistoryProcessInstanceQuery businessId(String businessId){
+	@Override
+    public HistoryProcessInstanceQuery businessId(String businessId){
 		this.businessId=businessId;
 		return this;
 	}
-	public HistoryProcessInstanceQuery promoter(String promoter){
+	@Override
+    public HistoryProcessInstanceQuery promoter(String promoter){
 		this.promoter=promoter;
 		return this;
 	}
-	public HistoryProcessInstanceQuery tag(String tag){
+	@Override
+    public HistoryProcessInstanceQuery tag(String tag){
 		this.tag=tag;
 		return this;
 	}
-	public HistoryProcessInstanceQuery addOrderDesc(String property){
+	@Override
+    public HistoryProcessInstanceQuery addOrderDesc(String property){
 		descOrders.add(property);
 		return this;
 	}
 
-	public HistoryProcessInstanceQuery createDateLessThen(Date date){
+	@Override
+    public HistoryProcessInstanceQuery createDateLessThen(Date date){
 		this.createDateLessThen=date;
 		return this;
 	}
 
-	public HistoryProcessInstanceQuery createDateLessThenOrEquals(Date date){
+	@Override
+    public HistoryProcessInstanceQuery createDateLessThenOrEquals(Date date){
 		this.createDateLessThenOrEquals=date;
 		return this;
 	}
 
-	public HistoryProcessInstanceQuery createDateGreaterThen(Date date){
+	@Override
+    public HistoryProcessInstanceQuery createDateGreaterThen(Date date){
 		this.createDateGreaterThen=date;
 		return this;
 	}
 
-	public HistoryProcessInstanceQuery createDateGreaterThenOrEquals(Date date){
+	@Override
+    public HistoryProcessInstanceQuery createDateGreaterThenOrEquals(Date date){
 		this.createDateGreaterThenOrEquals=date;
 		return this;
 	}

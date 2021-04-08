@@ -15,25 +15,13 @@
  ******************************************************************************/
 package com.bstek.uflo.process.node;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.bstek.uflo.model.*;
-import com.bstek.uflo.model.task.TaskState;
-import com.bstek.uflo.utils.IDGenerator;
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
-
 import com.bstek.uflo.command.impl.SaveHistoryProcessInstanceCommand;
 import com.bstek.uflo.command.impl.SaveProcessInstanceVariablesCommand;
 import com.bstek.uflo.env.Context;
+import com.bstek.uflo.model.*;
 import com.bstek.uflo.model.task.Task;
 import com.bstek.uflo.model.task.TaskParticipator;
+import com.bstek.uflo.model.task.TaskState;
 import com.bstek.uflo.model.task.TaskType;
 import com.bstek.uflo.model.variable.BlobVariable;
 import com.bstek.uflo.model.variable.DateVariable;
@@ -44,7 +32,18 @@ import com.bstek.uflo.query.ProcessVariableQuery;
 import com.bstek.uflo.query.impl.ProcessVariableQueryImpl;
 import com.bstek.uflo.service.ProcessService;
 import com.bstek.uflo.service.SchedulerService;
+import com.bstek.uflo.utils.IDGenerator;
 import com.bstek.uflo.utils.ProcessListenerUtils;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Jacky.gao
@@ -195,11 +194,13 @@ public class EndNode extends Node{
 			List<SubprocessVariable> outVariables=subprocessNode.getOutVariables();
 			if(outVariables!=null && outVariables.size()>0){
 				//将指定需要从子流程返回到父流程的变量取出来写入到父流程当中
-				vars=new HashMap<String,Object>();
+				vars= new HashMap<>(16);
 				for(SubprocessVariable var:outVariables){
 					String key=var.getInParameterKey();
 					Object obj=context.getExpressionContext().eval(rootProcessInstance, "${"+key+"}");
-					if(obj==null)obj=processService.getProcessVariable(key, rootProcessInstance);
+					if(obj==null) {
+                        obj=processService.getProcessVariable(key, rootProcessInstance);
+                    }
 					if(obj==null){
 						throw new IllegalArgumentException("流程中找不到名为"+key+"的变量,流程实例id为"+rootProcessInstance.getId());
 					}

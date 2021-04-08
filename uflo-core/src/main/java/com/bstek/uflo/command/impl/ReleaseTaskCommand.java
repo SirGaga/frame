@@ -31,7 +31,8 @@ public class ReleaseTaskCommand implements Command<Task> {
 	public ReleaseTaskCommand(Task task){
 		this.task=task;
 	}
-	public Task execute(Context context) {
+	@Override
+    public Task execute(Context context) {
 		if(StringUtils.isEmpty(task.getAssignee())){
 			throw new IllegalArgumentException("当前任务 ["+task.getTaskName()+"] 没有所有者,所以不能被释放!");
 		}

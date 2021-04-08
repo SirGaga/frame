@@ -30,7 +30,8 @@ public class SaveCalendarDateCommand implements Command<CalendarDate> {
 		this.date = date;
 	}
 
-	public CalendarDate execute(Context context) {
+	@Override
+    public CalendarDate execute(Context context) {
 		context.getSession().saveOrUpdate(this.date);
 		return this.date;
 	}

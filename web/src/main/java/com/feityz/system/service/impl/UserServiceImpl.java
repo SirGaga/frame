@@ -8,14 +8,12 @@ import com.feityz.system.dao.RoleMapper;
 import com.feityz.system.dao.UserAndRolesMapper;
 import com.feityz.system.dao.UserMapper;
 import com.feityz.system.entity.Dept;
-import com.feityz.system.entity.Role;
 import com.feityz.system.entity.User;
 import com.feityz.system.entity.UserAndRoles;
 import com.feityz.system.service.IDeptService;
-import com.feityz.system.service.IRoleService;
 import com.feityz.system.service.IUserService;
 import com.feityz.system.vo.UserInput;
-import com.feityz.util.MD5Util;
+import com.feityz.util.Md5Util;
 import com.feityz.util.SpringUtils;
 import exception.BizException;
 import org.apache.commons.lang3.StringUtils;
@@ -54,14 +52,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements IUs
         checkUser(entity);
         String[] roles = entity.getRoles().split(",");
         if (entity.getId() == null) {
-            entity.setPassword(MD5Util.getPassword(entity.getUserNum(), entity.getPassword()));
+            entity.setPassword(Md5Util.getPassword(entity.getUserNum(), entity.getPassword()));
             userMapper.insert(entity);
         } else {
             User sourceUser = userMapper.selectById(entity.getId());
             if (StringUtils.isEmpty(entity.getPassword())) {
                 entity.setPassword(sourceUser.getPassword());
             } else {
-                entity.setPassword(MD5Util.getPassword(entity.getUserNum(), entity.getPassword()));
+                entity.setPassword(Md5Util.getPassword(entity.getUserNum(), entity.getPassword()));
             }
             userMapper.updateById(entity);
         }
@@ -89,13 +87,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements IUs
             user = new User();
             user.setUserName(entity.getUserName());
             user.setUserNum(entity.getUserNum());
-            user.setPassword(MD5Util.getPassword(entity.getUserNum(), entity.getPassWord()));
+            user.setPassword(Md5Util.getPassword(entity.getUserNum(), entity.getPassWord()));
             userMapper.insert(user);
         }else{
             //user = new User();
             user.setUserName(entity.getUserName());
             user.setUserNum(entity.getUserNum());
-            user.setPassword(MD5Util.getPassword(entity.getUserNum(), entity.getPassWord()));
+            user.setPassword(Md5Util.getPassword(entity.getUserNum(), entity.getPassWord()));
             userMapper.updateById(user);
         }
         //更新人员部门
@@ -130,12 +128,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements IUs
     public void changePassword(User user) {
         User userRes = this.getById(SpringUtils.getLoginUser().getId());
         String oldPwd = userRes.getPassword();
-        String passwordInput = MD5Util.getPassword(userRes.getUserNum(), user.getOldPassword());//输入的原密码
+        //输入的原密码
+        String passwordInput = Md5Util.getPassword(userRes.getUserNum(), user.getOldPassword());
 
         if (!oldPwd.equals(passwordInput)) {
             throw new BizException("原密码不正确");
         } else {
-            userRes.setPassword(MD5Util.getPassword(userRes.getUserNum(), user.getPassword()));
+            userRes.setPassword(Md5Util.getPassword(userRes.getUserNum(), user.getPassword()));
             this.updateById(userRes);
         }
     }
@@ -145,7 +144,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements IUs
         //先查找有没有该用户
         checkUser(user);
 
-        user.setPassword(MD5Util.getPassword(user.getUserNum(), user.getPassword()));
+        user.setPassword(Md5Util.getPassword(user.getUserNum(), user.getPassword()));
 
         baseMapper.insert(user);
 

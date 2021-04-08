@@ -39,7 +39,8 @@ public class GetProcessInstanceVariableCommand implements Command<Variable> {
 		this.processInstance=processInstance;
 		this.key=key;
 	}
-	public Variable execute(Context context) {
+	@Override
+    public Variable execute(Context context) {
 		return getVariable(context,processInstance);
 	}
 	@SuppressWarnings("unchecked")

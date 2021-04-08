@@ -11,12 +11,12 @@ import com.feityz.system.service.IProcessInstanceService;
 import com.feityz.util.SpringUtils;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.annotation.Resource;
 import java.util.Map;
 
 /**
@@ -28,11 +28,11 @@ import java.util.Map;
 @RequestMapping("/processInstance")
 public class ProcessInstanceController {
 
-    @Autowired
+    @Resource
     private IProcessInstanceService processInstanceService;
-    @Autowired
+    @Resource
     private ProcessService processService;
-    @Autowired
+    @Resource
     private HistoryService historyService;
 
     @ApiOperation(value = "跳转到流程监控页面(处理人)", notes = "跳转到流程监控页面(处理人)")

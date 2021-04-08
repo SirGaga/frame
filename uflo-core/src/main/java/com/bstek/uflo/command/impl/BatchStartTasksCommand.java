@@ -29,7 +29,8 @@ public class BatchStartTasksCommand implements Command<Object> {
 	public BatchStartTasksCommand(List<Long> taskIds){
 		this.taskIds=taskIds;
 	}
-	public Object execute(Context context) {
+	@Override
+    public Object execute(Context context) {
 		for(long taskId:taskIds){
 			context.getTaskService().start(taskId);
 		}

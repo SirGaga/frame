@@ -15,16 +15,8 @@
  ******************************************************************************/
 package com.bstek.uflo.service.impl;
 
-import java.util.List;
-
 import com.bstek.uflo.command.CommandService;
-import com.bstek.uflo.command.impl.GetHistoryActivitiyCommand;
-import com.bstek.uflo.command.impl.GetHistoryProcessInstanceCommand;
-import com.bstek.uflo.command.impl.GetHistoryTaskCommand;
-import com.bstek.uflo.command.impl.GetHistoryVariableCommand;
-import com.bstek.uflo.command.impl.GetHistoryVariablesCommand;
-import com.bstek.uflo.command.impl.GetListHistoryProcessInstancesCommand;
-import com.bstek.uflo.command.impl.GetListHistoryTasksCommand;
+import com.bstek.uflo.command.impl.*;
 import com.bstek.uflo.model.HistoryActivity;
 import com.bstek.uflo.model.HistoryProcessInstance;
 import com.bstek.uflo.model.HistoryTask;
@@ -37,53 +29,66 @@ import com.bstek.uflo.query.impl.HistoryProcessVariableQueryImpl;
 import com.bstek.uflo.query.impl.HistoryTaskQueryImpl;
 import com.bstek.uflo.service.HistoryService;
 
+import java.util.List;
+
 /**
  * @author Jacky.gao
  * @since 2013年9月12日
  */
 public class DefaultHistoryService implements HistoryService {
 	private CommandService commandService;
-	public List<HistoryActivity> getHistoryActivitysByProcesssInstanceId(long processInstanceId) {
+	@Override
+    public List<HistoryActivity> getHistoryActivitysByProcesssInstanceId(long processInstanceId) {
 		return commandService.executeCommand(new GetHistoryActivitiyCommand(processInstanceId,true));
 	}
 	
-	public HistoryProcessVariableQuery createHistoryProcessVariableQuery() {
+	@Override
+    public HistoryProcessVariableQuery createHistoryProcessVariableQuery() {
 		return new HistoryProcessVariableQueryImpl(commandService);
 	}
 	
-	public HistoryVariable getHistoryVariable(long historyProcessInstanceId,String key) {
+	@Override
+    public HistoryVariable getHistoryVariable(long historyProcessInstanceId, String key) {
 		return commandService.executeCommand(new GetHistoryVariableCommand(historyProcessInstanceId,key));
 	}
 
-	public List<HistoryActivity> getHistoryActivitysByHistoryProcesssInstanceId(long historyProcessInstanceId) {
+	@Override
+    public List<HistoryActivity> getHistoryActivitysByHistoryProcesssInstanceId(long historyProcessInstanceId) {
 		return commandService.executeCommand(new GetHistoryActivitiyCommand(historyProcessInstanceId,false));
 	}
 
-	public List<HistoryProcessInstance> getHistoryProcessInstances(long processId) {
+	@Override
+    public List<HistoryProcessInstance> getHistoryProcessInstances(long processId) {
 		return commandService.executeCommand(new GetListHistoryProcessInstancesCommand(processId));
 	}
 
-	public HistoryProcessInstance getHistoryProcessInstance(long processInstanceId) {
+	@Override
+    public HistoryProcessInstance getHistoryProcessInstance(long processInstanceId) {
 		return commandService.executeCommand(new GetHistoryProcessInstanceCommand(processInstanceId));
 	}
 
-	public List<HistoryTask> getHistoryTasks(long processInstanceId) {
+	@Override
+    public List<HistoryTask> getHistoryTasks(long processInstanceId) {
 		return commandService.executeCommand(new GetListHistoryTasksCommand(processInstanceId));
 	}
 	
-	public HistoryProcessInstanceQuery createHistoryProcessInstanceQuery() {
+	@Override
+    public HistoryProcessInstanceQuery createHistoryProcessInstanceQuery() {
 		return new HistoryProcessInstanceQueryImpl(commandService);
 	}
 	
-	public HistoryTaskQuery createHistoryTaskQuery() {
+	@Override
+    public HistoryTaskQuery createHistoryTaskQuery() {
 		return new HistoryTaskQueryImpl(commandService);
 	}
 	
-	public List<HistoryVariable> getHistoryVariables(long historyProcessInstanceId) {
+	@Override
+    public List<HistoryVariable> getHistoryVariables(long historyProcessInstanceId) {
 		return commandService.executeCommand(new GetHistoryVariablesCommand(historyProcessInstanceId));
 	}
 	
-	public HistoryTask getHistoryTask(long taskId) {
+	@Override
+    public HistoryTask getHistoryTask(long taskId) {
 		return commandService.executeCommand(new GetHistoryTaskCommand(taskId));
 	}
 	public void setCommandService(CommandService commandService) {

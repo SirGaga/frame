@@ -41,7 +41,8 @@ public class DeleteProcessDefinitionCommand implements Command<Object> {
 	public DeleteProcessDefinitionCommand(ProcessDefinition processDefinition){
 		this.processDefinition=processDefinition;
 	}
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public Object execute(Context context) {
 		ProcessService processService=context.getProcessService();
 		ProcessInstanceQuery query=context.getProcessService().createProcessInstanceQuery();

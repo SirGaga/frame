@@ -40,7 +40,8 @@ import com.bstek.uflo.process.node.reminder.Reminder;
  */
 public class TaskParser extends AbstractTaskParser {
 
-	public Object parse(Element element,long processId,boolean parseChildren) {
+	@Override
+    public Object parse(Element element, long processId, boolean parseChildren) {
 		TaskNode node=new TaskNode();
 		node.setProcessId(processId);
 		parseNodeCommonInfo(element, node);
@@ -109,7 +110,7 @@ public class TaskParser extends AbstractTaskParser {
 				continue;
 			}
 			Element ele=(Element)obj;
-			if(!ele.getName().equals("due")){
+			if(!"due".equals(ele.getName())){
 				continue;
 			}
 			if(reminderDef==null){
@@ -135,18 +136,18 @@ public class TaskParser extends AbstractTaskParser {
 				Element childEle=(Element)child;
 				String name=childEle.getName();
 				
-				if(name.equals("once-reminder")){
+				if("once-reminder".equals(name)){
 					Reminder reminder=new Reminder();
 					reminder.setHandlerBean(unescape(childEle.attributeValue("handler-bean")));
 					reminderDef.setReminder(reminder);
-				}else if(name.equals("period-reminder")){
+				}else if("period-reminder".equals(name)){
 					PeriodReminder reminder=new PeriodReminder();
 					reminder.setHandlerBean(unescape(childEle.attributeValue("handler-bean")));
 					reminder.setRepeat(Integer.valueOf(childEle.attributeValue("repeat")));
 					reminder.setUnit(DateUnit.valueOf(childEle.attributeValue("unit")));
 					reminder.setCalendarInfos(parseCalendarProviders(childEle));
 					reminderDef.setReminder(reminder);
-				}else if(name.equals("due-action")){
+				}else if("due-action".equals(name)){
 					DueAction action=new DueAction();
 					String day=childEle.attributeValue("day");
 					if(StringUtils.isNotEmpty(day)){
@@ -177,7 +178,7 @@ public class TaskParser extends AbstractTaskParser {
 				continue;
 			}
 			Element ele=(Element)obj;
-			if(!ele.getName().equals("calendar-provider")){
+			if(!"calendar-provider".equals(ele.getName())){
 				continue;				
 			}
 			CalendarInfo info=new CalendarInfo();
@@ -188,7 +189,8 @@ public class TaskParser extends AbstractTaskParser {
 		return list;
 	}
 
-	public boolean support(Element element) {
-		return element.getName().equals("task");
+	@Override
+    public boolean support(Element element) {
+		return "task".equals(element.getName());
 	}
 }

@@ -35,7 +35,8 @@ public class GetTaskAppointorCommand implements Command<List<TaskAppointor>> {
 		this.taskNodeName=taskNodeName;
 		this.processInstanceId=processInstanceId;
 	}
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public List<TaskAppointor> execute(Context context) {
 		Criteria criteria=context.getSession().createCriteria(TaskAppointor.class);
 		criteria.add(Restrictions.eq("processInstanceId", processInstanceId));

@@ -26,7 +26,8 @@ public class GetHistoryTaskCommand implements Command<HistoryTask> {
 	public GetHistoryTaskCommand(long taskId){
 		this.taskId=taskId;
 	}
-	public HistoryTask execute(Context context) {
+	@Override
+    public HistoryTask execute(Context context) {
 		return (HistoryTask)context.getSession().createCriteria(HistoryTask.class).add(Restrictions.eq("taskId", taskId)).uniqueResult();
 	}
 }

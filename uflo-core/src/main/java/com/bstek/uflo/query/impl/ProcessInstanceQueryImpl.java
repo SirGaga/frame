@@ -56,22 +56,26 @@ public class ProcessInstanceQueryImpl implements ProcessInstanceQuery,QueryJob {
 		this.commandService=commandService;
 	}
 
-	public Criteria getCriteria(Session session,boolean queryCount) {
+	@Override
+    public Criteria getCriteria(Session session, boolean queryCount) {
 		Criteria criteria=session.createCriteria(ProcessInstance.class);
 		buildCriteria(criteria,queryCount);
 		return criteria;
 	}
 
-	public List<ProcessInstance> list(){
+	@Override
+    public List<ProcessInstance> list(){
 		return commandService.executeCommand(new QueryListCommand<List<ProcessInstance>>(this));
 	}
 
-	public ProcessInstanceQuery promoter(String promoter) {
+	@Override
+    public ProcessInstanceQuery promoter(String promoter) {
 		this.promoter=promoter;
 		return this;
 	}
 
-	public int count(){
+	@Override
+    public int count(){
 		return commandService.executeCommand(new QueryCountCommand(this));
 	}
 
@@ -123,64 +127,76 @@ public class ProcessInstanceQueryImpl implements ProcessInstanceQuery,QueryJob {
 		}
 	}
 
-	public ProcessInstanceQuery businessId(String businessId) {
+	@Override
+    public ProcessInstanceQuery businessId(String businessId) {
 		this.businessId=businessId;
 		return this;
 	}
 
 
 
-	public ProcessInstanceQuery processId(long processId){
+	@Override
+    public ProcessInstanceQuery processId(long processId){
 		this.processId=processId;
 		return this;
 	}
 
-	public ProcessInstanceQuery page(int firstResult, int maxResults){
+	@Override
+    public ProcessInstanceQuery page(int firstResult, int maxResults){
 		this.firstResult=firstResult;
 		this.maxResults=maxResults;
 		return this;
 	}
 
-	public ProcessInstanceQuery addOrderAsc(String property){
+	@Override
+    public ProcessInstanceQuery addOrderAsc(String property){
 		ascOrders.add(property);
 		return this;
 	}
 
-	public ProcessInstanceQuery addOrderDesc(String property){
+	@Override
+    public ProcessInstanceQuery addOrderDesc(String property){
 		descOrders.add(property);
 		return this;
 	}
 
-	public ProcessInstanceQuery createDateLessThen(Date date){
+	@Override
+    public ProcessInstanceQuery createDateLessThen(Date date){
 		this.createDateLessThen=date;
 		return this;
 	}
 
-	public ProcessInstanceQuery createDateLessThenOrEquals(Date date){
+	@Override
+    public ProcessInstanceQuery createDateLessThenOrEquals(Date date){
 		this.createDateLessThenOrEquals=date;
 		return this;
 	}
 
-	public ProcessInstanceQuery createDateGreaterThen(Date date){
+	@Override
+    public ProcessInstanceQuery createDateGreaterThen(Date date){
 		this.createDateGreaterThen=date;
 		return this;
 	}
 
-	public ProcessInstanceQuery createDateGreaterThenOrEquals(Date date){
+	@Override
+    public ProcessInstanceQuery createDateGreaterThenOrEquals(Date date){
 		this.createDateGreaterThenOrEquals=date;
 		return this;
 	}
 
-	public ProcessInstanceQuery parentId(long parentId) {
+	@Override
+    public ProcessInstanceQuery parentId(long parentId) {
 		this.parentId=parentId;
 		return this;
 	}
-	public ProcessInstanceQuery rootId(long rootId) {
+	@Override
+    public ProcessInstanceQuery rootId(long rootId) {
 		this.rootId=rootId;
 		return this;
 	}
 
-	public ProcessInstanceQuery subject(String subject) {
+	@Override
+    public ProcessInstanceQuery subject(String subject) {
 		this.subject=subject;
 		return this;
 	}

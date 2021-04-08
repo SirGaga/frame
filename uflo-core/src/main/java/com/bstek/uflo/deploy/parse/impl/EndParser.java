@@ -29,7 +29,8 @@ import com.bstek.uflo.process.node.EndNode;
  */
 public class EndParser extends AbstractParser {
 
-	public Object parse(Element element,long processId,boolean parseChildren) {
+	@Override
+    public Object parse(Element element, long processId, boolean parseChildren) {
 		EndNode node=new EndNode();
 		node.setProcessId(processId);
 		parseNodeCommonInfo(element, node);
@@ -49,7 +50,8 @@ public class EndParser extends AbstractParser {
 		return node;
 	}
 
-	public boolean support(Element element) {
-		return element.getName().equals("end");
+	@Override
+    public boolean support(Element element) {
+		return "end".equals(element.getName());
 	}
 }

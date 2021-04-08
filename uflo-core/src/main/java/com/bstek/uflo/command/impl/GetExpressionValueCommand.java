@@ -29,7 +29,8 @@ public class GetExpressionValueCommand implements Command<Object> {
 		this.processInstanceId=processInstanceId;
 		this.key=key;
 	}
-	public Object execute(Context context) {
+	@Override
+    public Object execute(Context context) {
 		return context.getExpressionContext().eval(processInstanceId, "${"+key+"}");
 	}
 }

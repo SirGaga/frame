@@ -23,11 +23,13 @@ import org.w3c.dom.Element;
  */
 public class EndNodeValidator extends NodeValidator {
 
-	public boolean support(Element element) {
-		return element.getNodeName().equals("end");
+	@Override
+    public boolean support(Element element) {
+		return "end".equals(element.getNodeName());
 	}
 
-	public String getNodeName() {
+	@Override
+    public String getNodeName() {
 		return "结束";
 	}
 }

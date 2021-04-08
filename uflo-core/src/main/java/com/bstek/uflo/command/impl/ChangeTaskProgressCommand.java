@@ -30,7 +30,8 @@ public class ChangeTaskProgressCommand implements Command<Task> {
 		this.task=task;
 		this.progress=progress;
 	}
-	public Task execute(Context context) {
+	@Override
+    public Task execute(Context context) {
 		task.setProgress(progress);
 		context.getSession().update(task);
 		return task;

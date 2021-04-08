@@ -46,7 +46,8 @@ public class GetProcessCommand implements Command<ProcessDefinition> {
 		this.version=version;
 		this.categoryId=categoryId;
 	}
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public ProcessDefinition execute(Context context) {
 		Session session=context.getSession();
 		if(processId>0){

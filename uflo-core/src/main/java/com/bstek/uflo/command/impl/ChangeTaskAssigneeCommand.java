@@ -32,7 +32,8 @@ public class ChangeTaskAssigneeCommand implements Command<Object> {
 		this.taskId=taskId;
 		this.username=username;
 	}
-	public Object execute(Context context) {
+	@Override
+    public Object execute(Context context) {
 		Task task=context.getTaskService().getTask(taskId);
 		if(StringUtils.isNotEmpty(task.getOwner())){
 			task.setAssignee(username);

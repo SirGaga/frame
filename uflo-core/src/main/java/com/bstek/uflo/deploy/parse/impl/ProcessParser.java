@@ -63,7 +63,8 @@ public class ProcessParser extends AbstractParser{
 		}
 	}
 
-	public Object parse(Element element,long processId,boolean parseChildren) {
+	@Override
+    public Object parse(Element element, long processId, boolean parseChildren) {
 		ProcessDefinition process=new ProcessDefinition();
 		process.setId(processId);
 		process.setEventHandlerBean(unescape(element.attributeValue("event-handler-bean")));
@@ -132,8 +133,9 @@ public class ProcessParser extends AbstractParser{
 	}
 
 
-	public boolean support(Element element) {
-		return element.getName().equals("uflo-process");
+	@Override
+    public boolean support(Element element) {
+		return "uflo-process".equals(element.getName());
 	}
 
 	@Override

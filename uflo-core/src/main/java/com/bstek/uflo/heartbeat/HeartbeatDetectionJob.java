@@ -42,6 +42,7 @@ import com.bstek.uflo.utils.EnvironmentUtils;
  */
 public class HeartbeatDetectionJob implements Job{
 	private String heartJobCronExpression="0/30 * * * * ?";
+	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		DetectionJobDetail jobDetail=(DetectionJobDetail)context.getJobDetail();
 		Session session=jobDetail.getSessionFactory().openSession();
@@ -133,7 +134,9 @@ public class HeartbeatDetectionJob implements Job{
 				return Operation.reset;
 			}
 		}else{
-			if(currentPos==1)return Operation.reset;
+			if(currentPos==1) {
+                return Operation.reset;
+            }
 		}
 		return Operation.donothing;
 	}

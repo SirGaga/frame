@@ -9,13 +9,12 @@ import com.bstek.uflo.model.ProcessInstance;
 import com.bstek.uflo.model.variable.Variable;
 import com.bstek.uflo.process.handler.AssignmentHandler;
 import com.bstek.uflo.process.node.TaskNode;
-import com.bstek.uflo.service.ProcessService;
 import com.feityz.common.Result;
 import com.feityz.system.entity.User;
 import com.feityz.system.service.IDeptService;
 import com.feityz.system.service.IParameterService;
 import com.feityz.system.service.IUserService;
-import com.feityz.util.MD5Util;
+import com.feityz.util.Md5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -23,10 +22,11 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 部门主管
+ * @author zhangjie
+ * @date 2021-04-08
  */
 @Component("deptLeader")
 public class DeptLeaderHandler implements AssignmentHandler {
@@ -68,7 +68,7 @@ public class DeptLeaderHandler implements AssignmentHandler {
                 user.setUserName(userName);
                 user.setUserNum(userNum);
                 user.setRoles("");
-                user.setPassword(MD5Util.getPassword(user.getUserNum(), "123456"));
+                user.setPassword(Md5Util.getPassword(user.getUserNum(), "123456"));
                 userService.save(user);
             }
             users.add(user.getId().toString());

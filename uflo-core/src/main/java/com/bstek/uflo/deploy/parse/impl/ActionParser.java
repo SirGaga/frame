@@ -28,7 +28,8 @@ import com.bstek.uflo.process.node.ActionNode;
  */
 public class ActionParser extends AbstractParser {
 
-	public Object parse(Element element, long processId, boolean parseChildren) {
+	@Override
+    public Object parse(Element element, long processId, boolean parseChildren) {
 		ActionNode node=new ActionNode();
 		node.setProcessId(processId);
 		parseNodeCommonInfo(element, node);
@@ -44,7 +45,8 @@ public class ActionParser extends AbstractParser {
 		return node;
 	}
 
-	public boolean support(Element element) {
-		return element.getName().equals("action");
+	@Override
+    public boolean support(Element element) {
+		return "action".equals(element.getName());
 	}
 }

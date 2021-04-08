@@ -15,10 +15,6 @@
  ******************************************************************************/
 package com.bstek.uflo.command.impl;
 
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.bstek.uflo.command.Command;
 import com.bstek.uflo.command.impl.jump.JumpNode;
 import com.bstek.uflo.env.Context;
@@ -27,6 +23,9 @@ import com.bstek.uflo.model.task.Task;
 import com.bstek.uflo.process.node.Node;
 import com.bstek.uflo.process.node.StartNode;
 import com.bstek.uflo.process.node.TaskNode;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.List;
 
 /**
  * @author Jacky.gao
@@ -37,7 +36,8 @@ public class CanWithdrawDecisionCommand implements Command<Boolean> {
 	public CanWithdrawDecisionCommand(Task task){
 		this.task=task;
 	}
-	public Boolean execute(Context context) {
+	@Override
+    public Boolean execute(Context context) {
 		ProcessDefinition pd=context.getProcessService().getProcessById(task.getProcessId());
 		String prevTaskName=task.getPrevTask();
 		if(StringUtils.isEmpty(prevTaskName)){
@@ -61,11 +61,7 @@ public class CanWithdrawDecisionCommand implements Command<Boolean> {
 		Node currentNode=pd.getNode(task.getNodeName());
 		Node node=pd.getNode(prevTaskName);
 		if(node!=null && (node instanceof TaskNode || node instanceof StartNode)){
-			if(node instanceof StartNode && currentNode instanceof StartNode){
-				return false;
-			}else{
-				return true;				
-			}
+			return !(node instanceof StartNode) || !(currentNode instanceof StartNode);
 		}else{
 			return false;
 		}

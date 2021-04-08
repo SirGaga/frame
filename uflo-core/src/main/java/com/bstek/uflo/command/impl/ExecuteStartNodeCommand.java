@@ -27,7 +27,8 @@ public class ExecuteStartNodeCommand implements Command<Object> {
 		this.startNode=startNode;
 		this.processInstance=processInstance;
 	}
-	public Object execute(Context context) {
+	@Override
+    public Object execute(Context context) {
 		startNode.getSequenceFlows().get(0).execute(context,processInstance);
 		return null;
 	}

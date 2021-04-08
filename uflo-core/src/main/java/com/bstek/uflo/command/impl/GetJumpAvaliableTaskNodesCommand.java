@@ -35,6 +35,7 @@ public class GetJumpAvaliableTaskNodesCommand implements Command<List<JumpNode>>
 	public GetJumpAvaliableTaskNodesCommand(Task task){
 		this.task=task;
 	}
+	@Override
 	public List<JumpNode> execute(Context context) {
 		ProcessDefinition process=context.getProcessService().getProcessById(task.getProcessId());
 		JumpNodeBuilder builder=new JumpNodeBuilder(process);
@@ -51,7 +52,9 @@ public class GetJumpAvaliableTaskNodesCommand implements Command<List<JumpNode>>
 	}
 	
 	private boolean parentEquals(List<String> a,List<String> b){
-		if(a.size()!=b.size())return false;
+		if(a.size()!=b.size()) {
+            return false;
+        }
 		for(int i=0;i<a.size();i++){
 			String name=a.get(i);
 			if(!name.equals(b.get(i))){

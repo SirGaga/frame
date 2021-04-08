@@ -28,7 +28,8 @@ import com.bstek.uflo.process.node.StartNode;
  */
 public class StartParser extends AbstractTaskParser {
 
-	public Object parse(Element element,long processId,boolean parseChildren) {
+	@Override
+    public Object parse(Element element, long processId, boolean parseChildren) {
 		StartNode node=new StartNode();
 		node.setProcessId(processId);
 		node.setTaskName(unescape(element.attributeValue("task-name")));
@@ -46,7 +47,8 @@ public class StartParser extends AbstractTaskParser {
 		return node;
 	}
 
-	public boolean support(Element element) {
-		return element.getName().equals("start");
+	@Override
+    public boolean support(Element element) {
+		return "start".equals(element.getName());
 	}
 }

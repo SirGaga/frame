@@ -15,13 +15,6 @@
  ******************************************************************************/
 package com.bstek.uflo.command.impl;
 
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
-
 import com.bstek.uflo.command.Command;
 import com.bstek.uflo.env.Context;
 import com.bstek.uflo.model.HistoryActivity;
@@ -34,6 +27,12 @@ import com.bstek.uflo.model.variable.Variable;
 import com.bstek.uflo.process.node.Node;
 import com.bstek.uflo.process.node.TaskNode;
 import com.bstek.uflo.service.SchedulerService;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 递归删除取消指定流程实例及其下子流程实现及他们所在的各个节点
@@ -46,7 +45,8 @@ public class DeleteProcessInstanceCommand implements Command<Object> {
 	public DeleteProcessInstanceCommand(ProcessInstance processInstance){
 		this.processInstance=processInstance;
 	}
-	public Object execute(Context context) {
+	@Override
+    public Object execute(Context context) {
 		ProcessDefinition process=context.getProcessService().getProcessById(processInstance.getProcessId());
 		deleteProcessInstance(context,processInstance,process);
 		return null;
@@ -60,8 +60,11 @@ public class DeleteProcessInstanceCommand implements Command<Object> {
 			deleteProcessInstance(context,instance,subProcess);
 			session.createQuery("delete "+Variable.class.getName()+" where processInstanceId=:pIId").setLong("pIId",instance.getId()).executeUpdate();
 		}
-		session.createQuery("delete "+Variable.class.getName()+" where processInstanceId=:processInstanceId ") /*or rootProcessInstanceId=:rootId*/
-			.setLong("processInstanceId",pi.getId())/*.setLong("rootId",pi.getRootId())*/.executeUpdate();
+		/*or rootProcessInstanceId=:rootId*/
+		session.createQuery("delete "+Variable.class.getName()+" where processInstanceId=:processInstanceId ")
+				.setLong("processInstanceId",pi.getId())
+				/*.setLong("rootId",pi.getRootId())*/
+				.executeUpdate();
 
 
 		String currentNodeName=pi.getCurrentNode();
@@ -71,11 +74,15 @@ public class DeleteProcessInstanceCommand implements Command<Object> {
 				currentNode.cancel(context, pi);
 			}
 		}
-
-		session.createQuery("delete "+HistoryTask.class.getName()+" where processInstanceId=:processInstanceId") /*or rootProcessInstanceId=:rootId*/
-			.setLong("processInstanceId", pi.getId())/*.setLong("rootId",pi.getRootId())*/.executeUpdate();
+		/*or rootProcessInstanceId=:rootId*/
+		session.createQuery("delete "+HistoryTask.class.getName()+" where processInstanceId=:processInstanceId")
+				.setLong("processInstanceId", pi.getId())
+				/*.setLong("rootId",pi.getRootId())*/
+				.executeUpdate();
 		session.createQuery("delete "+HistoryActivity.class.getName()+" where processInstanceId=:processInstanceId or rootProcessInstanceId=:rootId")
-	 		.setLong("processInstanceId", pi.getId()).setLong("rootId",pi.getRootId()).executeUpdate();
+				.setLong("processInstanceId", pi.getId())
+				.setLong("rootId",pi.getRootId())
+				.executeUpdate();
 
 		Collection<Task> tasks=session.createCriteria(Task.class).add(Restrictions.eq("processInstanceId", pi.getId())).list();
 		SchedulerService schedulerService=(SchedulerService)context.getApplicationContext().getBean(SchedulerService.BEAN_ID);

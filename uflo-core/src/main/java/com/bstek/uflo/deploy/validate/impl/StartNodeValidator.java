@@ -25,16 +25,19 @@ import org.w3c.dom.Element;
  */
 public class StartNodeValidator extends NodeValidator {
 
-	public void validate(Element element, List<String> errors,List<String> nodeNames) {
+	@Override
+    public void validate(Element element, List<String> errors, List<String> nodeNames) {
 		super.validate(element, errors,nodeNames);
 	}
 
-	public boolean support(Element element) {
-		return element.getNodeName().equals("start");
+	@Override
+    public boolean support(Element element) {
+		return "start".equals(element.getNodeName());
 	}
 
 	
-	public String getNodeName() {
+	@Override
+    public String getNodeName() {
 		return "开始";
 	}
 }

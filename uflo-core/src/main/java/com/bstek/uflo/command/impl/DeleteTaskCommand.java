@@ -34,7 +34,8 @@ public class DeleteTaskCommand implements Command<Task> {
 	public DeleteTaskCommand(Task task){
 		this.task=task;
 	}
-	public Task execute(Context context) {
+	@Override
+    public Task execute(Context context) {
 		Session session=context.getSession();
 		if(task.getType().equals(TaskType.Participative)){
 			session.createQuery("delete "+TaskParticipator.class.getName()+" where taskId=:taskId").setLong("taskId", task.getId()).executeUpdate();			

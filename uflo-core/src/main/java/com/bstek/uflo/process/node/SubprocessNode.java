@@ -15,15 +15,6 @@
  ******************************************************************************/
 package com.bstek.uflo.process.node;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.hibernate.criterion.Restrictions;
-
 import com.bstek.uflo.command.impl.StartProcessInstanceCommand;
 import com.bstek.uflo.env.Context;
 import com.bstek.uflo.model.ProcessDefinition;
@@ -31,6 +22,14 @@ import com.bstek.uflo.model.ProcessInstance;
 import com.bstek.uflo.process.flow.SequenceFlowImpl;
 import com.bstek.uflo.service.ProcessService;
 import com.bstek.uflo.service.StartProcessInfo;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.hibernate.criterion.Restrictions;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * @author Jacky.gao
  * @since 2013年8月7日
@@ -52,7 +51,7 @@ public class SubprocessNode extends Node {
 		ProcessDefinition subprocess = getTargetSubprocess(processService);
 		Map<String,Object> variables=null;
 		if(inVariables!=null && inVariables.size()>0){
-			variables=new HashMap<String,Object>();
+			variables= new HashMap<>(16);
 			for(SubprocessVariable var:inVariables){
 				Object obj=processService.getProcessVariable(var.getInParameterKey(), processInstance);
 				variables.put(var.getOutParameterKey(),obj);

@@ -28,7 +28,8 @@ import com.bstek.uflo.process.node.ForkNode;
  */
 public class ForkParser extends AbstractParser {
 
-	public Object parse(Element element, long processId, boolean parseChildren) {
+	@Override
+    public Object parse(Element element, long processId, boolean parseChildren) {
 		ForkNode node=new ForkNode();
 		node.setProcessId(processId);
 		parseNodeCommonInfo(element, node);
@@ -41,8 +42,9 @@ public class ForkParser extends AbstractParser {
 		return node;
 	}
 
-	public boolean support(Element element) {
-		return element.getName().equals("fork");
+	@Override
+    public boolean support(Element element) {
+		return "fork".equals(element.getName());
 	}
 
 }

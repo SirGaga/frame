@@ -30,7 +30,8 @@ public class DeleteProcessVariableCommand implements Command<Object> {
 		this.key=key;
 		this.processInstanceId=processInstanceId;
 	}
-	public Object execute(Context context) {
+	@Override
+    public Object execute(Context context) {
 		String hql="delete "+Variable.class.getName()+" where processInstanceId=:pid and key=:key";
 		context.getSession().createQuery(hql).setLong("pid", processInstanceId).setString("key",key).executeUpdate();
 		context.getExpressionContext().removeContextVariables(processInstanceId, key);

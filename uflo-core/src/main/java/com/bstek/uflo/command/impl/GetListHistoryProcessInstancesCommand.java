@@ -32,7 +32,8 @@ public class GetListHistoryProcessInstancesCommand implements Command<List<Histo
 	public GetListHistoryProcessInstancesCommand(long processId){
 		this.processId=processId;
 	}
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public List<HistoryProcessInstance> execute(Context context) {
 		return context.getSession().createCriteria(HistoryProcessInstance.class).add(Restrictions.eq("processId", processId)).list();
 	}

@@ -31,10 +31,13 @@ public class QueryCountCommand implements Command<Integer> {
 	public QueryCountCommand(QueryJob job){
 		this.job=job;
 	}
+	@Override
 	public Integer execute(Context context) {
 		Criteria criteria=job.getCriteria(context.getSession(),true);
 		Object obj=criteria.setProjection(Projections.rowCount()).uniqueResult();
-		if(obj==null)return 0;
+		if(obj==null) {
+            return 0;
+        }
 		if(obj instanceof Integer){
 			return (Integer)obj;
 		}else{

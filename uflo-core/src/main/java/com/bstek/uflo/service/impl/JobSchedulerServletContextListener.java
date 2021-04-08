@@ -32,10 +32,12 @@ import com.bstek.uflo.utils.EnvironmentUtils;
  */
 public class JobSchedulerServletContextListener implements ServletContextListener {
 
-	public void contextInitialized(ServletContextEvent sce) {
+	@Override
+    public void contextInitialized(ServletContextEvent sce) {
 	}
 
-	public void contextDestroyed(ServletContextEvent sce) {
+	@Override
+    public void contextDestroyed(ServletContextEvent sce) {
 		ApplicationContext context=EnvironmentUtils.getEnvironment().getApplicationContext();
 		SchedulerService schedulerService=(SchedulerService)context.getBean(SchedulerService.BEAN_ID);
 		Scheduler scheduler=schedulerService.getScheduler();

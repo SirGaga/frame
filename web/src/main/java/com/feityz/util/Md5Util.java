@@ -8,12 +8,16 @@ import java.security.MessageDigest;
 /**
  * MD5 工具类-建议添油加醋的对入参 str 改造一下
  *
- * @author Administrator
+ * @author zhangjie
+ * @date 2021-04-08
  */
-public class MD5Util {
+public class Md5Util {
 
-    // 工具类不允许被实例化
-    private MD5Util() throws Exception {
+    /**
+     * 工具类不允许被实例化
+     * @throws Exception 异常
+     */
+    private Md5Util() throws Exception {
         throw new Exception("异常");
     }
 

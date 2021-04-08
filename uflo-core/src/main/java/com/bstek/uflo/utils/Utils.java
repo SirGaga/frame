@@ -31,7 +31,7 @@ public class Utils {
 		if(obj instanceof BigDecimal){
 			return (BigDecimal)obj;
 		}else if(obj instanceof String){
-			if(obj.toString().trim().equals("")){
+			if("".equals(obj.toString().trim())){
 				return new BigDecimal(0);
 			}
 			try{
@@ -65,7 +65,8 @@ public class Utils {
 		Matcher m = p.matcher(oldstr);
 		StringBuffer sb = new StringBuffer();
 		while (m.find()) {
-			String group = m.group(2);//规则中${值}中的 值 一样 的数据不
+			//规则中${值}中的 值 一样 的数据不
+			String group = m.group(2);
 			//下一步是替换并且把替换好的值放到sb中
 			m.appendReplacement(sb, content);
 		}

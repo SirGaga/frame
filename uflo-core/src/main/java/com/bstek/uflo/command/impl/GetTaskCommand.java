@@ -28,7 +28,8 @@ public class GetTaskCommand implements Command<Task> {
 	public GetTaskCommand(long taskId){
 		this.taskId=taskId;
 	}
-	public Task execute(Context context) {
+	@Override
+    public Task execute(Context context) {
 		Task task=(Task)context.getSession().get(Task.class,taskId);
 		return task;
 	}

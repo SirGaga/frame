@@ -1,36 +1,31 @@
 package com.feityz.handler;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.bstek.uflo.env.Context;
 import com.bstek.uflo.model.ProcessInstance;
 import com.bstek.uflo.model.variable.Variable;
 import com.bstek.uflo.process.handler.AssignmentHandler;
 import com.bstek.uflo.process.node.TaskNode;
 import com.feityz.common.Result;
-import com.feityz.system.entity.Dept;
 import com.feityz.system.entity.User;
 import com.feityz.system.service.IDeptService;
 import com.feityz.system.service.IParameterService;
 import com.feityz.system.service.IUserService;
-import com.feityz.util.MD5Util;
-import org.apache.commons.lang.StringUtils;
+import com.feityz.util.Md5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 人员所在部门的所有人员
+ * @author zhangjie
  */
 @Component("userArea")
 public class UserAreaHandler implements AssignmentHandler {
@@ -71,7 +66,7 @@ public class UserAreaHandler implements AssignmentHandler {
                 user.setUserName(userName);
                 user.setUserNum(userNum);
                 user.setRoles("");
-                user.setPassword(MD5Util.getPassword(user.getUserNum(), "123456"));
+                user.setPassword(Md5Util.getPassword(user.getUserNum(), "123456"));
                 userService.save(user);
             }
             users.add(user.getId().toString());

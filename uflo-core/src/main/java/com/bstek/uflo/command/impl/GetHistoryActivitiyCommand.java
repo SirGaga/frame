@@ -36,7 +36,8 @@ public class GetHistoryActivitiyCommand implements Command<List<HistoryActivity>
 		this.instanceId=instanceId;
 		this.isProcessInstanceId=isProcessInstanceId;
 	}
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public List<HistoryActivity> execute(Context context) {
 		Criteria criteria=context.getSession().createCriteria(HistoryActivity.class);
 		if(isProcessInstanceId){

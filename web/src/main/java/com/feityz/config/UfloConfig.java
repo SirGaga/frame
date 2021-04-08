@@ -35,7 +35,7 @@ public class UfloConfig {
         // create 每次加载hibernate，重新创建数据库表结构
         // create-drop 加载hibernate时创建，退出是删除表结构
         // update 加载hibernate自动更新数据库结构
-        prop.put("hibernate.hbm2ddl.auto","update");
+        prop.put("hibernate.hbm2ddl.auto","none");
         prop.put("hibernate.jdbc.batch_size",100);
         sessionFactoryBean.setHibernateProperties(prop);
 

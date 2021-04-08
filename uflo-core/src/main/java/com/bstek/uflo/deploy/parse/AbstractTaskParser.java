@@ -35,7 +35,7 @@ public abstract class AbstractTaskParser extends AbstractParser {
 				continue;
 			}
 			Element ele=(Element)obj;
-			if(!ele.getName().equals("component-authority")){
+			if(!"component-authority".equals(ele.getName())){
 				continue;
 			}
 			String component=unescape(ele.attributeValue("component"));

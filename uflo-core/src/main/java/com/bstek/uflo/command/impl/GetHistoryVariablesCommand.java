@@ -33,7 +33,8 @@ public class GetHistoryVariablesCommand implements Command<List<HistoryVariable>
 	public GetHistoryVariablesCommand(long historyProcessInstanceId){
 		this.historyProcessInstanceId=historyProcessInstanceId;
 	}
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public List<HistoryVariable> execute(Context context) {
 		Criteria criteria=context.getSession().createCriteria(HistoryVariable.class);
 		criteria.add(Restrictions.eq("historyProcessInstanceId", historyProcessInstanceId));

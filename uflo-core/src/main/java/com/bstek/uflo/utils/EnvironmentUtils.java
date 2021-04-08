@@ -65,7 +65,8 @@ public class EnvironmentUtils implements ApplicationContextAware{
 	public ApplicationContext getApplicationContext() {
 		return applicationContext;
 	}
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+	@Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext=applicationContext;
 		Collection<EnvironmentProvider> providers=applicationContext.getBeansOfType(EnvironmentProvider.class).values();
 		if(providers.size()==0){

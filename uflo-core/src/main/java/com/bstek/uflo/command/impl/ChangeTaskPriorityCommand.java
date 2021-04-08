@@ -30,7 +30,8 @@ public class ChangeTaskPriorityCommand implements Command<Task> {
 		this.task=task;
 		this.priority=priority;
 	}
-	public Task execute(Context context) {
+	@Override
+    public Task execute(Context context) {
 		task.setPriority(priority);
 		context.getSession().update(task);
 		return task;

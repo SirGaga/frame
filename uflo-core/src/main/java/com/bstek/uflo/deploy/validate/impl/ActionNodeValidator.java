@@ -26,7 +26,8 @@ import org.w3c.dom.Element;
  */
 public class ActionNodeValidator extends NodeValidator {
 
-	public void validate(Element element, List<String> errors,List<String> nodeNames) {
+	@Override
+    public void validate(Element element, List<String> errors, List<String> nodeNames) {
 		super.validate(element, errors,nodeNames);
 		String handlerBean=element.getAttribute("handler-bean");
 		if(StringUtils.isEmpty(handlerBean)){
@@ -34,11 +35,13 @@ public class ActionNodeValidator extends NodeValidator {
 		}
 	}
 
-	public boolean support(Element element) {
-		return element.getNodeName().equals("action");
+	@Override
+    public boolean support(Element element) {
+		return "action".equals(element.getNodeName());
 	}
 	
-	public String getNodeName() {
+	@Override
+    public String getNodeName() {
 		return "动作";
 	}
 }

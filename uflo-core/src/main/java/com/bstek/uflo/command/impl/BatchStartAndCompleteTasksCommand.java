@@ -36,7 +36,8 @@ public class BatchStartAndCompleteTasksCommand implements Command<Object> {
 		this.variables=variables;
 		this.opinion=opinion;
 	}
-	public Object execute(Context context) {
+	@Override
+    public Object execute(Context context) {
 		TaskService taskService=context.getTaskService();
 		for(long taskId:taskIds){
 			taskService.start(taskId);

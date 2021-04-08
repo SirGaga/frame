@@ -43,7 +43,8 @@ public class ProcessValidator implements Validator {
 		validators.add(new SwimlaneValidator());
 		validators.add(new TaskNodeValidator());
 	}
-	public void validate(Element element, List<String> errors,List<String> nodeNames) {
+	@Override
+    public void validate(Element element, List<String> errors, List<String> nodeNames) {
 		boolean hasStart=false;
 		boolean hasEnd=false;
 		String name=element.getAttribute("name");
@@ -77,11 +78,13 @@ public class ProcessValidator implements Validator {
 		}
 	}
 
-	public boolean support(Element element) {
-		return element.getNodeName().equals("uflo-process");
+	@Override
+    public boolean support(Element element) {
+		return "uflo-process".equals(element.getNodeName());
 	}
 	
-	public String getNodeName() {
+	@Override
+    public String getNodeName() {
 		return "流程模版";
 	}
 }

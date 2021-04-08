@@ -29,7 +29,8 @@ public class ResumeTaskCommand implements Command<Task> {
 	public ResumeTaskCommand(Task task){
 		this.task=task;
 	}
-	public Task execute(Context context) {
+	@Override
+    public Task execute(Context context) {
 		TaskState state=task.getState();
 		if(!state.equals(TaskState.Suspended)){
 			throw new IllegalStateException("只有暂停状态的任务才可以被恢复!");

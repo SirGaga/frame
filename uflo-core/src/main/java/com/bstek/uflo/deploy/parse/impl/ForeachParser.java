@@ -30,7 +30,8 @@ import com.bstek.uflo.process.node.ForeachType;
  */
 public class ForeachParser extends AbstractParser {
 
-	public Object parse(Element element, long processId, boolean parseChildren) {
+	@Override
+    public Object parse(Element element, long processId, boolean parseChildren) {
 		ForeachNode node=new ForeachNode();
 		node.setProcessId(processId);
 		parseNodeCommonInfo(element, node);
@@ -54,8 +55,9 @@ public class ForeachParser extends AbstractParser {
 		return node;
 	}
 
-	public boolean support(Element element) {
-		return element.getName().equals("foreach");
+	@Override
+    public boolean support(Element element) {
+		return "foreach".equals(element.getName());
 	}
 
 }

@@ -28,7 +28,8 @@ public class DeleteTaskReminderCommand implements Command<Object> {
 	public DeleteTaskReminderCommand(long taskReminderId){
 		this.taskReminderId=taskReminderId;
 	}
-	public Object execute(Context context) {
+	@Override
+    public Object execute(Context context) {
 		context.getSession().createQuery("delete "+TaskReminder.class.getName()+" where id=:id").setLong("id", taskReminderId).executeUpdate();
 		return null;
 	}

@@ -32,7 +32,8 @@ public class GetTaskParticipatorsCommand implements Command<List<TaskParticipato
 	public GetTaskParticipatorsCommand(long taskId){
 		this.taskId=taskId;
 	}
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public List<TaskParticipator> execute(Context context) {
 		return context.getSession().createCriteria(TaskParticipator.class).add(Restrictions.eq("taskId", taskId)).list();
 	}

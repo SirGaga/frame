@@ -39,7 +39,8 @@ public class CancelTaskCommand implements Command<Task> {
 		this.task=task;
 		this.opinion=opinion;
 	}
-	public Task execute(Context context) {
+	@Override
+    public Task execute(Context context) {
 		Session session=context.getSession();
 		task.setState(TaskState.Canceled);
 		if(opinion!=null){

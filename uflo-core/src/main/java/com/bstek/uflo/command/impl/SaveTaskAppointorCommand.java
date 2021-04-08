@@ -37,7 +37,8 @@ public class SaveTaskAppointorCommand implements Command<Object> {
 		this.taskNodeName=taskNodeName;
 		this.assignees=assignees;
 	}
-	public Object execute(Context context) {
+	@Override
+    public Object execute(Context context) {
 		Session session=context.getSession();
 		Query query=session.createQuery("delete "+TaskAppointor.class.getName()+" where taskNodeName=:nodeName and processInstanceId=:processInstanceId");
 		query.setString("nodeName",taskNodeName).setLong("processInstanceId", task.getRootProcessInstanceId()).executeUpdate();

@@ -15,9 +15,6 @@
  ******************************************************************************/
 package com.bstek.uflo.deploy.parse.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.bstek.uflo.diagram.NodeDiagram;
 import com.bstek.uflo.diagram.Point;
 import com.bstek.uflo.diagram.ProcessDiagram;
@@ -25,6 +22,9 @@ import com.bstek.uflo.diagram.SequenceFlowDiagram;
 import com.bstek.uflo.model.ProcessDefinition;
 import com.bstek.uflo.process.flow.SequenceFlowImpl;
 import com.bstek.uflo.process.node.Node;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Jacky.gao
@@ -37,7 +37,7 @@ public class ProcessDiagramBudiler {
 	private int nodeHeight=0;
 	private ProcessDefinition process;
 	private ProcessDiagram diagram;
-	private List<SequenceFlowImpl> processedSequenceFLows=new ArrayList<SequenceFlowImpl>();
+	private List<SequenceFlowImpl> processedSequenceFLows =new ArrayList<SequenceFlowImpl>();
 	public ProcessDiagramBudiler(ProcessDefinition process){
 		this.process=process;
 		createDiagram();
@@ -79,7 +79,9 @@ public class ProcessDiagramBudiler {
 			nodeHeight=d.getHeight();
 		}
 		List<SequenceFlowImpl> flows=targetNode.getSequenceFlows();
-		if(flows==null)return;
+		if(flows==null) {
+            return;
+        }
 		for(SequenceFlowImpl flow:flows){
 			if(processedSequenceFLows.contains(flow)){
 				continue;
@@ -94,7 +96,9 @@ public class ProcessDiagramBudiler {
 	}
 	
 	private void buildPoint(List<Point> points){
-		if(points==null)return;
+		if(points==null) {
+            return;
+        }
 		for(Point p:points){
 			if(p.getX()>width){
 				width=p.getX();

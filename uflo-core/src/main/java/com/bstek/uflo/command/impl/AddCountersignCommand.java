@@ -45,7 +45,8 @@ public class AddCountersignCommand implements Command<Task> {
 		this.task=task;
 		this.username=username;
 	}
-	public Task execute(Context context) {
+	@Override
+    public Task execute(Context context) {
 		if(!TaskType.Countersign.equals(task.getType())){
 			throw new IllegalArgumentException("任务 "+task.getId()+" 不是一个会签任务.");
 		}

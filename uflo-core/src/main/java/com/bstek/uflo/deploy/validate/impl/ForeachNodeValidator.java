@@ -49,11 +49,13 @@ public class ForeachNodeValidator extends NodeValidator {
 		}
 	}
 	
-	public boolean support(Element element) {
-		return element.getNodeName().equals("foreach");
+	@Override
+    public boolean support(Element element) {
+		return "foreach".equals(element.getNodeName());
 	}
 
-	public String getNodeName() {
+	@Override
+    public String getNodeName() {
 		return "动态分支";
 	}
 }

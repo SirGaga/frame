@@ -36,7 +36,8 @@ public class UserAssigneeProvider extends AbstractAssigneeProvider{
     public boolean isTree() {
 		return false;
 	}
-	public String getName() {
+	@Override
+    public String getName() {
 		return "指定用户";
 	}
 	@Override

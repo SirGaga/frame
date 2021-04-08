@@ -1,20 +1,17 @@
 package com.feityz.handler;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.bstek.uflo.env.Context;
 import com.bstek.uflo.model.ProcessInstance;
-import com.bstek.uflo.model.variable.Variable;
 import com.bstek.uflo.process.handler.AssignmentHandler;
 import com.bstek.uflo.process.node.TaskNode;
 import com.feityz.common.Result;
 import com.feityz.system.entity.User;
-import com.feityz.system.service.IDeptService;
 import com.feityz.system.service.IParameterService;
 import com.feityz.system.service.IUserService;
-import com.feityz.util.MD5Util;
+import com.feityz.util.Md5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -25,6 +22,8 @@ import java.util.List;
 
 /**
  *  获取值班主任
+ * @author zhangjie
+ * @date 2021-04-08
  */
 @Component("dutySupervisor")
 public class DutySupervisorHandler implements AssignmentHandler {
@@ -56,7 +55,7 @@ public class DutySupervisorHandler implements AssignmentHandler {
                 user.setUserName(userName);
                 user.setUserNum(userNum);
                 user.setRoles("");
-                user.setPassword(MD5Util.getPassword(user.getUserNum(), "123456"));
+                user.setPassword(Md5Util.getPassword(user.getUserNum(), "123456"));
                 userService.save(user);
             }
             users.add(user.getId().toString());

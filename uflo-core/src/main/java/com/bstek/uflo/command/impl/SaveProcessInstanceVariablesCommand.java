@@ -41,9 +41,12 @@ public class SaveProcessInstanceVariablesCommand implements Command<Object> {
 		this.processInstance=processInstance;
 		this.variables=variables;
 	}
+	@Override
 	public Object execute(Context context) {
 		Session session=context.getSession();
-		if(variables==null) return null;
+		if(variables==null) {
+            return null;
+        }
 		for(String key:variables.keySet()){
 			ProcessVariableQuery query=new ProcessVariableQueryImpl(context.getCommandService());
 			query.processInstanceId(processInstance.getId());

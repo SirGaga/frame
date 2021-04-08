@@ -35,7 +35,8 @@ public class BatchCompleteTasksCommand implements Command<Object> {
 		this.variables=variables;
 		this.opinion=opinion;
 	}
-	public Object execute(Context context) {
+	@Override
+    public Object execute(Context context) {
 		for(long taskId:taskIds){
 			context.getTaskService().complete(taskId, variables,opinion);
 		}

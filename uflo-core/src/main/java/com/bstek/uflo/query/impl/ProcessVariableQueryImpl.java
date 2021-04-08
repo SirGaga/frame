@@ -47,14 +47,17 @@ public class ProcessVariableQueryImpl implements ProcessVariableQuery, QueryJob 
 	public ProcessVariableQueryImpl(CommandService commandService){
 		this.commandService=commandService;
 	}
-	public List<Variable> list() {
+	@Override
+    public List<Variable> list() {
 		return commandService.executeCommand(new QueryListCommand<List<Variable>>(this));
 	}
 	
-	public int count() {
+	@Override
+    public int count() {
 		return commandService.executeCommand(new QueryCountCommand(this));
 	}
-	public Criteria getCriteria(Session session,boolean queryCount) {
+	@Override
+    public Criteria getCriteria(Session session, boolean queryCount) {
 		Criteria criteria=session.createCriteria(Variable.class);
 		buildCriteria(criteria,queryCount);
 		return criteria;
@@ -87,32 +90,38 @@ public class ProcessVariableQueryImpl implements ProcessVariableQuery, QueryJob 
 	}
 	
 	
-	public ProcessVariableQuery addOrderAsc(String property){
+	@Override
+    public ProcessVariableQuery addOrderAsc(String property){
 		ascOrders.add(property);
 		return this;
 	}
 
-	public ProcessVariableQuery addOrderDesc(String property){
+	@Override
+    public ProcessVariableQuery addOrderDesc(String property){
 		descOrders.add(property);
 		return this;
 	}
 	
-	public ProcessVariableQuery processInstanceId(long processInstanceId) {
+	@Override
+    public ProcessVariableQuery processInstanceId(long processInstanceId) {
 		this.processInstanceId=processInstanceId;
 		return this;
 	}
 
-	public ProcessVariableQuery rootprocessInstanceId(long rootProcessInstanceId) {
+	@Override
+    public ProcessVariableQuery rootprocessInstanceId(long rootProcessInstanceId) {
 		this.rootProcessInstanceId=rootProcessInstanceId;
 		return this;
 	}
 
-	public ProcessVariableQuery key(String key) {
+	@Override
+    public ProcessVariableQuery key(String key) {
 		this.key=key;
 		return this;
 	}
 
-	public ProcessVariableQuery page(int firstResult, int maxResults) {
+	@Override
+    public ProcessVariableQuery page(int firstResult, int maxResults) {
 		this.firstResult=firstResult;
 		this.maxResults=maxResults;
 		return this;

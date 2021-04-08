@@ -21,7 +21,9 @@ package com.bstek.uflo.service;
  */
 public class TaskOpinion {
 	private String opinion;
-	//操作
+	/**
+	 * 操作
+	 */
 	private String operation;
 	public TaskOpinion(String opinion){
 		this.opinion=opinion;

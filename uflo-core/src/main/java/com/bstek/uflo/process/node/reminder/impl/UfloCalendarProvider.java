@@ -32,11 +32,13 @@ import com.bstek.uflo.service.CalendarService;
  */
 public class UfloCalendarProvider implements CalendarProvider {
 	private CalendarService calendarService;
-	public Calendar getCalendar(String calendarId) {
+	@Override
+    public Calendar getCalendar(String calendarId) {
 		return calendarService.getCalendar(Long.valueOf(calendarId));
 	}
 
-	public List<CalendarInfo> getCalendarInfos() {
+	@Override
+    public List<CalendarInfo> getCalendarInfos() {
 		Collection<CalendarDef> defs=calendarService.getAllCalendarDefs();
 		List<CalendarInfo> list=new ArrayList<CalendarInfo>();
 		for(CalendarDef def:defs){

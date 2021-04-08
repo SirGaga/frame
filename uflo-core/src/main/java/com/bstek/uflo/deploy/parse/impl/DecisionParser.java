@@ -30,7 +30,8 @@ import com.bstek.uflo.process.node.DecisionType;
  */
 public class DecisionParser extends AbstractParser {
 
-	public Object parse(Element element, long processId, boolean parseChildren) {
+	@Override
+    public Object parse(Element element, long processId, boolean parseChildren) {
 		DecisionNode node=new DecisionNode();
 		node.setProcessId(processId);
 		parseNodeCommonInfo(element, node);
@@ -42,7 +43,7 @@ public class DecisionParser extends AbstractParser {
 					continue;
 				}
 				Element ele=(Element)obj;
-				if(ele.getName().equals("expression")){
+				if("expression".equals(ele.getName())){
 					node.setExpression(ele.getText());
 					break;
 				}
@@ -60,8 +61,9 @@ public class DecisionParser extends AbstractParser {
 		return node;
 	}
 
-	public boolean support(Element element) {
-		return element.getName().equals("decision");
+	@Override
+    public boolean support(Element element) {
+		return "decision".equals(element.getName());
 	}
 
 }

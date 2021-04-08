@@ -53,9 +53,13 @@ public class AssigneeProviderListServletHandler extends WriteJsonServletHandler 
 		}
 		request.setCharacterEncoding("utf-8");
 		String pageIndex=request.getParameter("pageIndex");
-		if(StringUtils.isEmpty(pageIndex))pageIndex="1";
+		if(StringUtils.isEmpty(pageIndex)) {
+            pageIndex="1";
+        }
 		String pageSize=request.getParameter("pageSize");
-		if(StringUtils.isEmpty(pageSize))pageSize="1000";
+		if(StringUtils.isEmpty(pageSize)) {
+            pageSize="1000";
+        }
 		String parentId=request.getParameter("parentId");
 		if(parentId!=null && parentId.equals("null")){
 			parentId=null;

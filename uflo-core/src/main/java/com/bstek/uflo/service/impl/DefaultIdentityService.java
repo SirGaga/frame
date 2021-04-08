@@ -29,7 +29,8 @@ import com.bstek.uflo.service.IdentityService;
  */
 public class DefaultIdentityService implements IdentityService {
 
-	public Collection<String> getUsersByGroup(String group) {
+	@Override
+    public Collection<String> getUsersByGroup(String group) {
 		List<String> users=new ArrayList<String>();
 		for(int i=1;i<5;i++){
 			users.add("user-"+group+"-"+i);
@@ -37,7 +38,8 @@ public class DefaultIdentityService implements IdentityService {
 		return users;
 	}
 
-	public Collection<String> getUsersByPosition(String position) {
+	@Override
+    public Collection<String> getUsersByPosition(String position) {
 		List<String> users=new ArrayList<String>();
 		for(int i=1;i<5;i++){
 			users.add("user-"+position+"-"+i);
@@ -45,7 +47,8 @@ public class DefaultIdentityService implements IdentityService {
 		return users;
 	}
 
-	public Collection<String> getUsersByDept(String dept) {
+	@Override
+    public Collection<String> getUsersByDept(String dept) {
 		List<String> users=new ArrayList<String>();
 		for(int i=1;i<5;i++){
 			users.add("user-"+dept+"-"+i);
@@ -53,7 +56,8 @@ public class DefaultIdentityService implements IdentityService {
 		return users;
 	}
 
-	public Collection<String> getUsersByDeptAndPosition(String dept,String position) {
+	@Override
+    public Collection<String> getUsersByDeptAndPosition(String dept, String position) {
 		List<String> users=new ArrayList<String>();
 		for(int i=1;i<5;i++){
 			users.add("user-"+dept+"-"+position+"-"+i);
@@ -61,7 +65,8 @@ public class DefaultIdentityService implements IdentityService {
 		return users;
 	}
 
-	public void userPageQuery(PageQuery<Entity> page) {
+	@Override
+    public void userPageQuery(PageQuery<Entity> page) {
 		page.setRecordCount(400);
 		int index=page.getPageIndex();
 		int size=page.getPageSize();
@@ -83,7 +88,8 @@ public class DefaultIdentityService implements IdentityService {
 		page.setResult(entitys);
 	}
 
-	public void deptPageQuery(PageQuery<Entity> page,String parentId) {
+	@Override
+    public void deptPageQuery(PageQuery<Entity> page, String parentId) {
 		parentId=(parentId==null?"":parentId);
 		page.setRecordCount(400);
 		int index=page.getPageIndex();
@@ -110,11 +116,13 @@ public class DefaultIdentityService implements IdentityService {
 		page.setResult(entitys);
 	}
 
-	public void positionPageQuery(PageQuery<Entity> query,String parentId) {
+	@Override
+    public void positionPageQuery(PageQuery<Entity> query, String parentId) {
 		
 	}
 
-	public void groupPageQuery(PageQuery<Entity> query,String parentId) {
+	@Override
+    public void groupPageQuery(PageQuery<Entity> query, String parentId) {
 		
 	}
 

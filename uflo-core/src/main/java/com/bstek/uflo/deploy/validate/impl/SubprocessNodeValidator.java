@@ -28,7 +28,8 @@ import com.bstek.uflo.process.node.SubprocessType;
  */
 public class SubprocessNodeValidator extends NodeValidator {
 
-	public void validate(Element element, List<String> errors,List<String> nodeNames) {
+	@Override
+    public void validate(Element element, List<String> errors, List<String> nodeNames) {
 		super.validate(element, errors,nodeNames);
 		String subprocessType=element.getAttribute("subprocess-type");
 		if(StringUtils.isEmpty(subprocessType)){
@@ -48,11 +49,13 @@ public class SubprocessNodeValidator extends NodeValidator {
 		
 	}
 	
-	public boolean support(Element element) {
-		return element.getNodeName().equals("subprocess");
+	@Override
+    public boolean support(Element element) {
+		return "subprocess".equals(element.getNodeName());
 	}
 
-	public String getNodeName() {
+	@Override
+    public String getNodeName() {
 		return "子流程";
 	}
 }

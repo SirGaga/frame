@@ -45,7 +45,8 @@ public class SaveHistoryActivityCommand implements Command<HistoryActivity> {
 		this.isEnd=isEnd;
 		this.leaveFlowName=leaveFlowName;
 	}
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public HistoryActivity execute(Context context) {
 		Session session=context.getSession();
 		/**

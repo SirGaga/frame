@@ -23,11 +23,13 @@ import org.w3c.dom.Element;
  */
 public class ForkNodeValidator extends NodeValidator {
 
-	public boolean support(Element element) {
-		return element.getNodeName().equals("fork");
+	@Override
+    public boolean support(Element element) {
+		return "fork".equals(element.getNodeName());
 	}
 
-	public String getNodeName() {
+	@Override
+    public String getNodeName() {
 		return "分支";
 	}
 
