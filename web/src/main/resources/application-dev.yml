@@ -1,0 +1,15 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /Flows
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.92.145.11:3306/uflo?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+
+fileStoreDir: D:/process
+#EHS整改人员角色编号
+zgRoleNum: 6

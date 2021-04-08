@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<uflo-process name="my" key="my">
+    <start name="开始1" x="62" y="289" width="40" height="70">
+        <sequence-flow g="" type="line" to="人工任务1"></sequence-flow>
+    </start>
+    <task name="人工任务1" x="234" y="289" width="40" height="70" task-type="Normal" assignment-type="ProcessPromoter"
+          allow-specify-assignee="false">
+        <sequence-flow g="" type="line" to="人工任务2"></sequence-flow>
+    </task>
+    <task name="人工任务2" x="453" y="289" width="40" height="70" task-type="Normal" assignment-type="ProcessPromoter"
+          allow-specify-assignee="false">
+        <sequence-flow g="" type="line" to="路由决策1"></sequence-flow>
+    </task>
+    <decision name="路由决策1" x="448" y="190" width="40" height="70" decision-type="Expression">
+        <expression><![CDATA[case]]></expression>
+        <sequence-flow g="" type="line" to="人工任务3" name="同意"></sequence-flow>
+        <sequence-flow g="365,215,255,212:" type="curve" to="人工任务1" name="不同意"></sequence-flow>
+    </decision>
+    <task name="人工任务3" x="592" y="190" width="40" height="70" task-type="Normal" assignment-type="ProcessPromoter"
+          allow-specify-assignee="false">
+        <sequence-flow g="" type="line" to="结束流程1"></sequence-flow>
+    </task>
+    <end name="结束流程1" x="594" y="292" width="40" height="70" terminate="true"></end>
+</uflo-process>

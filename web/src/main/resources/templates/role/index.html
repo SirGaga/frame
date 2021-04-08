@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="header :: header(~{::title},~{::link},~{})">
+    <title>自动生成模板</title>
+    <link rel="stylesheet" type="text/css"
+          th:href="@{/static/zTree/css/metroStyle/metroStyle.css}">
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body layui-row layui-col-space10">
+            <div class="layui-col-md8">
+                <div class="layui-btn-group">
+                    <button class="layui-btn layui-btn-sm layui-btn-normal"
+                            onclick="show()" shiro:haspermission="role:add">
+                        <i class="layui-icon layui-icon-add-1"></i>新增
+                    </button>
+                    <button class="layui-btn layui-btn-sm" onclick="show(1)">
+                        <i class="layui-icon layui-icon-edit"></i>修改
+                    </button>
+                    <button class="layui-btn layui-btn-sm layui-btn-danger"
+                            onclick="del()" shiro:haspermission="role:delete">
+                        <i class="layui-icon layui-icon-delete"></i>删除
+                    </button>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <table style="width: 100%">
+                    <tr>
+                        <td><input type="text" id="itSearch" name="itSearch"
+                                   onkeydown="if(event.keyCode==13){query();}"
+                                   placeholder="请输入查询条件" autocomplete="off" class="layui-input"/>
+                        </td>
+                        <td>
+                            <li class="layui-nav-item layadmin-flexible"
+                                style="float: right" lay-unselect><a href="javascript:"
+                                                                     onclick="showAdvance()" layadmin-event="flexible"
+                                                                     title="高级搜索">
+                                <i class="layui-icon layui-icon-more"></i>
+                            </a></li>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-btn-container">
+                        <table id="dataTable" lay-filter="dataTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script class="add_dlg" type="text/html">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form id="dataForm" class="layui-form" action=""
+                  lay-filter="component-form-element">
+                <input type="hidden" name="id" id="id"/>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色编号：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="roleNum" id="roleNum"
+                               lay-verify="required" placeholder="" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色名称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="roleName" id="roleName"
+                               lay-verify="required" placeholder="" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="layui-card-header">
+            <blockquote class="layui-elem-quote">
+                功能菜单
+            </blockquote>
+        </div>
+        <div class="layui-card-body">
+            <ul class="ztree" style="height: 200px; overflow:auto;padding-left:40px;" id="menu_tree"></ul>
+        </div>
+    </div>
+</script>
+<script class="query_dlg" type="text/html">
+    <div class="layui-container">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <form id="queryForm" class="layui-form"
+                      lay-filter="component-form-element">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">角色编号：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="roleNum" id="query_roleNum" lay-verify="required"
+                                   placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">角色名称：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="roleName" id="query_roleName" lay-verify="required"
+                                   placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</script>
+</body>
+<div th:replace="footer :: foot"></div>
+<script th:src="@{/static/zTree/js/jquery.ztree.all.min.js}"></script>
+<script type="text/javascript">
+    $(function () {
+        bodyheight = document.documentElement.clientHeight - 140;
+        //渲染表格
+        table.render({
+            id: "dataTable",// 设定表格的唯一ID进行标识
+            elem: '#dataTable',
+            height: bodyheight,
+            url: ctx + '/role/list', //数据接口
+            method: 'post',
+            page: true, //开启分页
+            size: 'sm',
+            limit: 50,
+            done: function (data, curr, count) {
+                if (!data.success) {
+                    layer.msg(data.msg)
+                }
+            },
+            cols: [
+                [
+                    {
+                        field: 'sort',
+                        title: '序号',
+                        width: 60,
+                        fixed: 'center',
+                        templet: '#sort'
+                    }, {
+                        field: 'roleName',
+                        title: '角色名称',
+                    }, {
+                        field: 'roleNum',
+                        title: '角色编号',
+                    },
+                ]
+            ]
+        });
+        //监听行单击事件（单击事件为：rowDouble）
+        table.on('row(dataTable)', function (obj) {
+            var data = obj.data;
+            record = data;
+            //标注选中样式
+            obj.tr.addClass('layui-table-click').siblings().removeClass(
+                'layui-table-click');
+        });
+    });
+
+    function initMenu(roleId) {
+        var url = ctx + '/menu/listAll';
+        if (roleId) {
+            url += "?roleId=" + roleId;
+        }
+        var setting = {
+            data: {
+                key: {
+                    name: "title",
+                    url: "",
+                    checked: "checked",
+                    icon: null
+                },
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "parentId",
+                    rootPId: null
+                },
+            },
+            check: {
+                enable: true,
+                chkStyle: "checkbox",
+                chkboxType: {"Y": "ps", "N": "ps"}
+            }
+        };
+        var loading = layer.load(2);
+        $.get(url, {}, function (data) {
+            var jsonTree = data.data;
+            var tree = $.fn.zTree.init($("#menu_tree"), setting, jsonTree);
+            tree.expandAll(true);
+            layer.close(loading)
+        });
+
+    }
+
+    //显示新增(修改)框
+    function show(type) {
+        if (type && !record) {
+            layer.msg("请先选择记录");
+            return;
+        }
+        layer.open({
+            title: type ? "修改" : "新增",
+            type: 1,
+            content: $('.add_dlg').html(),
+            btn: ['确定'],
+            area: 'auto',
+            yes: function (index, layero) {
+                var data = $('#dataForm').serialize();
+                var ids = getCheckdIds('menu_tree');
+                if (data) {
+                    data += '&';
+                }
+                data += 'menus=' + ids;
+                var loading = layer.load(2);
+                $.post(ctx + '/role/save', data, function (data) {
+                    if (data.success) {
+                        layui.table.reload("dataTable", {});
+                        record = null;
+                        layer.close(index);
+                        layer.msg("保存成功")
+                    } else {
+                        layer.msg(data.msg)
+                    }
+                    layer.close(loading);
+                });
+            },
+            success: function () {
+                var url = ctx + '/menu/listAll';
+                //编辑
+                var roleId;
+                if (type && record) {
+                    $("#id").val(record.id);
+                    $("#roleName").val(record.roleName);
+                    $("#roleNum").val(record.roleNum);
+                    roleId = record.id
+                }
+                //新增
+                initMenu(roleId);
+                //初始化树
+                layui.form.render()
+            }
+        });
+    }
+
+    //删除
+    function del() {
+        if (!record) {
+            layer.msg("请选择记录");
+            return;
+        }
+        layer.confirm('你确定要删除该条记录吗?', {
+            icon: 3,
+            title: '提示'
+        }, function (index) {
+            $.get(ctx + "/role/delete", {
+                "id": record.id
+            }, function (data) {
+                if (data.success) {
+                    layui.table.reload("dataTable", {});
+                    record = null;
+                    layer.close(index);
+                    layer.msg("删除成功")
+                } else {
+                    layer.msg(data.msg)
+                }
+            });
+        });
+    }
+
+    //查询
+    function query() {
+        var itSearch = $('#itSearch').val();
+        layui.table.reload('dataTable', {
+            where: {
+                roleName: itSearch
+            }
+            //设定异步数据接口的额外参数
+        });
+        record = null;
+    }
+
+    //显示高级搜索框
+    function showAdvance() {
+        layer.open({
+            type: 1,
+            id: 'LAY_adminPopupR',
+            anim: -1,
+            title: '高级搜索',
+            closeBtn: false,
+            offset: 'r',
+            shade: 0.1,
+            shadeClose: true,
+            skin: 'layui-anim layui-anim-rl layui-layer-adminRight',
+            area: '400px',
+            content: $('.query_dlg').html(),
+            btn: ['查询', '重置'],
+            success: function () {
+
+                layui.form.render()
+            },
+            yes: function () {
+                var fo = $("#queryForm").serializeJson();
+                console.log(fo);
+                layui.table.reload('dataTable', {
+                    where: fo
+                });
+                record = null;
+            },
+            btn2: function () {
+                $("#queryForm")[0].reset();
+                return false;
+            }
+        });
+    }
+
+    function getCheckdIds(treeid) {
+        var ztreeObj = $.fn.zTree.getZTreeObj(treeid);
+        var list = ztreeObj.getCheckedNodes(true);
+        var idArr = [];
+        list.map(val => idArr.push(val.id));
+        return idArr;
+    }
+</script>
+</html>

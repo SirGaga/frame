@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="header :: header(~{::title},~{},~{})">
+    <meta charset="UTF-8">
+    <title>自动生成模板</title>
+</head>
+<body>
+<div class="layui-card-body">
+    <form id="dataForm" class="layui-form" action=""
+          lay-filter="dataForm">
+        <input type="hidden" th:value="${bizId}" id="id" name="id">
+        <div class="layui-form-item">
+            <label class="layui-form-label">开始时间：</label>
+            <div class="layui-input-block">
+                <input type="text" name="startTime" id="startTime"
+                       lay-verify="required" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">结束时间：</label>
+            <div class="layui-input-block">
+                <input type="text" name="endTime" id="endTime"
+                       lay-verify="required" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">申请人：</label>
+            <div class="layui-input-block">
+                <input type="text" name="applyUser" id="applyUser"
+                       lay-verify="required" class="layui-input">
+            </div>
+        </div>
+        <div>
+            <button>保存</button>
+        </div>
+    </form>
+</div>
+</body>
+<div th:replace="footer :: foot"></div>
+<script type="text/javascript">
+    $(function () {
+        bodyheight = document.documentElement.clientHeight - 140;
+        //渲染表格
+        //initTable();
+        initForm();
+    });
+    function initForm(){
+        laydate.render({
+            elem: '#startTime',
+            trigger: 'click'//呼出事件改成click
+        });
+        laydate.render({
+            elem: '#endTime',
+            trigger: 'click'//呼出事件改成click
+        });
+        var bizId = $('#id').val()
+        $.get(ctx+'/leave/get?id='+bizId,{},function(res){
+
+            if(res.success){
+                form.val("dataForm", res.data)
+                layui.form.render()
+            }
+        })
+
+    }
+</script>
+</html>

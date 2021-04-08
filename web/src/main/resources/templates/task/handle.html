@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="header :: header(~{::title},~{},~{})">
+    <meta charset="UTF-8">
+    <title>通用办理页面</title>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body layui-row layui-col-space10">
+            <div class="layui-col-md8">
+                <div class="layui-btn-group">
+                    <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="showOpinion(1)">
+                        <i class="layui-icon layui-icon-ok"></i>办理
+                    </button>
+                    <button th:style="${disagree}?'':'display:none'" class="layui-btn layui-btn-sm layui-btn-danger" onclick="showOpinion(0)">
+                        <i class="layui-icon layui-icon-close"></i>否决
+                    </button>
+                    <button th:style="${rollBack}?'':'display:none'" class="layui-btn layui-btn-sm layui-btn-danger" onclick="rollBack()">
+                        <i class="layui-icon layui-icon-release"></i>驳回上一步
+                    </button>
+                    <button th:style="${rollBack}?'':'display:none'" class="layui-btn layui-btn-sm layui-btn-warm" onclick="rollBack(1)">
+                        <i class="layui-icon layui-icon-release"></i>驳回到开始
+                    </button>
+                    <button class="layui-btn layui-btn-sm layui-btn-danger" onclick="closewin()">
+                        <i class="layui-icon layui-icon-close"></i>关闭
+                    </button>
+                    <!--<button th:style="${rollBack}?'':'display:none'" class="layui-btn layui-btn-sm layui-btn-danger" onclick="changeAssignee()">
+                        <i class="layui-icon layui-icon-release"></i>转办
+                    </button>-->
+                    <!--<button class="layui-btn layui-btn-sm layui-btn-warm" onclick="view()">
+                        <i class="layui-icon layui-icon-picture "></i>查看流程图
+                    </button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" th:value="${taskId}" id="taskId">
+    <input type="hidden" th:value="${bizId}" id="bizId">
+    <input type="hidden" th:value="${url}" id="url">
+    <hr/>
+    <div class="layui-row">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-tab" lay-filter="component-tabs-brief">
+                        <ul class="layui-tab-title" >
+                            <li class="layui-this">表单信息</li>
+                            <li>流转记录</li>
+                            <li>流程图</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-btn-container">
+                                    <iframe class="layui-row layui-col-space15" id="bizForm" style="width: 100%;"
+                                            frameborder="no" border="0" marginwidth="0" marginheight="0" allowtransparency="yes">
+                                    </iframe>
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <!--流转记录-->
+                                <div class="layui-btn-container">
+                                    <div id="timeline"></div>
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-btn-container">
+                                    <iframe class="layui-row layui-col-space15" id="imageFrame" style="width: 100%;"
+                                            frameborder="no" border="0" marginwidth="0" marginheight="0" allowtransparency="yes">
+                                    </iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--弹出办理对话框-->
+<script class="choose_dlg" type="text/html">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form id="choose_form" class="layui-form" action=""
+                  lay-filter="choose_form">
+                <div class="layui-form-item" id="col_next_node">
+                    <label class="layui-form-label">下一节点：</label>
+                    <div class="layui-input-block">
+                        <select lay-filter="nextNode" name="nextNode" id="nextNode">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item" id="col_next_user">
+                    <label class="layui-form-label">处理人：</label>
+                    <div class="layui-input-block">
+                        <select name="assignee" id="assignee">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">处理意见：</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入内容" id="opinion" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+<script class="rollback_dlg" type="text/html">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form id="rollback_form" class="layui-form" action=""
+                  lay-filter="rollback_form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">处理意见：</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入内容" id="rollbackOpinion" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<script class="changeAssignee_dlg" type="text/html">
+    <div class="layui-card">
+
+        <div class="layui-card-body">
+            <form id="changeAssignee_form" class="layui-form" action=""
+                  lay-filter="rollback_form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">转办人员：</label>
+                    <div class="layui-input-block">
+                        <input type="hidden" id="assigneeChangeId" class="layui-input" />
+                        <input placeholder="请选择人员" id="assigneeChangeName" class="layui-input" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+</body>
+<div th:replace="footer :: foot"></div>
+<script th:src="@{/static/js/tableSelect.js}"></script>
+<script type="text/javascript">
+
+    window.onload=function(){
+        bodyheight = document.documentElement.clientHeight - 190;
+        //设置iframe地址
+        var bizId = $('#bizId').val();
+        $('#bizForm').height(bodyheight);
+        $('#bizForm').attr('src',$('#url').val()+"?bizId="+bizId);
+        initProgressImage();
+        initTimeLine();
+        layui.element.on('tab(component-tabs-brief)', function(obj){
+            reloadImage();
+        });
+    }
+
+    function initTimeLine(){
+        var taskId = $('#taskId').val()
+        $.get(ctx + '/task/historyTasks/task/'+taskId,function(res){
+
+            var html =`<ul class="layui-timeline">`
+            var data = res.data;
+            for(var i=0;i<data.length;i++){
+
+                var rec = data[i];
+                html+=`<li class="layui-timeline-item">`;
+                html+=`<i class="layui-icon layui-timeline-axis"></i>`;
+                html+=`<div class="layui-timeline-content layui-text">`;
+                html+=`<h3 class="layui-timeline-title">`+rec.endDate+`</h3>`
+                html+=`<p><strong>任务名称:</strong>`+rec.taskName+`</p>`
+                html+=`<p><strong>审&nbsp;&nbsp;批&nbsp;&nbsp;人:</strong>`+rec.assigneeName+`</p>`;
+                html+=`<p><strong>审批意见:</strong>`+rec.opinion+`</p>`
+                html+=`</div></li>`
+
+            }
+            html+=`</ul>`;
+            $('#timeline').html(html)
+            $('#timeline').css("height",(bodyheight-20)+"px");
+            $('#timeline').css("padding-top","20px")
+            $('#timeline').css("overflow-y","auto")
+        })
+
+    }
+    //弹出意见框
+    function showOpinion(agree){
+        //agree=1 同意 agree=0 否决
+        var taskId = $('#taskId').val();
+        if(!taskId){
+            layer.msg("请选择一条记录");
+            return;
+        }
+        var parms = {"taskId":taskId,
+            variables:{
+                "agree":agree
+                }
+            };
+        $.ajax({
+            url: ctx + "/task/nextNode",
+            type: "post",
+            data:JSON.stringify(parms),
+            dataType : 'json',
+            contentType: "application/json",
+            success: function (res) {
+                layer.open({
+                    title: '信息',
+                    type: 1,
+                    content: $('.choose_dlg').html(),
+                    btn: ['确定'],
+                    yes: function (index,layero) {
+                        complate(index,agree);
+
+                    },
+                    success:function () {
+                        if(res.success){
+                            //表示有下一节点
+                            initNodeChoose(res.data);
+                        }else{
+                            $('#col_next_node').hide();
+                            $('#col_next_user').hide();
+                        }
+                        $('#opinion').val("同意");
+                    }
+                });
+            }
+        });
+    }
+
+    function complate(index,agree){
+        //完成任务
+        var taskId = $('#taskId').val();
+        var data = {
+            "taskId":taskId,
+            "opinion":$('#opinion').val(),
+            "nextNodeName":$('#nextNode').val(),
+            "assignee":$('#assignee').val(),
+            "variables":{
+                "agree":agree
+            }
+        }
+        var loading = layer.load(2);
+        $.ajax({
+            url: ctx + "/task/complate",
+            type: "post",
+            contentType: "application/json",
+            dataType : 'json',
+            data :JSON.stringify(data),
+            success: function (res) {
+                layer.close(loading)
+                if(res.success) {
+                    layer.close(index);
+                    layer.msg("操作成功")
+                    parent.layer.closeAll();
+                }else{
+                    layer.msg(res.msg)
+                }
+            },
+            error:function(){
+                layer.close(loading)
+            }
+        });
+    }
+    function initNodeChoose(nextNodes){
+        $.each(nextNodes, function (index, item) {
+            //往下拉菜单里添加元素
+            $('#nextNode').append(new Option(item.nextNodeName, item.nextNodeName));
+        });
+        //第一次加载的时候将人员的选择框默认加载为第一个节点下的人员
+        $.each(nextNodes[0].assignee, function (index, item) {
+            //往下拉菜单里添加元素
+            $('#assignee').append(new Option(item.userName, item.userNum));
+        });
+        form.on('select(nextNode)', function(node){
+            var key = node.value;
+            $("#assignee").empty()
+            for(let n in nextNodes){
+                if(nextNodes[n].nextNodeName == key){
+                    $.each(nextNodes[n].assignee, function (index, item) {
+                        //往下拉菜单里添加元素
+                        $('#assignee').append(new Option(item.userName, item.userNum));
+                    });
+                    layui.form.render()
+                    break;
+                }
+            }
+        });
+        layui.form.render()
+    }
+    function rollBack(type){
+        var url = ctx + "/task/rollBack"
+        if(type){
+            //表示驳回到开始节点
+            url = ctx + "/task/rollBackStart"
+        }
+        var taskId = $('#taskId').val();
+        var opinion = $('#rollbackOpinion').val();
+        var parms = {
+            "taskId":taskId,
+            "opinion":opinion
+        }
+        layer.open({
+            title: '驳回',
+            type: 1,
+            content: $('.rollback_dlg').html(),
+            btn: ['确定'],
+            yes: function (index,layero) {
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    contentType: "application/json",
+                    dataType : 'json',
+                    data :JSON.stringify(parms),
+                    success: function (res) {
+                        if (res.success) {
+                            layui.table.reload("dataTable", {})
+                            record = null;
+                            layer.close(index);
+                            parent.layer.closeAll();
+                            layer.msg("保存成功")
+                        } else {
+                            layer.msg(data.msg)
+                        }
+                    },
+                    error:function(){
+                        layer.close(loading)
+                    }
+                })
+            },
+            success:function(){
+                if(type){
+                    //表示驳回到开始节点
+                    $('#rollbackOpinion').val("驳回到提交人员")
+                }else{
+                    $('#rollbackOpinion').val("驳回到上一步")
+                }
+
+            }
+        });
+    }
+    function initProgressImage(){
+        var taskId = $('#taskId').val();
+        var url = ctx + '/uflo/diagram';
+        url = url+'?taskId='+taskId+"&number="+Math.random();
+        $('#imageFrame').height(bodyheight);
+        $('#imageFrame').attr('src',url);
+
+        setTimeout("reloadImage(1)",1000);
+    }
+    function reloadImage(){
+        document.getElementById('imageFrame').contentWindow.location.reload();
+    }
+    function view() {
+        var taskId = $('#taskId').val();
+        var url = ctx + '/uflo/diagram';
+        url = url+'?taskId='+taskId;
+        var index = layer.open({
+            title: '查看流程图',
+            type: 2,
+            content: url
+        });
+        layer.full(index);
+    }
+    function changeAssignee(){
+        var taskId = $('#taskId').val();
+        layer.open({
+            title: '转办指定人员',
+            type: 1,
+            content: $('.changeAssignee_dlg').html(),
+            btn: ['确定'],
+            yes: function (index,layero) {
+                var parms = {
+                    "taskId":taskId,
+                    "assignee":$('#assigneeChangeId').val()
+                }
+                url = ctx + "/task/changeAssignee"
+                $.post(url, parms, function (data) {
+                    if (data.success) {
+                        layui.table.reload("dataTable", {})
+                        record = null;
+                        layer.close(index);
+                        parent.layer.closeAll();
+                        layer.msg("保存成功")
+                    } else {
+                        layer.msg(data.msg)
+                    }
+                });
+            },
+            success:function(){
+                var tableSelect = layui.tableSelect;
+                tableSelect.render({
+                    elem: '#assigneeChangeName',	//定义输入框input对象 必填
+                    checkedKey: 'id', //表格的唯一建值，非常重要，影响到选中状态 必填
+                    searchKey: 'userName',	//搜索输入框的name值 默认keyword
+                    searchPlaceholder: '名称或编号',	//搜索输入框的提示文字 默认关键词搜索
+                    table: {	//定义表格参数，与LAYUI的TABLE模块一致，只是无需再定义表格elem
+                        method: 'post',
+                        size: 'sm',
+                        page: true, //开启分页
+                        limit: 50,
+                        url: ctx + '/user/listNopermission', //数据接口
+                        cols: [
+                            [
+                                {type: 'radio'},
+                                /*{field: 'sort',title: '序号',width: 60,fixed: 'center',templet: '#sort'},*/
+                                /* {
+                                    type:'checkbox'
+                                }, */
+                                {field: 'userNum',title: '人员编号',width: 120},
+                                {field: 'userName',title: '人员名称',width: 120},
+                                {field: 'deptName',title: '部门',width: 120},
+                                {field: 'roles',title: '角色',},
+                            ]
+                        ],
+                    },
+                    done: function (elem, data) {
+                        //选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
+                        //拿到data[]后 就按照业务需求做想做的事情啦~比如加个隐藏域放ID...
+                        elem.val(data.data[0].userName)
+                        $('#assigneeChangeId').val(data.data[0].id)
+                    }
+                })
+            }
+        });
+    }
+    function closewin(){
+        parent.layer.closeAll();
+    }
+</script>
+</html>

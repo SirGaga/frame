@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="header :: header(~{::title},~{},~{})">
+    <meta charset="UTF-8">
+    <title>通用查看页面</title>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body layui-row layui-col-space10">
+            <div class="layui-col-md8">
+                <div class="layui-btn-group">
+                    <button class="layui-btn layui-btn-sm layui-btn-danger" onclick="closewin()">
+                        <i class="layui-icon layui-icon-close"></i>关闭
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" th:value="${instanceId}" id="instanceId">
+    <input type="hidden" th:value="${bizId}" id="bizId">
+    <input type="hidden" th:value="${url}" id="url">
+    <hr/>
+    <div class="layui-row">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-tab" lay-filter="component-tabs-brief">
+                        <ul class="layui-tab-title" >
+                            <li class="layui-this">表单信息</li>
+                            <li>流转记录</li>
+                            <li>流程图</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-btn-container">
+                                    <iframe class="layui-row layui-col-space15" id="bizForm" style="width: 100%;"
+                                            frameborder="no" border="0" marginwidth="0" marginheight="0" allowtransparency="yes">
+                                    </iframe>
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <!--流转记录-->
+                                <div class="layui-btn-container">
+                                    <div id="timeline"></div>
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-btn-container">
+                                    <iframe class="layui-row layui-col-space15" id="imageFrame" style="width: 100%;"
+                                            frameborder="no" border="0" marginwidth="0" marginheight="0" allowtransparency="yes">
+                                    </iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<div th:replace="footer :: foot"></div>
+<script th:src="@{/static/js/tableSelect.js}"></script>
+<script type="text/javascript">
+
+    window.onload=function(){
+        bodyheight = document.documentElement.clientHeight - 190;
+        //设置iframe地址
+        var bizId = $('#bizId').val();
+        $('#bizForm').height(bodyheight);
+        $('#bizForm').attr('src',$('#url').val()+"?bizId="+bizId+"&edit=0");
+        initProgressImage();
+        initTimeLine();
+        layui.element.on('tab(component-tabs-brief)', function(obj){
+            reloadImage();
+        });
+    }
+
+    function initTimeLine(){
+        var instanceId = $('#instanceId').val()
+        $.get(ctx + '/task/historyTasks/instance/'+instanceId,function(res){
+
+            var html =`<ul class="layui-timeline">`
+            var data = res.data;
+            for(var i=0;i<data.length;i++){
+
+                var rec = data[i];
+                html+=`<li class="layui-timeline-item">`;
+                html+=`<i class="layui-icon layui-timeline-axis"></i>`;
+                html+=`<div class="layui-timeline-content layui-text">`;
+                html+=`<h3 class="layui-timeline-title">`+rec.endDate+`</h3>`
+                html+=`<p><strong>任务名称:</strong>`+rec.taskName+`</p>`
+                html+=`<p><strong>审&nbsp;&nbsp;批&nbsp;&nbsp;人:</strong>`+rec.assigneeName+`</p>`;
+                html+=`<p><strong>审批意见:</strong>`+rec.opinion+`</p>`
+                html+=`</div></li>`
+
+            }
+            html+=`</ul>`;
+            $('#timeline').html(html)
+            $('#timeline').css("height",(bodyheight-20)+"px");
+            $('#timeline').css("padding-top","20px")
+            $('#timeline').css("overflow-y","auto")
+        })
+
+    }
+    function initProgressImage(){
+        var instanceId = $('#instanceId').val();
+        var url = ctx + '/uflo/diagram';
+        url = url+'?processInstanceId='+instanceId+"&number="+Math.random();
+        $('#imageFrame').height(bodyheight);
+        $('#imageFrame').attr('src',url);
+
+        setTimeout("reloadImage(1)",1000);
+    }
+    function reloadImage(){
+        document.getElementById('imageFrame').contentWindow.location.reload();
+    }
+    function closewin(){
+        parent.layer.closeAll();
+    }
+</script>
+</html>

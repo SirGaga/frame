@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="header :: header(~{::title},~{},~{})">
+    <meta charset="UTF-8">
+    <title>自动生成模板</title>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body layui-row layui-col-space10">
+            <div class="layui-col-md8">
+                <div class="layui-btn-group">
+                    <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="show()"
+                            shiro:haspermission="leave:add">
+                        <i class="layui-icon layui-icon-add-1"></i>新增
+                    </button>
+                    <button class="layui-btn layui-btn-sm" onclick="show(1)"
+                            shiro:haspermission="leave:edit">
+                        <i class="layui-icon layui-icon-edit"></i>修改
+                    </button>
+                    <button class="layui-btn layui-btn-sm layui-btn-danger" onclick="del()"
+                            shiro:haspermission="leave:delete">
+                        <i class="layui-icon layui-icon-delete"></i>删除
+                    </button>
+                    <button class="layui-btn layui-btn-sm layui-btn-danger" onclick="apply()">
+                        <i class="layui-icon layui-icon-delete"></i>提交
+                    </button>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <input type="text" id="itSearch" name="itSearch" onkeydown="if(event.keyCode==13){query();}"
+                                   placeholder="请输入查询条件" autocomplete="off" class="layui-input"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-btn-container">
+                        <table id="dataTable" lay-filter="dataTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script class="add_dlg" type="text/html">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form id="dataForm" class="layui-form" action=""
+                  lay-filter="dataForm">
+                <input type="hidden" name="id" id="id"/>
+                                                            <div class="layui-form-item">
+                            <label class="layui-form-label">开始时间：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="startTime" id="startTime"
+                                       lay-verify="required" class="layui-input">
+                            </div>
+                        </div>
+                                                                                <div class="layui-form-item">
+                            <label class="layui-form-label">结束时间：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="endTime" id="endTime"
+                                       lay-verify="required" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">申请人：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="applyUser" id="applyUser"
+                                       lay-verify="required" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">请假天数：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="dayCount" id="dayCount"
+                                       lay-verify="required" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">人员职务</label>
+                            <div class="layui-input-block">
+                                <select id="position" name="position">
+                                        <option value="1">普通员工</option>
+                                        <option value="2">部门主管</option>
+                                        <option value="3">经理</option>
+                                </select>
+                                <!-- <input type="text" name="position" id="position"
+                                       lay-verify="required" class="layui-input">
+                               <select id="position" name="position">
+                                    <option value="普通人员" name="普通员工">普通员工</option>
+                                    <option value="普通人员" name="部门主管">部门主管</option>
+                                    <option value="普通人员" name="经理">经理</option>
+                                </select>-->
+                            </div>
+                        </div>
+            </form>
+        </div>
+    </div>
+</script>
+<script class="query_dlg" type="text/html">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form id="queryForm" class="layui-form"
+                  lay-filter="component-form-element">
+             </form>
+        </div>
+    </div>
+</script>
+<script class="choose_dlg" type="text/html">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form id="choose_form" class="layui-form" action=""
+                  lay-filter="choose_form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">下一节点：</label>
+                    <div class="layui-input-block">
+                        <select lay-filter="nextNode" name="nextNode" id="nextNode">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">处理人：</label>
+                    <div class="layui-input-block">
+                        <select name="assignee" id="assignee">
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+</body>
+<div th:replace="footer :: foot"></div>
+<script type="text/javascript">
+    $(function () {
+        bodyheight = document.documentElement.clientHeight - 140;
+        //渲染表格
+        initTable();
+    });
+
+    function initTable() {
+        table.render({
+            id: "dataTable",// 设定表格的唯一ID进行标识
+            elem: '#dataTable',
+            height: bodyheight,
+            url: ctx + '/leave/list', //数据接口
+            method: 'get',
+            page: true, //开启分页
+            limit: 50,
+            size: 'sm',
+            cols: [
+                [
+                    {field: 'sort', title: '序号', width: 60, fixed: 'center', templet: '#sort'},
+                    {title: '开始时间', field: 'startTime'},
+                    {title: '结束时间', field: 'endTime'},
+                    {title: '申请人', field: 'applyUser'},
+                    {title: '申请日期', field: 'insertTime'},
+                    {title: '天数', field: 'dayCount'},
+                    {title: '职务', field: 'position',templet:function(d){
+                            var position = d.position;
+                            if(position=='1') return '普通员工'
+                            if(position=='2') return '部门主管'
+                            if(position=='3') return '经理'
+                            if(position=='4') return '其他'
+                            return "";
+                        }
+                    },
+                ]
+            ],
+            done: function (data) {
+                if (!data.success) {
+                    layer.msg(data.msg)
+                }
+            }
+        });
+        //监听行单击事件（单击事件为：rowDouble）
+        table.on('row(dataTable)', function (obj) {
+            record = obj.data;
+            //标注选中样式
+            obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+        });
+    }
+
+    //显示新增(修改)框
+    function show(type) {
+        if (type && !record) {
+            layer.msg("请先选择记录");
+            return;
+        }
+        layer.open({
+            title: type ? "修改" : "新增",
+            type: 1,
+            content: $('.add_dlg').html(),
+            btn: ['确定'],
+            area: 'auto',
+            yes: function (index, layero) {
+                form.on('submit(fromContent)', function (data) {
+                    var data = $('#dataForm').serialize();
+                    var loading = layer.load(2);
+                    $.post(ctx + '/leave/save', data, function (data) {
+                        if (data.success) {
+                            layui.table.reload("dataTable", {});
+                            record = null;
+                            layer.close(index);
+                            layer.msg("保存成功")
+                        } else {
+                            layer.msg(data.msg)
+                        }
+                        layer.close(loading);
+                    });
+                })
+            },
+            success: function (layero, index) {
+                layero.addClass('layui-form');//添加form标识
+                layero.find('.layui-layer-btn0').attr('lay-filter', 'fromContent').attr('lay-submit', '');//将按钮弄成能提交的
+                laydate.render({
+                    elem: '#startTime'
+                });
+                laydate.render({
+                    elem: '#endTime'
+                });
+                if (type && record) {
+                    form.val("dataForm", record)
+                }
+                layui.form.render()
+            }
+        });
+    }
+
+    //删除
+    function del() {
+        if (!record) {
+            layer.msg("请选择记录");
+            return;
+        }
+        layer.confirm('你确定要删除该条记录吗?', {
+            icon: 3,
+            title: '提示'
+        }, function (index) {
+            $.ajax({
+                url: ctx + "/leave/delete?id=" + record.id,
+                type: "get",
+                contentType: "application/json",
+                success: function (data) {
+                    if (data.success) {
+                        layui.table.reload("dataTable", {});
+                        record = null;
+                        layer.close(index);
+                        layer.msg("删除成功")
+                    } else {
+                        layer.msg(data.msg)
+                    }
+                }
+            });
+        });
+    }
+
+    //查询
+    function query() {
+        var itSearch = $('#itSearch').val();
+        layui.table.reload('dataTable', {
+            where: {
+                startTime:
+                itSearch
+            }
+            //设定异步数据接口的额外参数
+        })
+        record = null;
+    }
+
+    //显示高级搜索框
+    function showAdvance() {
+        layer.open({
+            type: 1,
+            id: 'LAY_adminPopupR',
+            anim: -1,
+            title: '高级搜索',
+            closeBtn: false,
+            offset: 'r',
+            shade: 0.1,
+            shadeClose: true
+            ,
+            skin: 'layui-anim layui-anim-rl layui-layer-adminRight'
+            ,
+            area: '400px',
+            content: $('.query_dlg').html(),
+            btn: ['查询', '重置'],
+            success: function () {
+                laydate.render({
+                    elem: '#query_startTime'
+                });
+                laydate.render({
+                    elem: '#query_endTime'
+                });
+                layui.form.render()
+            },
+            yes: function () {
+                var fo = $("#queryForm").serializeJson();
+                layui.table.reload('dataTable', {
+                    where: fo
+                });
+                record = null;
+            },
+            btn2: function () {
+                $("#queryForm")[0].reset();
+                return false;
+            }
+        });
+    }
+    //提交
+    function apply(){
+        if(!record){
+            layer.msg("请选择一条记录");
+        }
+        var data = {
+            "processKey":"leave",
+            "bizId":record.id,
+            "subject":record.applyUser+"的请假申请",
+            //"promoter":"1",这里从session中去取了
+            "variables":{
+                "dayCount":record.dayCount,
+                "role":record.position,
+            }
+        }
+        var loading = layer.load(2);
+        $.ajax({
+            url: ctx + "/process/start",
+            type: "post",
+            contentType: "application/json",
+            dataType : 'json',
+            data :JSON.stringify(data),
+            success: function (res) {
+                layer.close(loading)
+                if(res.success){
+                    layer.msg("提交成功")
+                }else{
+                    if(!res.data){
+                        layer.msg(res.msg)
+                    }else{
+                        var nodes = res.data;
+                        if(nodes.length>0) {
+                            showChooseUser(nodes, res.data.taskId)
+                        }
+                    }
+                }
+            }
+        });
+    }
+    function showChooseUser(nextNodes,taskId){
+        layer.open({
+            title:'请选择下一步处理人',
+            type: 1,
+            content: $('.choose_dlg').html(),
+            btn: ['确定'],
+            yes: function (index, layero) {
+                form.on('submit(fromContent)', function (data) {
+                    var parms = {
+                        "processKey":"leave",
+                        "bizId":record.id,
+                        "subject":record.applyUser+"的请假申请",
+                        //"promoter":"1",这里从session中去取了
+                        "variables":{
+                            "dayCount":record.dayCount,
+                            "role":record.position,
+                        },
+                        "nextNodeName":$('#nextNode').val(),
+                        "assignee":$('#assignee').val(),
+                    }
+                    var loading = layer.load(2);
+                    $.ajax({
+                        url: ctx + '/process/start',
+                        type: "post",
+                        contentType: "application/json",
+                        dataType : 'json',
+                        data :JSON.stringify(parms),
+                        success: function (res) {
+                            if(res.success){
+                                layui.table.reload("dataTable", {});
+                                record = null;
+                                layer.close(loading);
+                                layer.close(index);
+                                layer.msg("提交成功")
+                            }else {
+                                layer.msg(res.msg);
+                            }
+
+                        }
+                    });
+                })
+            },
+            success: function (layero, index) {
+                layero.addClass('layui-form');//添加form标识
+                layero.find('.layui-layer-btn0').attr('lay-filter', 'fromContent').attr('lay-submit', '');//将按钮弄成能提交的
+                $.each(nextNodes, function (index, item) {
+                    //往下拉菜单里添加元素
+                    console.log(item.nodeName)
+                    $('#nextNode').append(new Option(item.nextNodeName, item.nextNodeName));
+                });
+                //第一次加载的时候将人员的选择框默认加载为第一个节点下的人员
+                $.each(nextNodes[0].assignee, function (index, item) {
+                    //往下拉菜单里添加元素
+                    $('#assignee').append(new Option(item.userName, item.userNum));
+                });
+                form.on('select(nextNode)', function(node){
+                    var key = node.value;
+                    $("#assignee").empty()
+                    for(let n in nextNodes){
+                        if(nextNodes[n].nextNodeName == key){
+                            $.each(nextNodes[n].assignee, function (index, item) {
+                                //往下拉菜单里添加元素
+                                $('#assignee').append(new Option(item.userName, item.userNum));
+                            });
+                            layui.form.render()
+                            break;
+                        }
+                    }
+                });
+                layui.form.render()
+            }
+        });
+    }
+</script>
+</html>

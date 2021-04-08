@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.feityz.system.dao.LeaveMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.feityz.system.entity.Leave">
+        <result column="id" property="id"/>
+        <result column="insert_time" property="insertTime"/>
+        <result column="insert_user" property="insertUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="flag" property="flag"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="apply_user" property="applyUser"/>
+        <result column="draft" property="draft"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+                            id,
+                            insert_time,
+                            insert_user,
+                            update_time,
+                            update_user,
+                            flag,
+                        start_time, end_time, apply_user, draft
+        </sql>
+
+    <select id="listPage" resultMap="BaseResultMap">
+        SELECT
+        a.*
+        FROM
+        biz_leave a
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

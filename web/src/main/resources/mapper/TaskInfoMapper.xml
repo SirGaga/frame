@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.feityz.system.dao.TaskInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.feityz.system.entity.TaskInfo">
+        <id column="ID_" property="id"/>
+        <result column="DESCRIPTION_" property="description"/>
+        <result column="NODE_NAME_" property="nodeName"/>
+        <result column="PROCESS_ID_" property="processId"/>
+        <result column="NAME_" property="processName"/>
+        <result column="ASSIGNEE_" property="assignee"/>
+        <result column="BUSINESS_ID_" property="businessId"/>
+        <result column="COUNTERSIGN_COUNT_" property="countersignCount"/>
+        <result column="CREATE_DATE_" property="createDate"/>
+        <result column="DATE_UNIT_" property="dateUnit"/>
+        <result column="DUE_ACTION_DATE_" property="dueActionDate"/>
+        <result column="DUEDATE_" property="duedate"/>
+        <result column="END_DATE_" property="endDate"/>
+        <result column="OPINION_" property="opinion"/>
+        <result column="OWNER_" property="owner"/>
+        <result column="PREV_STATE_" property="prevState"/>
+        <result column="PREV_TASK_" property="prevTask"/>
+        <result column="PRIORITY_" property="priority"/>
+        <result column="PROCESS_INSTANCE_ID_" property="processInstanceId"/>
+        <result column="PROGRESS_" property="progress"/>
+        <result column="ROOT_PROCESS_INSTANCE_ID_" property="rootProcessInstanceId"/>
+        <result column="STATE_" property="state"/>
+        <result column="SUBJECT_" property="subject"/>
+        <result column="TASK_NAME_" property="taskName"/>
+        <result column="TYPE_" property="type"/>
+        <result column="URL_" property="url"/>
+        <result column="ENTER_FLOW_" property="enterFlow"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+            ID_, DESCRIPTION_, NODE_NAME_, PROCESS_ID_, ASSIGNEE_, BUSINESS_ID_, COUNTERSIGN_COUNT_, CREATE_DATE_, DATE_UNIT_, DUE_ACTION_DATE_, DUEDATE_, END_DATE_, OPINION_, OWNER_, PREV_STATE_, PREV_TASK_, PRIORITY_, PROCESS_INSTANCE_ID_, PROGRESS_, ROOT_PROCESS_INSTANCE_ID_, STATE_, SUBJECT_, TASK_NAME_, TYPE_, URL_,ENTER_FLOW_
+    </sql>
+
+    <select id="listPage" resultMap="BaseResultMap">
+        select * from(
+            SELECT
+            t1.*,t2.NAME_
+            FROM
+            uflo_task t1
+            left join uflo_process t2
+            on t1.PROCESS_ID_ = t2.ID_
+            WHERE
+            1 = 1
+            AND (
+                (t1.ASSIGNEE_ = #{ew.assignee} AND t1.STATE_ IN ( 'Created', 'InProgress', 'Ready', 'Suspended',
+                'Reserved' ) )
+                OR
+                (t1.STATE_ IN ( 'Ready' ) AND t1.ID_ IN ( SELECT TASK_ID_ FROM uflo_task_participator WHERE 1 = 1 AND USER_ =#{ew.assignee} ))
+            )
+            <if test="ew.subject != null and ew.subject != ''">
+                and t1.SUBJECT_ LIKE "%"#{ew.subject}"%"
+            </if>
+            <if test="ew.processKey != null and ew.processKey != ''">
+                and t2.KEY_ = #{ew.processKey}
+            </if>
+        ) t3
+        order by CREATE_DATE_ desc
+    </select>
+</mapper>

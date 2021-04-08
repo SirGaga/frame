@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="header :: header(~{::title},~{},~{})">
+    <meta charset="UTF-8">
+    <title>待办任务</title>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body layui-row layui-col-space10">
+            <div class="layui-col-md8">
+                <div class="layui-btn-group">
+                    <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="handle()">
+                        <i class="layui-icon layui-icon-ok"></i>办理
+                    </button>
+                    <button class="layui-btn layui-btn-sm layui-btn-warm" onclick="view()">
+                        <i class="layui-icon layui-icon-picture"></i>查看流程图
+                    </button>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <input type="text" id="itSearch" name="itSearch" onkeydown="if(event.keyCode==13){query();}"
+                                   placeholder="请输入查询条件" autocomplete="off" class="layui-input"/>
+                        </td>
+                        <td>
+                            <li class="layui-nav-item layadmin-flexible" style="float: right" lay-unselect>
+                                <a href="javascript:" onclick="showAdvance()" layadmin-event="flexible" title="高级搜索">
+                                    <i class="layui-icon layui-icon-more"></i>
+                                </a>
+                            </li>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-btn-container">
+                        <table id="dataTable" lay-filter="dataTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script class="query_dlg" type="text/html">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form id="queryForm" class="layui-form"
+                  lay-filter="component-form-element">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">内容：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="subject" class="layui-input">
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+</script>
+</body>
+<div th:replace="footer :: foot"></div>
+<script type="text/javascript">
+    $(function () {
+        bodyheight = document.documentElement.clientHeight - 140;
+        //渲染表格
+        initTable();
+    });
+
+    function initTable() {
+        table.render({
+            id: "dataTable",// 设定表格的唯一ID进行标识
+            elem: '#dataTable',
+            height: bodyheight,
+            url: ctx + '/task/list', //数据接口
+            method: 'POST',
+            page: true, //开启分页
+            limit: 50,
+            size: 'sm',
+            cols: [
+                [
+                    {field: 'sort', title: '序号', width: 60, fixed: 'center', templet: '#sort'},
+                    {title: '流程名称', field: 'processName',width: 160},
+                    {title: '当前节点', field: 'taskName',width: 160},
+                    {title: '上一节点', field: 'prevTask',width: 160},
+                    {title: '内容', field: 'subject'},
+                    {title: '创建时间', field: 'createDate',width:180},
+
+                ]
+            ],
+            done: function (data) {
+                if (!data.success) {
+                    layer.msg(data.msg)
+                }
+            }
+        });
+        //监听行单击事件（单击事件为：rowDouble）
+        table.on('row(dataTable)', function (obj) {
+            record = obj.data;
+            //标注选中样式
+            obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+        });
+    }
+
+    //查询
+    function query() {
+        var itSearch = $('#itSearch').val();
+        layui.table.reload('dataTable', {
+            where: {
+                subject:itSearch
+            }
+            //设定异步数据接口的额外参数
+        })
+        record = null;
+    }
+
+    //显示高级搜索框
+    function showAdvance() {
+        layer.open({
+            type: 1,
+            id: 'LAY_adminPopupR',
+            anim: -1,
+            title: '高级搜索',
+            closeBtn: false,
+            offset: 'r',
+            shade: 0.1,
+            shadeClose: true
+            ,
+            skin: 'layui-anim layui-anim-rl layui-layer-adminRight'
+            ,
+            area: '400px',
+            content: $('.query_dlg').html(),
+            btn: ['查询', '重置'],
+            success: function () {
+                layui.form.render()
+            },
+            yes: function () {
+                var fo = $("#queryForm").serializeJson();
+                layui.table.reload('dataTable', {
+                    where: fo
+                });
+                record = null;
+            },
+            btn2: function () {
+                $("#queryForm")[0].reset();
+                return false;
+            }
+        });
+    }
+    function view() {
+        //http://localhost:8080/uflo/diagram;
+        var url = ctx + '/uflo/diagram';
+        if (!record) {
+            layer.msg("请先选择记录");
+            return;
+        }else{
+            url = url+'?taskId='+record.id;
+        }
+        var index = layer.open({
+            title: '查看流程图',
+            type: 2,
+            content: url
+        });
+        layer.full(index);
+    }
+    //办理
+    function handle(){
+        if(!record){
+            layer.msg("请先选择记录");
+            return;
+        }
+        //打开通用办理页面
+        var index = layer.open({
+            type: 2,
+            title:false,
+            shadeClose: false,
+            content: ctx+'/task/commonHandle?taskId='+record.id,
+            end:function(){
+                initTable();
+                record = null
+            }
+        });
+        layer.full(index);
+    }
+</script>
+</html>

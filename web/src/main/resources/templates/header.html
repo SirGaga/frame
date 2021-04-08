@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header(title,links,styles)">
+    <meta charset="utf-8">
+    <title th:replace="${title}">模板自动生成</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta
+            content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+            name="viewport">
+    <!--全局通用框架样式 begin-->
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}"/>
+    <link rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}" media="all"/>
+    <link rel="stylesheet" th:href="@{/static/css/formSelects-v4.css}"/>
+    <style type="text/css">
+        .layui-layer-content {
+            overflow: visible !important;
+        }
+
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+            -webkit-appearance: none !important;
+            margin: 0;
+        }
+    </style>
+    <!--全局通用框架样式 end-->
+    <script th:inline="javascript" type="text/javascript">
+        var ctx = [[${#httpServletRequest.getContextPath()}]];
+    </script>
+    <!--/* Per-page placeholder for additional links */-->
+    <th:block th:replace="${links}"/>
+    <!--/* Per-page placeholder for additional styles */-->
+    <th:block th:replace="${styles}"/>
+
+</head>
+</html>

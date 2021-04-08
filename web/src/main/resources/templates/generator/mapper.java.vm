@@ -1,0 +1,19 @@
+package ${package.Mapper};
+
+import com.feityz.system.entity.${entity};
+import ${superMapperClassPackage};
+import org.apache.ibatis.annotations.Param;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+/**
+ * <p>
+ * $!{table.comment} Mapper 接口
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
+        IPage<${entity}> listPage(IPage<${entity}> page,@Param("ew") QueryWrapper<${entity}> queryWrapper);
+        }

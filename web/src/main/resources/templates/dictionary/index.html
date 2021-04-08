@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: header(~{::title},~{},~{})">
+    <meta charset="UTF-8">
+    <title>数据字典</title>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space16">
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-body layui-row layui-col-space15">
+                    <div class="layui-btn-group">
+                        <button class="layui-btn layui-btn-sm layui-btn-normal"
+                                onclick="showDictionary()">
+                            <i class="layui-icon layui-icon-add-1"></i>新增
+                        </button>
+                        <button class="layui-btn layui-btn-sm" onclick="showDictionary(1)">
+                            <i class="layui-icon layui-icon-edit"></i>修改
+                        </button>
+                        <button class="layui-btn layui-btn-sm layui-btn-danger" onclick="delDictionary()">
+                            <i class="layui-icon layui-icon-delete"></i>删除
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="layui-card">
+                <div class="layui-card-body layui-row layui-col-space15">
+                    <div class="layui-btn-container">
+                        <table id="dictionary_table" lay-filter="dictionary_table"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-body layui-row layui-col-space15">
+                    <div class="layui-btn-group">
+                        <button class="layui-btn layui-btn-sm layui-btn-normal"
+                                onclick="showDictionaryDetail()">
+                            <i class="layui-icon layui-icon-add-1"></i>新增
+                        </button>
+                        <button class="layui-btn layui-btn-sm" onclick="showDictionaryDetail(1)">
+                            <i class="layui-icon layui-icon-edit"></i>修改
+                        </button>
+                        <button class="layui-btn layui-btn-sm layui-btn-danger" onclick="delDictionaryDetail()">
+                            <i class="layui-icon layui-icon-delete"></i>删除
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="layui-card">
+                <div class="layui-card-body layui-row layui-col-space15">
+                    <div class="layui-btn-container">
+                        <table id="dictionary_detail_table"
+                               lay-filter="dictionary_detail_table"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script class="add_dlg" type="text/html">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form id="dictory_form" class="layui-form" action=""
+                  lay-filter="component-form-element">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <input type="hidden" name="id" id="id"/>
+                    <div class="layui-col-lg12">
+                        <label class="layui-form-label">编号：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="code" id="code" lay-verify="required"
+                                   placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-lg12">
+                        <label class="layui-form-label">名称：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name" id="name" lay-verify="required"
+                                   placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<script class="add_detail_dlg" type="text/html">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form id="dictionary_detail_form" class="layui-form" action=""
+                  lay-filter="component-form-element">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <input type="hidden" name="id" id="detail_id"/>
+                    <input type="hidden" name="dictionaryCode" id="dictionaryCode"/>
+                    <div class="layui-col-lg12">
+                        <label class="layui-form-label">编号：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="code" id="detail_code" lay-verify="required"
+                                   placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-lg12">
+                        <label class="layui-form-label">值：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="value" id="detail_value" lay-verify="required"
+                                   placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+</body>
+<div th:replace="footer :: foot"></div>
+<script type="text/javascript">
+    var table = layui.table;
+    var hzRecord;
+    var mxRecord;
+    $(function () {
+        bodyheight = document.documentElement.clientHeight - 150;
+        var dictionary = table.render({
+            id: "dictionaryTable",// 设定表格的唯一ID进行标识
+            elem: '#dictionary_table',
+            height: bodyheight,
+            url: ctx + '/sys/dictionary/list', //数据接口
+            method: 'post',
+            page: true, //开启分页
+            size: 'sm',
+            cols: [
+                [
+                    {
+                        field: 'code',
+                        title: '编号'
+                    }, {
+                        field: 'name',
+                        title: '名称'
+                    }
+                ]
+            ]
+        });
+        //监听行单击事件（单击事件为：rowDouble）
+        table.on('row(dictionary_table)', function (obj) {
+            var data = obj.data;
+            //标注选中样式
+            obj.tr.addClass('layui-table-click').siblings().removeClass(
+                'layui-table-click');
+            hzRecord = data;
+            layui.table.reload('dictionaryDetailTable', {
+                where: {
+                    dictionaryCode: data.code
+                }
+                //设定异步数据接口的额外参数
+            });
+        });
+        //明细
+        var dictionary = table.render({
+            id: "dictionaryDetailTable",// 设定表格的唯一ID进行标识
+            elem: '#dictionary_detail_table',
+            height: bodyheight,
+            url: ctx + '/sys/dictionaryDetail/list', //数据接口
+            method: 'post',
+            page: true, //开启分页
+            size: 'sm',
+            cols: [
+                [
+                    {
+                        field: 'code',
+                        title: '编号'
+                    }, {
+                        field: 'value',
+                        title: '值'
+                    }
+                ]
+            ]
+        });
+        //监听行单击事件（单击事件为：rowDouble）
+        table.on('row(dictionary_detail_table)', function (obj) {
+            var data = obj.data;
+            mxRecord = data;
+            //标注选中样式
+            obj.tr.addClass('layui-table-click').siblings().removeClass(
+                'layui-table-click');
+        });
+    });
+
+    //字典汇总
+    function showDictionary(type) {
+        if (type) {
+            if (!hzRecord) {
+                layer.msg("请选择记录");
+                return;
+            }
+        }
+        layer.open({
+            title: '字典汇总',
+            type: 1,
+            content: $('.add_dlg').html(),
+            btn: ['确定'],
+            area: 'auto',
+            yes: function (index, layero) {
+                var data = $('#dictory_form').serialize();
+                $.post(ctx + "/sys/dictionary/save", data, function (data) {
+                    table.reload("dictionaryTable", {})
+                    layer.close(index);
+                    layer.msg("保存成功")
+                    hzRecord = null;
+                });
+            },
+            success: function () {
+                if (type) {
+                    $("#id").val(hzRecord.id);
+                    $("#desc").val(hzRecord.desc);
+                    $("#name").val(hzRecord.name);
+                    $("#code").val(hzRecord.code);
+                } else {
+                    $('#dictory_form')[0].reset()
+                }
+            }
+        });
+    }
+
+    function delDictionary() {
+        if (!hzRecord) {
+            layer.msg("请选择记录");
+            return;
+        }
+        layer.confirm('你确定要删除该条记录吗?', {
+            icon: 3,
+            title: '提示'
+        }, function (index) {
+            $.get(ctx + "/sys/dictionary/delete", {
+                "id": hzRecord.id
+            }, function (data) {
+                layui.table.reload("dictionaryTable", {})
+                layer.close(index);
+                layer.msg("删除成功")
+            });
+        });
+    }
+
+    //明细
+    function showDictionaryDetail(type) {
+        if (type) {
+            if (!mxRecord) {
+                layer.msg("请选择明细")
+                return;
+            }
+        }
+        if (!hzRecord) {
+            layer.msg("请先选中字典汇总记录!")
+            return;
+        }
+        layer.open({
+            title: '字典明细',
+            type: 1,
+            content: $('.add_detail_dlg').html(),
+            btn: ['确定'],
+            area: 'auto',
+            yes: function (index, layero) {
+                $('#dictionaryCode').val(hzRecord.code);
+                var data = $('#dictionary_detail_form').serialize();
+                $.post(ctx + "/sys/dictionaryDetail/save", data, function (data) {
+                    table.reload("dictionaryDetailTable", {})
+                    layer.close(index);
+                    layer.msg("保存成功")
+                });
+            },
+            success: function () {
+                if (type) {
+                    //表示编辑
+                    $("#detail_id").val(mxRecord.id);
+                    $("#detail_code").val(mxRecord.code);
+                    $("#detail_value").val(mxRecord.value);
+                } else {
+                    $('#dictionary_detail_form')[0].reset()
+                }
+            }
+        });
+    }
+
+    function delDictionaryDetail() {
+        if (!mxRecord) {
+            layer.msg("请选择明细")
+            return;
+        }
+        layer.confirm('你确定要删除该条记录吗?', {
+            icon: 3,
+            title: '提示'
+        }, function (index) {
+            $.get(ctx + "/sys/dictionaryDetail/delete", {
+                "id": mxRecord.id
+            }, function (data) {
+                layui.table.reload("dictionaryDetailTable", {})
+                layer.close(index);
+                layer.msg("删除成功")
+                mxRecord = null;
+            });
+        });
+
+    }
+</script>
+</html>

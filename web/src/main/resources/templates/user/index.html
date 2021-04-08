@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <head th:replace="header :: header(~{::title},~{},~{})">
+        <title>人员信息</title>
+    </head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body layui-row layui-col-space10">
+            <div class="layui-col-md8">
+                <div class="layui-btn-group">
+                    <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="show()">
+                        <i class="layui-icon layui-icon-add-1"></i>新增
+                    </button>
+                    <button class="layui-btn layui-btn-sm" onclick="show(1)">
+                        <i class="layui-icon layui-icon-edit"></i>修改
+                    </button>
+                    <button class="layui-btn layui-btn-sm layui-btn-danger" onclick="del()">
+                        <i class="layui-icon layui-icon-delete"></i>删除
+                    </button>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <input type="text" id="itSearch" name="itSearch"
+                                   onkeydown="if(event.keyCode===13){query();}"
+                                   placeholder="请输入查询条件" autocomplete="off" class="layui-input" style="height:30px;"/>
+                        </td>
+                        <td>
+                            <li class="layui-nav-item layadmin-flexible"
+                                style="float: right" lay-unselect><a href="javascript:"
+                                                                     onclick="showAdvance()" layadmin-event="flexible"
+                                                                     title="高级搜索">
+                                <i class="layui-icon layui-icon-more"></i>
+                            </a></li>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-btn-container">
+                        <table id="dataTable" lay-filter="dataTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script class="add_dlg" type="text/html">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form id="dataForm" class="layui-form"
+                  lay-filter="dataForm">
+                <input type="hidden" name="id" id="id"/>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">人员编号：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="userNum" id="userNum"
+                               lay-verify="required" placeholder="" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">人员名称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="userName" id="userName"
+                               lay-verify="required" placeholder="" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码：</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="password" id="password"
+                               placeholder="为空表示不修改" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">部门：</label>
+                    <div class="layui-input-block">
+                        <select name="dept" id="dept">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色：</label>
+                    <div class="layui-input-block">
+                        <select name="roles" xm-select="role_select">
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+<script class="query_dlg" type="text/html">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form id="queryForm" class="layui-form"
+                  lay-filter="component-form-element">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">人员编号：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="userNum" id="query_userNum" lay-verify="required"
+                               placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">人员名称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="userName" id="query_userName" lay-verify="required"
+                               placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+</body>
+<div th:replace="footer :: foot"></div>
+<script type="text/javascript">
+    let bodyHeight = 0;
+    $(function () {
+        bodyHeight = document.documentElement.clientHeight - 140;
+        initTable();
+        initDepts();
+    });
+
+    function initTable() {
+        table.render({
+            id: "dataTable",// 设定表格的唯一ID进行标识
+            elem: '#dataTable',
+            height: bodyHeight,
+            url: ctx + '/user/list', //数据接口
+            method: 'post',
+            size: 'sm',
+            page: true, //开启分页
+            limit: 50,
+            cols: [
+                [
+                    {field: 'sort',title: '序号',width: 60,fixed: 'center',templet: '#sort'},
+                /* {
+                    type:'checkbox'
+                }, */
+                {field: 'userNum',title: '人员编号',width: 120},
+                {field: 'userName',title: '人员名称',width: 120},
+                {field: 'deptName',title: '部门',width: 120},
+                {field: 'roles',title: '角色',},
+            ]],
+            done: function (data, curr, count) {
+                if (!data.success) {
+                    layer.msg(data.msg)
+                }
+            },
+        });
+        //监听行单击事件（单击事件为：rowDouble）
+        table.on('row(dataTable)', function (obj) {
+            var data = obj.data;
+            record = data;
+            //标注选中样式
+            obj.tr.addClass('layui-table-click').siblings().removeClass(
+                'layui-table-click');
+        });
+    }
+
+    function initDepts() {
+        $.get(ctx + '/dept/listAll', {}, function (data) {
+            depts = data.data;
+        })
+    }
+
+    function show(type) {
+        if (type && !record) {
+            layer.msg("请先选择记录");
+            return;
+        }
+        layer.open({
+            title: type ? "修改" : "新增",
+            type: 1,
+            content: $('.add_dlg').html(),
+            btn: ['确定'],
+            area: 'auto',
+            yes: function (index, layero) {
+                form.on('submit(fromContent)', function (data) {
+                    var data = $('#dataForm').serialize();
+                    var loading = layer.load(2);
+                    $.post(ctx + '/user/save', data, function (data) {
+                        if (data.success) {
+                            layui.table.reload("dataTable", {});
+                            record = null;
+                            layer.close(index);
+                            layer.msg("保存成功")
+                        } else {
+                            layer.msg(data.msg)
+                        }
+                        layer.close(loading)
+                    });
+                })
+            },
+            success: function (layero, index) {
+                layero.addClass('layui-form');//添加form标识
+                layero.find('.layui-layer-btn0').attr('lay-filter', 'fromContent').attr('lay-submit', '');//将按钮弄成能提交的
+                var url = ctx + '/role/listAllForMuilte';
+                //初始化部门下拉框
+                $('#dept').append(new Option("请选择", ""));
+                $.each(depts, function (index, item) {
+                    //往下拉菜单里添加元素
+                    $('#dept').append(new Option(item.deptName, item.id));
+                });
+                if (type && record) {
+                    layui.form.val("dataForm", record);
+                    $("#password").val("");
+
+                    url = url + "?userId=" + record.id;
+                }
+                //初始化角色多选
+                var formSelects = layui.formSelects;
+                formSelects.render('role_select', {
+                    height: "auto", //是否固定高度, 38px | auto
+                    max: 10, //多选最多选择量
+                });
+                formSelects.data('role_select', 'server', {
+                    url: url,
+                });
+                layui.form.render()
+            }
+        });
+    }
+
+    function del() {
+        if (!record) {
+            layer.msg("请选择记录");
+            return;
+        }
+        layer.confirm('你确定要删除该条记录吗?', {
+            icon: 3,
+            title: '提示'
+        }, function (index) {
+            $.get(ctx + "/user/delete", {
+                "id": record.id
+            }, function (data) {
+                if (data.success) {
+                    layui.table.reload("dataTable", {});
+                    record = null;
+                    layer.close(index);
+                    layer.msg("删除成功")
+                } else {
+                    layer.msg(data.msg)
+                }
+            });
+        });
+    }
+
+    function query() {
+
+        var itSearch = $('#itSearch').val();
+        layui.table.reload('dataTable', {
+            where: {
+                userName: itSearch
+            }
+            //设定异步数据接口的额外参数
+        });
+        record = null;
+    }
+
+    function showAdvance() {
+        layer.open({
+            type: 1,
+            id: 'LAY_adminPopupR',
+            anim: -1,
+            title: '高级搜索',
+            closeBtn: false,
+            offset: 'r',
+            shade: 0.1,
+            shadeClose: true
+            ,
+            skin: 'layui-anim layui-anim-rl layui-layer-adminRight'
+            ,
+            area: '400px',
+            content: $('.query_dlg').html(),
+            btn: ['查询', '重置'],
+            success: function () {
+                layui.form.render()
+            },
+            yes: function () {
+                var fo = $("#queryForm").serializeJson();
+                console.log(fo);
+                layui.table.reload('dataTable', {
+                    where: fo
+                });
+                record = null;
+            },
+            btn2: function () {
+                $("#queryForm")[0].reset();
+                return false;
+            }
+        });
+    }
+</script>
+</html>

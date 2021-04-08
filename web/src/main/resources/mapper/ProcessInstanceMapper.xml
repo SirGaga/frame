@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.feityz.system.dao.ProcessInstanceMapper">
+
+    <resultMap id="BaseResultMap" type="com.feityz.system.entity.ProcessInstanceVo">
+        <id column="ID_" property="id"/>
+        <id column="SUBJECT_" property="subject" />
+        <id column="BUSINESS_ID_" property="businessId"/>
+        <id column="CURRENT_NODE_" property="currentNode"/>
+        <id column="CURRENT_TASK_" property="currentTask"/>
+        <id column="PROMOTER_" property="promoter"/>
+        <id column="CREATE_DATE_" property="createDate"/>
+        <id column="END_DATE_" property="endDate"/>
+        <id column="NAME_" property="processName"/>
+        <id column="user_name" property="promoterName"/>
+
+    </resultMap>
+
+    <!--流程监控(处理人员)-->
+    <select id="pageByAssignee" resultMap="BaseResultMap">
+        select m.*,m2.NAME_,m3.user_name from (
+            select ID_,PROCESS_ID_,SUBJECT_,BUSINESS_ID_,CURRENT_NODE_,CURRENT_TASK_,PROMOTER_,CREATE_DATE_,null END_DATE_ from uflo_process_instance where ID_ in (
+            select PROCESS_INSTANCE_ID_ from uflo_his_task
+            where ASSIGNEE_ = #{ew.assignee}
+            )
+            UNION all
+            (select PROCESS_INSTANCE_ID_ ID_,PROCESS_ID_,SUBJECT_,BUSINESS_ID_,END_NAME CURRENT_NODE_,END_NAME CURRENT_TASK_,PROMOTER_,CREATE_DATE_,END_DATE_ from uflo_his_process_instance where
+                END_DATE_ is not null and
+                 PROCESS_INSTANCE_ID_ in (
+                select PROCESS_INSTANCE_ID_ from uflo_his_task
+                where ASSIGNEE_ = #{ew.assignee}
+                )
+            )
+            )m left join uflo_process m2
+        on m.PROCESS_ID_ = m2.ID_
+        left join sys_user m3 on m.PROMOTER_ = m3.id
+        order by m.CREATE_DATE_ desc,m2.NAME_
+    </select>
+    <select id="pageByPromoter" resultMap="BaseResultMap">
+        select m.*,m2.NAME_ from (
+            select ID_,PROCESS_ID_,SUBJECT_,BUSINESS_ID_,CURRENT_NODE_,CURRENT_TASK_,PROMOTER_,CREATE_DATE_,null END_DATE_ from uflo_process_instance where ID_ in (
+            select PROCESS_INSTANCE_ID_ from uflo_his_task
+            where PROMOTER_ = #{ew.promoter}
+            )
+            UNION all
+            (select PROCESS_INSTANCE_ID_ ID_,PROCESS_ID_,SUBJECT_,BUSINESS_ID_,END_NAME CURRENT_NODE_,END_NAME CURRENT_TASK_,PROMOTER_,CREATE_DATE_,END_DATE_ from uflo_his_process_instance where
+                END_DATE_ is not null and
+                 PROCESS_INSTANCE_ID_ in (
+                select PROCESS_INSTANCE_ID_ from uflo_his_task
+                where PROMOTER_ = #{ew.promoter}
+                )
+            )
+            )m left join uflo_process m2
+        on m.PROCESS_ID_ = m2.ID_
+        order by m.CREATE_DATE_ desc,m2.NAME_
+    </select>
+
+    <select id="pageAll" resultMap="BaseResultMap">
+        select m.*,m2.NAME_ from (
+                 select ID_,PROCESS_ID_,SUBJECT_,BUSINESS_ID_,CURRENT_NODE_,CURRENT_TASK_,PROMOTER_,CREATE_DATE_,null END_DATE_ from uflo_process_instance where ID_ in (
+                     select PROCESS_INSTANCE_ID_ from uflo_his_task
+
+                 )
+                 UNION all
+                 (select PROCESS_INSTANCE_ID_ ID_,PROCESS_ID_,SUBJECT_,BUSINESS_ID_,END_NAME CURRENT_NODE_,END_NAME CURRENT_TASK_,PROMOTER_,CREATE_DATE_,END_DATE_ from uflo_his_process_instance where
+                     END_DATE_ is not null and
+                         PROCESS_INSTANCE_ID_ in (
+                         select PROCESS_INSTANCE_ID_ from uflo_his_task
+                     )
+                 )
+             )m left join uflo_process m2
+        on m.PROCESS_ID_ = m2.ID_
+        where END_DATE_ is not null
+        <if test="ew.processKey!=null and ew.processKey != '' ">
+            and PROCESS_ID_ in (select ID_ from uflo_process where KEY_ = #{ew.processKey})
+        </if>
+        order by m.CREATE_DATE_ desc,m2.NAME_
+    </select>
+
+    <delete id="deleteHisInstance">
+        delete from uflo_his_process_instance where PROCESS_INSTANCE_ID_ = #{instanceId}
+    </delete>
+    <select id="selectInstanceByBizId" resultType="java.lang.Integer">
+        select count(1) from uflo_his_process_instance where BUSINESS_ID_ = #{bizId}
+    </select>
+    <select id="selectHisInstanceByBizId" resultType="java.lang.Integer">
+        select count(1) from uflo_his_process_instance where BUSINESS_ID_ = #{bizId}
+    </select>
+
+    <select id="selectHisInstanceIdByBizId" resultType="java.lang.Integer">
+        select process_instance_id_ from uflo_his_process_instance where BUSINESS_ID_ = #{bizId}
+    </select>
+
+
+    <select id="selectCurrentInstance" resultType="com.feityz.system.entity.ProcessInstanceVo">
+        select * from uflo_his_process_instance where BUSINESS_ID_ = #{bizId}
+    </select>
+</mapper>

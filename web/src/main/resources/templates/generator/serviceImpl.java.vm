@@ -1,0 +1,45 @@
+package ${package.ServiceImpl};
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.feityz.system.dao.${table.mapperName};
+import com.feityz.system.service.${table.serviceName};
+import com.feityz.system.entity.${entity};
+import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.commons.lang3.StringUtils;
+
+/**
+ * <p>
+ * ${entity}服务类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+public class ${table.serviceImplName} extends ServiceImpl<BaseMapper<${entity}>, ${entity}>implements ${table.serviceName}{
+
+private final String FIX="a.";
+
+@Autowired
+private ${table.mapperName} ${table.entityPath}Mapper;
+
+public IPage<${entity}> getPage(${entity} condition,Page<${entity}> page){
+        QueryWrapper<${entity}> query=new QueryWrapper<${entity}>();
+    #foreach($field in ${table.fields})
+        #if(${field.propertyType.equals("String")})
+                query.like(StringUtils.isNotEmpty(condition.get${field.capitalName}()),FIX+${entity}.${field.name.toUpperCase()},condition.get${field.capitalName}());
+        #else
+                query.eq(condition.get${field.capitalName}()!=null,FIX+${entity}.${field.name.toUpperCase()},condition.get${field.capitalName}());
+        #end
+    #end
+        query.eq(FIX+${entity}.FLAG,"1");
+        IPage<${entity}> result= ${table.entityPath}Mapper.listPage(page,query);
+        return result;
+        }
+
+        }

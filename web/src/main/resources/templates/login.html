@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="登录">
+    <!--样式 -->
+    <link rel="stylesheet" th:href="@{static/css/login.css}">
+    <script th:inline="javascript" type="text/javascript">
+        const ctx = [[${#httpServletRequest.getContextPath()}]];
+    </script>
+    <style>
+        html {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="main">
+    <div class="login">
+        <h1>管理系统</h1>
+        <div class="inset">
+            <!--start-main-->
+            <form id="loginForm">
+                <div>
+                    <span><label>用户名</label></span>
+                    <span><input type="text" name="userName" class="textbox"
+                                 onkeydown="if(event.keyCode===13){$('#password').focus()}"></span>
+                </div>
+                <div>
+                    <span><label>密码</label></span>
+                    <span><input type="password" class="password" name="password"
+                                 onkeydown="if(event.keyCode===13){setLogin()}"></span>
+                </div>
+                <div class="sign">
+                    <button id="login" type="button" class="submit">登录</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--//end-main-->
+</div>
+
+<div class="copy-right">
+    <p>&copy; 2020 Login Form. All Rights Reserved</p>
+
+</div>
+
+</body>
+<script th:src="@{/static/layui/layui.all.js}"></script>
+<script th:src="@{/static/js/common.js}"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#userName").focus();
+        //session获取iframe处理
+        if (window !== top) {
+            top.location.href = location.href;
+        }
+        $("#login").click(function () {
+            setLogin();
+        })
+    });
+
+    function setLogin() {
+        const loading = layer.load(2);
+        $.post(ctx + "/login", $("#loginForm").serialize(), function (data) {
+            if (data.success) {
+                window.location = ctx + data.data;
+            } else {
+                layer.msg(data.msg)
+            }
+            layer.close(loading)
+        })
+    }
+</script>
+</html>
