@@ -4,17 +4,10 @@ import org.springframework.stereotype.Controller;
     #if(${superControllerClassPackage})
     import ${superControllerClassPackage};
     #end
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.feityz.system.service.${table.serviceName};
-import com.feityz.system.entity.${entity};
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.feityz.common.BaseController;
-import com.feityz.common.Rest;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+    ${table.serviceName};
+    ${entity};
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import springfox.documentation.annotations.ApiIgnore;
 import io.swagger.annotations.Api;

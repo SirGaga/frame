@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.feityz.system.dao.ProcessInstanceMapper">
+<mapper namespace="com.asideal.system.dao.ProcessInstanceMapper">
 
-    <resultMap id="BaseResultMap" type="com.feityz.system.entity.ProcessInstanceVo">
+    <resultMap id="BaseResultMap" type="com.asideal.system.entity.ProcessInstanceVo">
         <id column="ID_" property="id"/>
         <id column="SUBJECT_" property="subject" />
         <id column="BUSINESS_ID_" property="businessId"/>
@@ -92,7 +92,7 @@
     </select>
 
 
-    <select id="selectCurrentInstance" resultType="com.feityz.system.entity.ProcessInstanceVo">
+    <select id="selectCurrentInstance" resultType="com.asideal.system.entity.ProcessInstanceVo">
         select * from uflo_his_process_instance where BUSINESS_ID_ = #{bizId}
     </select>
 </mapper>

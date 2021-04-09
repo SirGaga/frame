@@ -1,10 +1,8 @@
 package ${package.Mapper};
 
-import com.feityz.system.entity.${entity};
+    ${entity};
 import ${superMapperClassPackage};
 import org.apache.ibatis.annotations.Param;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 /**
  * <p>

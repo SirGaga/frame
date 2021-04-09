@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 2021-04-21
  */
 @Configuration
-@MapperScan(basePackages = {"com.feityz.system.dao"})
+@MapperScan(basePackages = {"com.asideal.system.dao"})
 public class MyBatisPlusConfig {
     /**
      * 分页插件

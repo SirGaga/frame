@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.feityz.system.dao.HisTaskQueryMapper">
+<mapper namespace="com.asideal.system.dao.HisTaskQueryMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.feityz.system.entity.HistoryTaskInfo">
+    <resultMap id="BaseResultMap" type="com.asideal.system.entity.HistoryTaskInfo">
         <id column="ID_" property="id"/>
         <result column="DESCRIPTION_" property="description"/>
         <result column="NODE_NAME_" property="nodeName"/>
@@ -32,7 +32,7 @@
     <sql id="Base_Column_List">
         ID_, DESCRIPTION_, NODE_NAME_, PROCESS_ID_, ASSIGNEE_, BUSINESS_ID_, CREATE_DATE_, DUEDATE_, END_DATE_, HIS_PROCESS_INSTANCE_ID_, OPINION_, OWNER_, PROCESS_INSTANCE_ID_, ROOT_PROCESS_INSTANCE_ID_, STATE_, SUBJECT_, TASK_ID_, TASK_NAME_, TYPE_, URL_
     </sql>
-    <select id="findHistoryTask" resultType="com.feityz.system.entity.HistoryTaskInfo">
+    <select id="findHistoryTask" resultType="com.asideal.system.entity.HistoryTaskInfo">
         SELECT
         t1.*,
         t2.user_name ASSIGNEE_NAME_,

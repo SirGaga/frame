@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.feityz.system.dao.LeaveMapper">
+<mapper namespace="com.asideal.system.dao.LeaveMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.feityz.system.entity.Leave">
+    <resultMap id="BaseResultMap" type="com.asideal.system.entity.Leave">
         <result column="id" property="id"/>
         <result column="insert_time" property="insertTime"/>
         <result column="insert_user" property="insertUser"/>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.feityz.system.dao.UserMapper">
+<mapper namespace="com.asideal.system.dao.UserMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.feityz.system.entity.User">
+    <resultMap id="BaseResultMap" type="com.asideal.system.entity.User">
         <result column="id" property="id"/>
         <result column="flag" property="flag"/>
         <result column="insert_time" property="insertTime"/>
@@ -29,7 +29,7 @@
         user_name, password, user_num, dept,admin
     </sql>
 
-    <select id="listPage" resultType="com.feityz.system.entity.User">
+    <select id="listPage" resultType="com.asideal.system.entity.User">
         select a.*,b.dept_name deptName,t.role_name roles from sys_user a
         left join sys_dept b
         on a.dept = b.id

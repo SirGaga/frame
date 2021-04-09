@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.feityz.system.dao.TaskInfoMapper">
+<mapper namespace="com.asideal.system.dao.TaskInfoMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.feityz.system.entity.TaskInfo">
+    <resultMap id="BaseResultMap" type="com.asideal.system.entity.TaskInfo">
         <id column="ID_" property="id"/>
         <result column="DESCRIPTION_" property="description"/>
         <result column="NODE_NAME_" property="nodeName"/>

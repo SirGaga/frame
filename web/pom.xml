@@ -9,7 +9,7 @@
         <version>2.4.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.feityz</groupId>
+    <groupId>com.asideal</groupId>
     <artifactId>web</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>web端</name>
@@ -22,7 +22,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.feityz</groupId>
+            <groupId>com.asideal</groupId>
             <artifactId>uflo-console</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
@@ -109,7 +109,7 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.feityz</groupId>
+            <groupId>com.asideal</groupId>
             <artifactId>frame</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>

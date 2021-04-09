@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author zhangjie
  * @date 2021-04-07
  */
-@SpringBootApplication(scanBasePackages = {"com.zhangjie"})
+@SpringBootApplication(scanBasePackages = {"com.asideal"})
 @ImportResource({"classpath:uflo-console-context.xml"})
 @EnableTransactionManagement
 @EnableAsync

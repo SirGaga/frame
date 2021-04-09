@@ -1,7 +1,6 @@
 package ${package.Entity};
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.feityz.common.BaseEntity;
 import lombok.Data;
 /**
  * <p>
